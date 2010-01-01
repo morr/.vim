@@ -1,0 +1,146 @@
+*synmark.txt*                  highlight text at a fixed position
+
+                      Version 0.1. For vim version 6.3.
+
+          VIM REFERENCE MANUAL  by Moshe Kaminsky <kaminsky@math.huji.ac.il>
+
+*synmark* *synmark.vim*
+
+1. Introduction    |synmark-introduction|
+2. Commands        |synmark-commands|
+
+
+This plugin provides commands for defining highlighting at fixed locations
+(marks) in the text. It may be useful if you find yourself inserting text just
+for the sake of highlighting. Instead of inserting this text, using this
+plugins you will drop marks at the start and end of the text you wish to
+highlight. The marks will not move when the text is changed, though, making it
+useful mainly for readonly text.
+
+See |add-local-help| for the installation of this file
+
+{Vi does not have any of these features}
+
+=============================================================================
+1. Introduction                                 *synmark-introduction*
+
+The typical scenario for using this plugin is this: You have another plugin
+that displays some text in a vim buffer. You also want to highlight some parts
+of this text (eg, some text should appear emphasized). These parts are known
+to you by their location, but are not distinguished by any textual
+characterisitcs. Normally, you would need to insert some special text to
+identify these regions. Instead, using this plugin, you would do something
+like:
+>
+    :SynMark Emph Xstart Ystart Xend Yend
+<
+for each of the regions, and the text is unaltered.
+
+Another use is to do something like
+>
+    :vmap e :SynMark Emph<CR>
+<
+Then pressing e when a text is visually selected will highlight that text.
+
+=============================================================================
+2. Commands                                     *synmark-commands*
+
+The following commands are used to define and mark regions:
+
+                                                        *:SynMarkDef*
+:SynMarkDef {name} [args]                Define a new mark kind with name
+                                         {name}. [args] is any arguments that
+                                         can be given to a "syntax region"
+                                         command, except for start, skip and
+                                         end. These arguments will affect all
+                                         regions marked with the this word. If
+                                         no [args] are needed, this command
+                                         can be omitted.
+
+                                                        *:SynMarkStart*
+:SynMarkStart[!] {name} [col [line]]     Mark the start of a region with name
+                                         {name} at the given location. {name}
+                                         is any name valid for a syntax group
+                                         name. "col" is the column number and
+                                         "line" is the line number. If either
+                                         is omitted, it is taken from the
+                                         current cursor location. The value 0
+                                         for "col" can be used to start the
+                                         region at the end of the given
+                                         "line". This is useful for starting a
+                                         region in an empty line. See ? for
+                                         the meaning of the bang.
+
+                                                        *:SynMarkEnd*
+:SynMarkEnd[!] {name} [col [line]]       Mark the end of a region with the
+                                         given {name} at the given location.
+                                         All arguments are the same as for
+                                         |:SynMarkStart|.
+
+                                                        *:SynMark*
+:SynMark[!] {name} [start] [end]         Mark the start and end of a region to
+                                         highlight in one command. {name} is
+                                         the name of the syntax group. Each of
+                                         "start" and "end" can be one of the
+                                         following: if two numbers are given,
+                                         the first is the column and the
+                                         second is the line of the mark (the
+                                         column interpretation depends on the
+                                         bang, see ?). If it is one number, it
+                                         is the column number, and the line is
+                                         the current cursor line. If it is not
+                                         a number, it should be something
+                                         acceptable by the |col()| and
+                                         |line()| functions, like a (usual)
+                                         mark. If only "start" is given, the
+                                         current cursor position is used for
+                                         "end". Finally, if no location
+                                         arguments are given, the last visual
+                                         region is used. Note that the two
+                                         first numbers are always used as the
+                                         start coordinates, so that
+>
+    :SynMark Foo 10 20
+<
+                                         means: highlight the region starting
+                                         at column 10, line 20 and ending at
+                                         the cursor position, with group Foo.
+                                         To highlight columns 10 to 20 of the
+                                         current line, use
+>
+    :SynMark Foo 10 . 20
+<
+
+The {name} in the commands above has the same function as the group name for
+usual |syntax| commands. However, it lives in a different namespace. The
+|:SynMarkDef| command is used to define arguments for subsequent synmark
+commands whose group has the same name. It may be used several times, and each
+time will affect only marks dropped after the decleration. If the matchgroup=
+argument is given (|syn-matchgroup|), it will affect the marker positions.
+
+                                                *synmark-bang*
+The column argument in the various commands is interpreted as the number of
+"characters" from the start of the line. Adding a bang to the marking commands
+will cause this number to be interpreted as a "byte" instead. These are only
+different when there are characters larger than byte on the line.
+
+The following commands are used for defining highlighting for the marked
+groups:
+
+                                                        *:SynMarkHighlight*
+:SynMarkHighlight[!] {name} {args}       Defines highlighting for the given
+                                         synmark group {name}. The bang and
+                                         the rest of the arguments are
+                                         interpreted exactly as for the
+                                         |:highlight| command.
+
+                                                        *:SynMarkLink*
+:SynMarkLink[!] {name} {to-group}        Link the synmark group {name} to
+                                         {to-group}. {to-group} and the bang
+                                         are as in the usual highlight
+                                         linking, |:highlight-link|.
+                                         {to-group} may also be NONE.
+
+
+
+ vim:tw=78:ts=8:ft=help:norl:

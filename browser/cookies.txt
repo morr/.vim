@@ -1,0 +1,5 @@
+#LWP-Cookies-1.0
+Set-Cookie3: NewUser=|dh|ds2; path="/"; domain=.reference.com; path_spec; expires="2010-12-21 18:19:48Z"; version=0
+Set-Cookie3: accepting=1; path="/"; domain=.reference.com; path_spec; expires="2010-12-21 18:19:45Z"; version=0
+Set-Cookie3: classicef=3d40c1bd8d40c1bd8; path="/"; domain=.reference.com; path_spec; expires="2010-12-21 18:19:48Z"; version=0
+Set-Cookie3: ldpt="pdic=4043|0~5090|0~5091|0~5092|0"; path="/"; domain=.reference.com; path_spec; expires="2010-12-21 18:19:48Z"; version=0
