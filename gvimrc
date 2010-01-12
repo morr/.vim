@@ -411,7 +411,7 @@ anoremenu &Tags.&ctags :call system("ctags -R --fields=+zitKSla --extra=+q --exc
 if has("unix")
   anoremenu &Tags.&rjstags :call system("ruby ~/.vim/bin/rjstags/rjstags.rb .")<cr>
 else
-  anoremenu &Tags.&rjstags :call system("ruby ~/vimfiles/bin/rjstags/rjstags.rb .")<cr>
+  anoremenu &Tags.&rjstags :call system("ruby '".$HOME."//vimfiles//bin//rjstags//rjstags.rb' .")<cr>
 endif
 "-----------------------------------------------------------------------------
 " autocommands
@@ -474,7 +474,7 @@ au BufNewFile,BufRead *.cpp,*.h set tags+=~/.vimdata/c++/unix/std/tags
 "-----------------------------------------------------------------------------
 autocmd FileType ruby set omnifunc=rubycomplete#Complete
 autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType javascript set omnifunc=RjsComplete
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
@@ -503,7 +503,11 @@ endfunction
 
 function! InitSubversion()
   if finddir(".svn") != ""
-    unmenu &File.&Subversion
+    if exists(g:subversion_menu)
+      unmenu &File.&Subversion
+    end
+    let g:subversion_menu = 1
+
     anoremenu &File.&Subversion.&Commit\ File :call system("TortoiseProc.exe /command:commit /path:".shellescape(expand("%"))." /notempfile /closeonend:1")<cr>
     anoremenu &File.&Subversion.&Update\ File :call system("TortoiseProc.exe /command:update /path:".shellescape(expand("%"))." /notempfile")<cr>
     anoremenu &File.&Subversion.&Diff\ File :call system("TortoiseProc.exe /command:diff /path:".shellescape(expand("%"))." /notempfile")<cr>
@@ -515,7 +519,11 @@ function! InitSubversion()
     anoremenu &File.&Subversion.&Log\ Project :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
     anoremenu &File.&Subversion.&Clean\ up\ Project :call system("TortoiseProc.exe /command:cleanup /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
   elseif finddir(".git") != ""
-    unmenu &File.&Subversion
+    if exists(g:subversion_menu)
+      unmenu &File.&Subversion
+    end
+    let g:subversion_menu = 1
+
     anoremenu &File.&Subversion.&Commit\ Project :GitCommit<cr>
     anoremenu &File.&Subversion.&Push\ Project :GitPush<cr>
     anoremenu &File.&Subversion.&Add\ Buffer :call system("git add ".shellescape(expand('%')))<cr>
@@ -861,6 +869,10 @@ let g:notesRoot = '~/notes'
 let OmniCpp_ShowScopeInAbbr = 1
 let OmniCpp_MayCompleteScope = 1
 let OmniCpp_ShowPrototypeInAbbr = 1
+
+" javascript omnicomplete
+call DrawRjsMenu()
+call SetRjsCompleteLibarary("jQuery")
 
 "let g:tlist_javascript_settings = 'javascript;v:var;c:class;p:prototype;m:method;f:function;o:object'
 
