@@ -407,11 +407,11 @@ anoremenu &File.&Preview.&Midori :!midori %<cr>
 
 " tag list
 anoremenu &Tags.&TagList :TlistToggle<cr>
-anoremenu &Tags.&ctags :call system("ctags -R --fields=+zitKSla --extra=+q --exclude=.svn --exclude=fckeditor --exclude=editor --exclude=ckeditor --exclude=ckfinder --exclude=suilib_packed.js --exclude=jquery-1.3.2.min.js --exclude=jquery.plugins.js --exclude=highslide.packed.js --exclude=sui.js --exclude=codemirror --exclude=jTweener.js --exclude=swfobject.js --exclude=community_map.packed.js --exclude=order_base.packed.js --exclude=special_header.packed.js --exclude=prototype-1.4.0.js --exclude=raphael-min.js  --exclude=frontend.js --exclude=packed.js .")<cr>
+anoremenu &Tags.&ctags :exec("!ctags -R --fields=+zitKSla --extra=+q --exclude=.svn --exclude=fckeditor --exclude=editor --exclude=ckeditor --exclude=ckfinder --exclude=suilib_packed.js --exclude=jquery-1.3.2.min.js --exclude=jquery.plugins.js --exclude=highslide.packed.js --exclude=sui.js --exclude=codemirror --exclude=jTweener.js --exclude=swfobject.js --exclude=community_map.packed.js --exclude=order_base.packed.js --exclude=special_header.packed.js --exclude=prototype-1.4.0.js --exclude=raphael-min.js  --exclude=frontend.js --exclude=packed.js .")<cr>
 if has("unix")
-  anoremenu &Tags.&rjstags :call system("ruby ~/.vim/bin/rjstags/rjstags.rb .")<cr>
+  anoremenu &Tags.&rjstags :exec("!ruby ~/.vim/bin/rjstags/rjstags.rb .")<cr>
 else
-  anoremenu &Tags.&rjstags :call system("ruby '".$HOME."//vimfiles//bin//rjstags//rjstags.rb' .")<cr>
+  anoremenu &Tags.&rjstags :exec("!ruby '".$HOME."//vimfiles//bin//rjstags//rjstags.rb' .")<cr>
 endif
 "-----------------------------------------------------------------------------
 " autocommands
@@ -503,7 +503,7 @@ endfunction
 
 function! InitSubversion()
   if finddir(".svn") != ""
-    if exists(g:subversion_menu)
+    if exists('g:subversion_menu')
       unmenu &File.&Subversion
     end
     let g:subversion_menu = 1
@@ -519,7 +519,7 @@ function! InitSubversion()
     anoremenu &File.&Subversion.&Log\ Project :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
     anoremenu &File.&Subversion.&Clean\ up\ Project :call system("TortoiseProc.exe /command:cleanup /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
   elseif finddir(".git") != ""
-    if exists(g:subversion_menu)
+    if exists('g:subversion_menu')
       unmenu &File.&Subversion
     end
     let g:subversion_menu = 1
@@ -871,8 +871,7 @@ let OmniCpp_MayCompleteScope = 1
 let OmniCpp_ShowPrototypeInAbbr = 1
 
 " javascript omnicomplete
-call DrawRjsMenu()
-call SetRjsCompleteLibarary("jQuery")
+let g:rjscomplete_library = 'jQuery'
 
 "let g:tlist_javascript_settings = 'javascript;v:var;c:class;p:prototype;m:method;f:function;o:object'
 

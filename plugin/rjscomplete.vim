@@ -7,16 +7,21 @@ if exists("g:loaded_rjscomplete") || &cp || v:version < 700
 endif
 "let g:loaded_rjscomplete = 1
 
-if !exists('s:rjscomplete_library')
-  let s:rjscomplete_library = ''
+if !exists('g:rjscomplete_library')
+  let g:rjscomplete_library = ''
 endif
 
 function! DrawRjsMenu()
+  exec "anoremenu &Javascript.&none :call SetRjsCompleteLibarary('')<cr>"
   let files = split(globpath(&rtp, 'javascript/libs/*'), '\n')
   if len(files) > 0
     for file in files
       if filereadable(file."/tags")
-        let filename = substitute(file, "^.*javascript\\\\libs\\", "", "")
+        if has("unix")
+          let filename = substitute(file, "^.*javascript/libs/", "", "")
+        else
+          let filename = substitute(file, "^.*javascript\\\\libs\\", "", "")
+        end
         exec "anoremenu &Javascript.&".filename." :call SetRjsCompleteLibarary('".filename."')<cr>"
       endif
     endfor
@@ -24,13 +29,13 @@ function! DrawRjsMenu()
 endfunction
 
 function! SetRjsCompleteLibarary(library)
-  if s:rjscomplete_library != ''
-    exec("set tags-=~/.vimdata/javascript/libs/".s:rjscomplete_library."/tags")
+  if g:rjscomplete_library != ''
+    exec("set tags-=~/.vimdata/javascript/libs/".g:rjscomplete_library."/tags")
   end
   if a:library != ''
     exec("set tags+=~/.vimdata/javascript/libs/".a:library."/tags")
   end
-  let s:rjscomplete_library = a:library
+  let g:rjscomplete_library = a:library
 endfunction
 
 function! RjsComplete(findstart, base)
@@ -72,12 +77,11 @@ function! RjsComplete(findstart, base)
       let file = getline(1, '$')
     endif
 
+    let object = {}
+    let object_type = 'undefined'
     if s:shortcontext =~ '\.$'
-      let object = {}
-      let object_type = 'undefined'
-
       " jQuery block
-      if s:rjscomplete_library == 'jQuery'
+      if g:rjscomplete_library == 'jQuery'
         let s:shortcontext = substitute(s:shortcontext, '\<$\>', 'jQuery', '')
         if match(s:shortcontext, '(.*)[') != -1
           let object_type = 'DOMElement'
@@ -99,6 +103,7 @@ function! RjsComplete(findstart, base)
       "echoe 'final_object name:'.object.name.', prefix:'.object.prefix.', type:'.object.type
 
       if object.type == 'undefined'
+        call s:FindObjectPropertiesInTags(object)
         call s:GetBuildInTypeProperties(object)
         if s:properties != [] || s:methods != []
           return s:properties + s:methods
@@ -111,10 +116,48 @@ function! RjsComplete(findstart, base)
         call s:GetBuildInTypeProperties(object)
         return s:properties + s:methods
       endif
+    else
+      let object.name = a:base
+      let object.prefix = ''
+      let object.type = 'window'
+      call s:FindGlobalObjectInTags(object)
+      call s:GetBuildInTypeProperties(object)
+      return s:properties + s:methods
     endif
-
   endif
   " }}}
+endfunction
+
+
+function! s:FindGlobalObjectInTags(object)
+  " Find object children in tags {{{
+  let fnames = join(map(tagfiles(), 'escape(v:val, " #%")'))
+
+  if fnames != ''
+    exe 'silent! vimgrep /^'.escape(a:object.name, "$").'.*\tscope:\t.*/j '.fnames
+    let qflist = getqflist()
+    if len(qflist) > 0
+      for field in qflist
+        let hash = {}
+        let hash.word = substitute(field.text, '^\([^\t]\+\)\t.*$', '\1', '')
+        if match(hash.word, '\.') != -1 || match(hash.word, 'CLOSURE_\d\+') != -1
+          continue
+        end
+        let hash.kind = substitute(field.text, '^.*\tkind:\([^:.\t]\+\(::\|\.\)\)*\([^:.\t]\+\)\t.*$', '\3', '')
+        let hash.kind = substitute(hash.kind, 'CLOSURE_\d\+', 'Function', '')
+        let hash.abbr = hash.word
+
+        if hash.word =~? '^'.s:base
+          if hash.kind == 'Function'
+            call add(s:methods, hash)
+          else
+            call add(s:properties, hash)
+          endif
+        endif
+      endfor
+    endif
+  endif
+  return a:object
 endfunction
 
 
@@ -677,6 +720,8 @@ function! s:GetBuildInTypeProperties(object)
     let values = maths
   elseif a:object.type == 'DOMElement'
     let values = xdomelems
+  elseif a:object.type == 'window'
+    let values = winds
   endif
 
   if !exists('values')
@@ -744,3 +789,7 @@ function! s:GetBuildInTypeProperties(object)
   endfor
 " }}}
 endfunction
+
+autocmd vimenter * call DrawRjsMenu()
+autocmd vimenter * call SetRjsCompleteLibarary(g:rjscomplete_library)
+
