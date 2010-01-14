@@ -410,8 +410,10 @@ anoremenu &Tags.&TagList :TlistToggle<cr>
 anoremenu &Tags.&ctags :exec("!ctags -R --fields=+zitKSla --extra=+q --exclude=.svn --exclude=fckeditor --exclude=editor --exclude=ckeditor --exclude=ckfinder --exclude=suilib_packed.js --exclude=jquery-1.3.2.min.js --exclude=jquery.plugins.js --exclude=highslide.packed.js --exclude=sui.js --exclude=codemirror --exclude=jTweener.js --exclude=swfobject.js --exclude=community_map.packed.js --exclude=order_base.packed.js --exclude=special_header.packed.js --exclude=prototype-1.4.0.js --exclude=raphael-min.js  --exclude=frontend.js --exclude=packed.js .")<cr>
 if has("unix")
   anoremenu &Tags.&rjstags :exec("!ruby ~/.vim/bin/rjstags/rjstags.rb .")<cr>
+  anoremenu &Tags.&rjstags\ file :exec("!ruby ~/.vim/bin/rjstags/rjstags.rb %")<cr>
 else
   anoremenu &Tags.&rjstags :exec("!ruby '".$HOME."//vimfiles//bin//rjstags//rjstags.rb' .")<cr>
+  anoremenu &Tags.&rjstags\ file :exec("!ruby '".$HOME."//vimfiles//bin//rjstags//rjstags.rb' %")<cr>
 endif
 "-----------------------------------------------------------------------------
 " autocommands
@@ -445,8 +447,6 @@ endif
 
 au BufNewFile,BufRead *.ctp set filetype=phtml
 au BufNewFile,BufRead *.php,*.phtml set dict+=~/.vimdata/php/keywords
-
-au BufNewFile,BufRead *.js,*.phtml set tags+=~/.vimdata/js/jquery/tags
 
 au BufNewFile,BufRead *.rb map <s-k> :call TryRubyDoc()<cr>
 if has("unix")
