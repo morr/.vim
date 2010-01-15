@@ -83,26 +83,22 @@ set statusline+=%y      "filetype
 set statusline+=%r      "read only flag
 set statusline+=%m      "modified flag
 "display a warning if &et is wrong, or we have mixed-indenting
-set statusline+=%#error#
-set statusline+=%{StatuslineTabWarning()}
-set statusline+=%*
-set statusline+=%{StatuslineTrailingSpaceWarning()}
-set statusline+=%{StatuslineLongLineWarning()}
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#error#
+"set statusline+=%{StatuslineTabWarning()}
+"set statusline+=%*
+"set statusline+=%{StatuslineTrailingSpaceWarning()}
+"set statusline+=%{StatuslineLongLineWarning()}
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 "display a warning if &paste is set
 set statusline+=%#error#
 set statusline+=%{&paste?'[paste]':''}
 set statusline+=%*
 set statusline+=%=      "left/right separator
-set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
-"set statusline+=Col:%3*%03c%*\ Ln:%3*%03l%*/%3*%03L%*
-"set statusline+=\ %3*%P    "percent through file
+"set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
 set statusline+=Col:%03c%*\     "cursor column
 set statusline+=Ln:%l/%L   "cursor line/total lines
-"set statusline+=%c,     "cursor column
-"set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 set laststatus=2
 set laststatus=2
@@ -187,6 +183,8 @@ nmap l <right>
 vmap l <right>
 imap <c-l> <right>
 cmap <c-l> <right>
+" ESC button
+imap ii <Esc><right>
 "imap <c-d> <esc>ddI
 "imap <c-a> <esc>A
 "imap <c-o> <esc>O
@@ -239,8 +237,6 @@ nmap <kEnter> :nohlsearch<cr>/<BS>
 imap <tab> <c-r>=InsertTabWordWrapper()<cr>
 imap <c-tab> <c-r>=InsertTabLineWrapper()<cr>
 imap <s-tab> <c-n>
-" omni completion
-imap <c-F> <c-X><c-O>
 " snippet
 imap <silent> ; <c-r>=InsertSnippetWrapper()<cr>
 imap <a-;> <c-r>=ShowAvailableSnips()<cr>
@@ -354,6 +350,9 @@ vnoremap <f5> <esc>:emenu File.Subversion.<tab>
 "inoremap <f9> <c-O>:emenu File.Preview.<tab>
 "vnoremap <f9> <esc>:emenu File.Preview.<tab>
 " Tags
+nnoremap <f11> :TlistToggle<cr>
+inoremap <f11> <c-O>:TlistToggle<cr>
+vnoremap <f11> <esc>:TlistToggle<cr>
 nnoremap <f12> :emenu Tags.<tab>
 inoremap <f12> <c-O>:emenu Tags.<tab>
 vnoremap <f12> <esc>:emenu Tags.<tab>
@@ -469,6 +468,8 @@ augroup END
 
 au BufNewFile,BufRead *.cpp map <c-f12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
 au BufNewFile,BufRead *.cpp,*.h set tags+=~/.vimdata/c++/unix/std/tags
+
+au BufNewFile,BufRead *.ass set filetype=ssa
 "-----------------------------------------------------------------------------
 " omni completion
 "-----------------------------------------------------------------------------
@@ -844,11 +845,14 @@ let g:SessionMgr_DefaultName = "last"
 "let s:did_snips_mappings = 1
 " Tlist settings
 let g:Tlist_Show_One_File = 1
+let g:Tlist_GainFocus_On_ToggleOpen = 1
+let g:Tlist_Use_Right_Window = 1
+let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
 "set mps+=[:]
 " netrw settings
-let g:netrw_ftp_cmd = "ftp -p"
+"let g:netrw_ftp_cmd = "ftp -p"
 " php settings
 let php_sql_query = 1
 let php_htmlInStrings = 1
@@ -871,7 +875,8 @@ let OmniCpp_MayCompleteScope = 1
 let OmniCpp_ShowPrototypeInAbbr = 1
 
 " javascript omnicomplete
-let g:rjscomplete_library = 'jQuery'
+let g:rjscomplete_library = 'jQuery_1.4'
+let g:rjscomplete_find_in_prototype = 0
 
 "let g:tlist_javascript_settings = 'javascript;v:var;c:class;p:prototype;m:method;f:function;o:object'
 

@@ -11,6 +11,15 @@ if !exists('g:rjscomplete_library')
   let g:rjscomplete_library = ''
 endif
 
+" do not enable this option, it is bugged
+if !exists('g:rjscomplete_show_path')
+  let g:rjscomplete_show_path = '0'
+endif
+
+if !exists('g:rjscomplete_find_in_prototype')
+  let g:rjscomplete_find_in_prototype = '0'
+endif
+
 let s:closures = {}
 
 function! DrawRjsMenu()
@@ -24,7 +33,7 @@ function! DrawRjsMenu()
         else
           let filename = substitute(file, "^.*javascript\\\\libs\\", "", "")
         end
-        exec "anoremenu &Javascript.&".filename." :call SetRjsCompleteLibarary('".filename."')<cr>"
+        exec "anoremenu &Javascript.&".escape(filename, " .")." :call SetRjsCompleteLibarary('".filename."')<cr>"
       endif
     endfor
   endif
@@ -33,10 +42,10 @@ endfunction
 
 function! SetRjsCompleteLibarary(library)
   if g:rjscomplete_library != ''
-    exec("set tags-=~/.vimdata/javascript/libs/".g:rjscomplete_library."/tags")
+    exec("set tags-=~/.vimdata/javascript/libs/".escape(g:rjscomplete_library, " ")."/tags")
   end
   if a:library != ''
-    exec("set tags+=~/.vimdata/javascript/libs/".a:library."/tags")
+    exec("set tags+=~/.vimdata/javascript/libs/".escape(a:library, " ")."/tags")
   end
   let g:rjscomplete_library = a:library
 endfunction
@@ -47,126 +56,128 @@ function! RjsComplete(findstart, base)
 
   " Main function {{{
   if a:findstart
-    " locate the start of the word
-    let line = getline('.')
-    let start = col('.') - 1
-    let curline = line('.')
-    let compl_begin = col('.') - 2
-    " Bit risky but JS is rather limited language and local chars shouldn't
-    " fint way into names
-    while start >= 0 && line[start - 1] =~ '\k'
-      let start -= 1
-    endwhile
-    let b:compl_context = getline('.')[0:compl_begin]
-    return start
+    return s:FindStart()
   else
-    " Initialize base return lists
     let s:properties = []
     let s:methods = []
-    " a:base is very short - we need context
-    " Shortcontext is context without a:base, useful for checking if we are
-    " looking for objects and for what objects we are looking for
-    let context = b:compl_context
-    let s:shortcontext = substitute(context, a:base.'$', '', '')
+
+    let s:last_reduced_object = {'name': '', 'prefix': '', 'type': ''}
+
+    call s:CompleteWord(a:base, 0)
     unlet! b:compl_context
 
-    if exists("b:jsrange")
-      let file = getline(b:jsrange[0],b:jsrange[1])
-      unlet! b:jsrange
-
-      if len(b:js_extfiles) > 0
-        let file = b:js_extfiles + file
-      endif
-    else
-      let file = getline(1, '$')
-    endif
-
-    let object = {}
-    let object_type = 'undefined'
-    if s:shortcontext =~ '\.$'
-      " jQuery block
-      if g:rjscomplete_library == 'jQuery'
-        let s:shortcontext = substitute(s:shortcontext, '\<$\>', 'jQuery', '')
-        if match(s:shortcontext, '(.*)[') != -1
-          let object_type = 'DOMElement'
-        elseif match(s:shortcontext, '^jQuery(.*)') != -1
-          let s:shortcontext = "jQuery.fn."
-        end
-      end
-
-      let object.name = matchstr(s:shortcontext, '\zs\k\+\ze\(\[.\{-}\]\)\?\.$')
-      let object.prefix = substitute(substitute(substitute(s:shortcontext, '\.$', '', ''), object.name.'$', '', ''), '\.$', '' ,'')
-      let object.type = object_type
-
-      if object.type == 'undefined'
-        "call s:FindObjectTypeInBuffers(object)
-        if object.type == 'undefined'
-          let object = s:FindObjectTypeInTags(object, 1)
-        endif
-      endif
-
-      if object.type == 'undefined'
-        call s:FindObjectPropertiesInTags(object)
-        let s:properties = sort(s:properties, "s:PropCompare")
-        let s:methods = sort(s:methods, "s:PropCompare")
-        call s:GetBuildInTypeProperties(object)
-      else
-        let s:properties = sort(s:properties, "s:PropCompare")
-        let s:methods = sort(s:methods, "s:PropCompare")
-        call s:GetBuildInTypeProperties(object)
-      endif
-    else
-      let object.name = a:base
-      let object.prefix = ''
-      let object.type = 'window'
-      call s:FindGlobalObjectInTags(object)
-      call s:GetBuildInTypeProperties(object)
-    endif
-    if s:properties != [] || s:methods != []
-      let ret = []
-      for hash in s:properties
-        if hash.word =~? '^'.s:base
-          call add(ret, hash)
-        endif
-      endfor
-      for hash in s:methods
-        if hash.word =~? '^'.s:base
-          call add(ret, hash)
-        endif
-      endfor
-      return ret
-    else
-      return -1
-    end
+    return filter(extend(s:properties, s:methods), 'v:val.word =~? "^'.s:base.'"')
+    "list ret = []
+    "for hash in s:properties
+      "if hash.word =~? '^'.s:base
+        "call add(ret, hash)
+      "endif
+    "endfor
+    "for hash in s:methods
+      "if hash.word =~? '^'.s:base
+        "call add(ret, hash)
+      "endif
+    "endfor
+    "return ret
   endif
   " }}}
 endfunction
 
 
-function! s:MakeFoundItem(object, field)
+function! s:FindStart()
+  " locate the start of the word
+  let line = getline('.')
+  let start = col('.') - 1
+  let curline = line('.')
+  let compl_begin = col('.') - 2
+  " Bit risky but JS is rather limited language and local chars shouldn't
+  " fint way into names
+  while start >= 0 && line[start - 1] =~ '\k'
+    let start -= 1
+  endwhile
+  let b:compl_context = getline('.')[0:compl_begin]
+  return start
+endfunction
+
+
+function! s:CompleteWord(base, prototype)
+  let s:shortcontext = substitute(b:compl_context, a:base.'$', '', '')
+
+  let object = {}
+  let object_type = 'undefined'
+  if s:shortcontext !~ '\.$'
+    let object.name = a:base
+    let object.prefix = ''
+    let object.type = 'window'
+    call s:TagsGlobals(object)
+    call s:GetBuildInTypeProperties(object)
+  else
+    " jQuery block
+    if g:rjscomplete_library =~ 'jQuery'
+      let s:shortcontext = substitute(s:shortcontext, '\<$\>', 'jQuery', '')
+      if match(s:shortcontext, '(.*)[') != -1
+        let object_type = 'DOMElement'
+      elseif match(s:shortcontext, '^jQuery(.*)') != -1
+        let s:shortcontext = "jQuery.fn."
+      end
+    end
+
+    let object.name = matchstr(s:shortcontext, '\zs\k\+\ze\(\[.\{-}\]\)\?\.$')
+    let object.prefix = substitute(substitute(substitute(s:shortcontext, '\.$', '', ''), object.name.'$', '', ''), '\.$', '' ,'')
+    let object.type = object_type
+
+    if object.type == 'undefined'
+      "call s:BuffersResolve(object)
+      if object.type == 'undefined'
+        let object = s:TagsResolve(object, 1)
+      endif
+    endif
+
+    "echoe 'name:'.object.name.', prefix:'.object.prefix.', type:'.object.type
+    if object.type == 'undefined'
+      call s:TagsMembers(object)
+    endif
+    let s:properties = sort(s:properties, "s:PropCompare")
+    let s:methods = sort(s:methods, "s:PropCompare")
+
+    if !a:prototype
+      if g:rjscomplete_find_in_prototype
+        let b:compl_context = b:compl_context.'prototype.'
+        call s:CompleteWord(a:base, 1)
+      end
+      call s:GetBuildInTypeProperties(object)
+    end
+  endif
+endfunction
+
+
+function! s:Tag2Item(object, field)
     let hash = {}
     let hash.word = substitute(a:field.text, '^\([^\t]\+\)\t.*$', '\1', '')
     if match(hash.word, '\.') != -1 || match(hash.word, '^CLOSURE_\d\+') != -1
       return {}
     end
-    let hash.kind = substitute(a:field.text, '^.*\tkind:\([^:.\t]\+\(::\|\.\)\)*\([^:.\t]\+\)\t.*$', '\3', '')
+    let hash.kind = substitute(a:field.text, '^.*\tkind:\%([^:.\t]\+\%(::\|\.\)\)*\([^:.\t]\+\)\t.*$', '\1', '')
     let hash.kind = substitute(hash.kind, 'CLOSURE_\d\+', 'Function', '')
 
-    let hash.menu = substitute(a:object.prefix.'.'.a:object.name, '^\.', '', '')
-    " resolve CLOSURES in hash.menu
-    while match(hash.menu, 'CLOSURE_\d\+') != -1
-      let closure = substitute(hash.menu, '.*\(CLOSURE_\d\+\).*', '\1', '')
-      if !has_key(s:closures, closure)
-        let s:closures[closure] = s:FindClosureNameInTags(closure)
-      end
-      let hash.menu = substitute(hash.menu, 'CLOSURE_\d\+', s:closures[closure] != "" ? s:closures[closure] : "", "")
-    endwhile
+    if g:rjscomplete_show_path
+      let hash.menu = substitute(a:object.prefix.'.'.a:object.name, '^\.', '', '')
+      " resolve CLOSURES in hash.menu
+      while match(hash.menu, 'CLOSURE_\d\+') != -1
+        let closure = substitute(hash.menu, '.*\(CLOSURE_\d\+\).*', '\1', '')
+        if !has_key(s:closures, closure)
+          let s:closures[closure] = s:TagsClosureName(closure)
+        end
+        let hash.menu = substitute(hash.menu, 'CLOSURE_\d\+', s:closures[closure] != "" ? s:closures[closure] : "", "")
+      endwhile
+    end
 
     return hash
 endfunction
 
 
-function! s:FindClosureNameInTags(closure)
+function! s:TagsClosureName(closure)
+  " Finds closure name in tags {{{
   let fnames = join(map(tagfiles(), 'escape(v:val, " #%")'))
   if fnames != ''
     exe 'silent! vimgrep /\(::\|\.\|\)\?'.a:closure.'\tscope:\t.*/j '.fnames
@@ -178,11 +189,12 @@ function! s:FindClosureNameInTags(closure)
     endif
   endif
   return ""
+  " }}}
 endfunction
 
 
-function! s:FindGlobalObjectInTags(object)
-  " Find object children in tags {{{
+function! s:TagsGlobals(object)
+  " Finds global objects in tags {{{
   let fnames = join(map(tagfiles(), 'escape(v:val, " #%")'))
 
   if fnames != ''
@@ -190,24 +202,51 @@ function! s:FindGlobalObjectInTags(object)
     let qflist = getqflist()
     if len(qflist) > 0
       for field in qflist
-        let hash = s:MakeFoundItem(a:object, field)
+        let hash = s:Tag2Item(a:object, field)
 
-        "if hash != {} && hash.word =~? '^'.s:base
-        if hash.kind == 'Function'
-          call add(s:methods, hash)
-        else
-          call add(s:properties, hash)
+        if hash != {} "&& hash.word =~? '^'.s:base
+          if hash.kind == 'Function'
+            call add(s:methods, hash)
+          else
+            call add(s:properties, hash)
+          endif
         endif
-        "endif
       endfor
     endif
   endif
   return a:object
+  " }}}
 endfunction
 
 
-function! s:FindObjectPropertiesInTags(object)
-  " Find object children in tags {{{
+function! s:TagsType(object)
+  " Finds object type in tags {{{
+  for tag in taglist('^'.a:object.name.'$')
+    if match(tag.cmd, 'scope:\%(::\|\.\|\)'.escape(a:object.prefix, "$").'\t.*language:js') != -1
+      return substitute(tag.cmd, '^.*\tkind:\([^\t]\+\)\tscope:\%(::\|\.\|\)'.escape(a:object.prefix, "$").'\t.*$', '\1', '')
+    endif
+  endfor
+  return 'undefined'
+
+  "let object_type = 'undefined'
+  "let fnames = join(map(tagfiles(), 'escape(v:val, " #%")'))
+  "if fnames != ''
+    "exe 'silent! vimgrep /^'.escape(a:object.name, "$").'\t.*\tscope:\(::\|\.\|\)'.escape(a:object.prefix, "$").'\t.*language:js$/j '.fnames
+    "let qflist = getqflist()
+    "if len(qflist) > 0
+      "for field in qflist
+        "let object_type = substitute(field.text, '^.*\tkind:\([^\t]\+\)\tscope:\%(::\|\.\|\)'.escape(a:object.prefix, "$").'\t.*$', '\1', '')
+        "break
+      "endfor
+    "endif
+  "endif
+  "return object_type
+  " }}}
+endfunction
+
+
+function! s:TagsMembers(object)
+  " Finds object members in tags {{{
   let fnames = join(map(tagfiles(), 'escape(v:val, " #%")'))
 
   if fnames != ''
@@ -216,7 +255,7 @@ function! s:FindObjectPropertiesInTags(object)
     let qflist = getqflist()
     if len(qflist) > 0
       for field in qflist
-        let hash = s:MakeFoundItem(a:object, field)
+        let hash = s:Tag2Item(a:object, field)
 
         if hash != {}
         "&& hash.word =~? '^'.s:base
@@ -230,81 +269,70 @@ function! s:FindObjectPropertiesInTags(object)
     endif
   endif
   return a:object
+  " }}}
 endfunction
 
 
-function! s:GetObjectTypeFromTags(object)
-  let object_type = 'undefined'
-  let fnames = join(map(tagfiles(), 'escape(v:val, " #%")'))
-
-  if fnames != ''
-    exe 'silent! vimgrep /^'.escape(a:object.name, "$").'\t.*\tscope:\(::\|\.\|\)'.escape(a:object.prefix, "$").'\t.*language:js$/j '.fnames
-    let qflist = getqflist()
-    if len(qflist) > 0
-      for field in qflist
-        let object_type = substitute(field.text, '^.*\tkind:\([^\t]\+\)\tscope:\(::\|\.\|\)'.escape(a:object.prefix, "$").'\t.*$', '\1', '')
-        break
-      endfor
-    endif
-  endif
-  return object_type
-endfunction
-
-
-function! s:FindObjectTypeInTags(object, add_properties)
+function! s:TagsResolve(object, add_properties)
   " Find object type declaration in tags {{{
-  let a:object.type = s:GetObjectTypeFromTags(a:object)
+  let a:object.type = s:TagsType(a:object)
   "echoe 'name:'.a:object.name.', prefix:'.a:object.prefix.', type:'.a:object.type
 
   " if object's type contains :: or . lets check if its type is buildin
-  if match(a:object.type, '\w\+::\w\+') != -1
-    let tmp_type = substitute(a:object.type, '^.*::\(\w\+\)$', '\1', '')
-    if s:IsBuildInType(tmp_type)
-      let a:object.type = tmp_type
-    endif
-  endif
+  "if match(a:object.type, '\w\+::\w\+') != -1
+    "let tmp_type = substitute(a:object.type, '^.*::\(\w\+\)$', '\1', '')
+    "if s:IsBuildInType(tmp_type)
+      "let a:object.type = tmp_type
+    "endif
+  "endif
 
   " if object is not found but its prefix is not empty then lets try to reduce prefix
   if a:object.type == 'undefined' && a:object.prefix != ''
-    if a:add_properties
-      call s:FindObjectPropertiesInTags(a:object)
-    end
     let reduced_object = {}
-    let reduced_object.name = substitute(a:object.prefix, '^\(.*\%(\.\|::\)\)\?\(\w\+\)$', '\2', '')
-    let reduced_object.prefix = substitute(a:object.prefix, '\(\.\|::\)\?'.escape(reduced_object.name, '$').'$', '', '')
+    let reduced_object.name = substitute(a:object.prefix, '^\%(.*\%(\.\|::\)\)\?\(\w\+\)$', '\1', '')
+    let reduced_object.prefix = substitute(a:object.prefix, '\%(\.\|::\)\?'.escape(reduced_object.name, '$').'$', '', '')
     let reduced_object.type = 'undefined'
 
     let reduced_object_original_name = reduced_object.name
-    "echoe 'reduced_object try name:'.reduced_object.name.', prefix:'.reduced_object.prefix.', type:'.reduced_object.type
-    let reduced_object = s:FindObjectTypeInTags(reduced_object, 0)
+    if s:last_reduced_object.name != reduced_object.name || s:last_reduced_object.prefix != reduced_object.prefix || s:last_reduced_object.type != reduced_object.type
+      "echoe 'reduced_object try name:'.reduced_object.name.', prefix:'.reduced_object.prefix.', type:'.reduced_object.type
+      let s:last_reduced_object.name = reduced_object.name
+      let s:last_reduced_object.prefix = reduced_object.prefix
+      let s:last_reduced_object.type = reduced_object.type
+      let reduced_object = s:TagsResolve(reduced_object, 0)
+    end
     "echoe 'reduced_object original_name:'.reduced_object_original_name.', name:'.reduced_object.name.', prefix:'.reduced_object.prefix.', type:'.reduced_object.type
     if reduced_object.type != 'undefined'
+      if a:add_properties
+        call s:TagsMembers(a:object)
+      end
+      " add resolved name to s:closures dictionary
       let s:closures[reduced_object.name] = reduced_object_original_name
       "echoe 'prior object name:'.a:object.name.', prefix:'.a:object.prefix.', type:'.a:object.type
-      let a:object.prefix = substitute(substitute(a:object.prefix, '.*'.reduced_object_original_name.'\(\.\|$\)', reduced_object.prefix.'.'.reduced_object.name.'.', ''), '\.$', '' ,'')
+      let a:object.prefix = substitute(substitute(a:object.prefix, '.*'.reduced_object_original_name.'\%(\.\|$\)', reduced_object.prefix.'.'.reduced_object.name.'.', ''), '\.$', '' ,'')
       "echoe 'return_object_after_reduce name:'.a:object.name.', prefix:'.a:object.prefix.', type:'.a:object.type
-      return s:FindObjectTypeInTags(a:object, a:add_properties)
+      return s:TagsResolve(a:object, a:add_properties)
     end
   endif
 
   " if object is found but its type is not buildin type then lets try to replace it
   if a:object.type != 'undefined' && !s:IsBuildInType(a:object.type)
     let replaced_object = {}
-    let replaced_object.name = substitute(a:object.type, '^.*\(\.\|::\)\(\w\+\)$', '\2', '')
-    let replaced_object.prefix = substitute(a:object.type, '\(\.\|::\)\?'.replaced_object.name.'$', '', '')
+    let replaced_object.name = substitute(a:object.type, '^.*\%(\.\|::\)\(\w\+\)$', '\1', '')
+    let replaced_object.prefix = substitute(a:object.type, '\%(\.\|::\)\?'.replaced_object.name.'$', '', '')
     let replaced_object.type = 'undefined'
 
-    if s:GetObjectTypeFromTags(replaced_object) != a:object.type
+    if s:TagsType(replaced_object) != a:object.type
       if a:add_properties
-        call s:FindObjectPropertiesInTags(a:object)
+        call s:TagsMembers(a:object)
       end
       "echoe 'return_replaced_object name:'.replaced_object.name.', prefix:'.replaced_object.prefix.', type:'.replaced_object.type
-      return s:FindObjectTypeInTags(replaced_object, a:add_properties)
+      return s:TagsResolve(replaced_object, a:add_properties)
     end
   end
 
   if a:add_properties
-    call s:FindObjectPropertiesInTags(a:object)
+    call s:TagsMembers(a:object)
   end
   "echoe 'return_object name:'.a:object.name.', prefix:'.a:object.prefix.', type:'.a:object.type
   return a:object
@@ -312,7 +340,7 @@ function! s:FindObjectTypeInTags(object, add_properties)
 endfunction
 
 
-function! s:FindObjectTypeInBuffers(object)
+function! s:BuffersResolve(object)
   " Find object type declaration in open buffers. {{{
   " 1. Get object name
   " 2. Find object declaration line
@@ -408,10 +436,10 @@ function! s:MakeProperties(type, properties, methods)
   let data = []
 
   for v in a:properties
-    call add(data, {'word': v, 'kind': 'Property', 'menu': a:type.'.Prototype'})
+    call add(data, {'word': v, 'kind': 'Property', 'menu': g:rjscomplete_show_path ? a:type.'.Prototype' : ""})
   endfor
   for v in a:methods
-    call add(data, {'word': v, 'kind': 'Function', 'menu': a:type.'.Prototype'})
+    call add(data, {'word': v, 'kind': 'Function', 'menu': g:rjscomplete_show_path ? a:type.'.Prototype' : ""})
   endfor
 
   return data
@@ -419,30 +447,36 @@ endfunction
 
 
 function! s:GetBuildInTypeProperties(object)
+  let object = {'name': a:object.name, 'prefix': a:object.prefix, 'type': a:object.type}
+  if object.type == 'undefined'
+    let object.type = object.name
+  end
   " {{{ Complete methods and properties for default objects
-  if a:object.type == 'Object'
+  if object.type == 'Object'
     let values = s:objes
-  elseif a:object.type == 'Function'
+  elseif object.type == 'Function'
     let values = s:funcs
-  elseif a:object.type == 'Date'
+  elseif object.type == 'Number'
+    let values = s:numbs
+  elseif object.type == 'Date'
     let values = s:dates
-  "elseif a:object.type == 'Image'
+  "elseif object.type == 'Image'
     "let values = s:imags
-  elseif a:object.type == 'Array'
+  elseif object.type == 'Array'
     let values = s:arrays
-  elseif a:object.type == 'Boolean'
+  elseif object.type == 'Boolean'
     let values = s:bools
-  "elseif a:object.type == 'XMLHttpRequest'
+  "elseif object.type == 'XMLHttpRequest'
     "let values = s:xmlhs
-  elseif a:object.type == 'String'
+  elseif object.type == 'String'
     let values = s:stris
-  elseif a:object.type == 'RegExp'
+  elseif object.type == 'RegExp'
     let values = s:reges
-  elseif a:object.type == 'Math'
+  elseif object.type == 'Math'
     let values = s:maths
-  elseif a:object.type == 'DOMElement'
+  elseif object.type == 'DOMElement'
     let values = s:xdomelems
-  elseif a:object.type == 'window'
+  elseif object.type == 'window'
     let values = s:winds
   endif
 
@@ -496,6 +530,8 @@ function! s:GetBuildInTypeProperties(object)
       "let values = s:xdomerror
     "elseif s:shortcontext =~ 'attributes\[\d\+\]\.$'
       "let values = s:xdomattrprop
+    elseif s:shortcontext =~ 'arguments\.$'
+      let values = s:args
     else
       let values = []
       "let values = objes
@@ -515,9 +551,7 @@ endfunction
 " {{{ methods and properties for default objects
 " Arrays
 let arrayprop = ['constructor', 'index', 'input', 'length', 'prototype']
-let arraymeth = ['concat', 'join', 'pop', 'push', 'reverse', 'shift',
-      \ 'splice', 'sort', 'toSource', 'toString', 'unshift', 'valueOf',
-      \ 'watch', 'unwatch']
+let arraymeth = ['concat', 'join', 'pop', 'push', 'reverse', 'shift', 'slice', 'splice', 'sort', 'toSource', 'toString', 'unshift', 'valueOf',  'watch', 'unwatch']
 let s:arrays = s:MakeProperties('Array', arrayprop, arraymeth)
 
 " Boolean - complete subset of array values
@@ -542,10 +576,14 @@ let datemeth = ['getDate', 'getDay', 'getFullYear', 'getHours', 'getMilliseconds
 let s:dates = s:MakeProperties('Date', dateprop, datemeth)
 
 " Function
-let funcprop = ['arguments', 'arguments.callee', 'arguments.caller', 'arguments.length',
-      \ 'arity', 'constructor', 'length', 'prototype']
+let funcprop = ['arguments', 'constructor', 'length', 'prototype']
 let funcmeth = ['apply', 'call', 'toSource', 'toString', 'valueOf']
 let s:funcs = s:MakeProperties('Function', funcprop, funcmeth)
+
+" Arguments
+let argsprop = ['callee', 'caller', 'length']
+let argsmeth = []
+let s:args = s:MakeProperties('arguments', argsprop, argsmeth)
 
 " Math
 let mathprop = ['E', 'LN2', 'LN10', 'LOG2E', 'LOG10E', 'PI', 'SQRT1_2', 'SQRT']
