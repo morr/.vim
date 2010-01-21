@@ -13,11 +13,15 @@ endif
 
 " do not enable this option, it is bugged
 if !exists('g:rjscomplete_show_path')
-  let g:rjscomplete_show_path = '0'
+  let g:rjscomplete_show_path = 0
 endif
 
 if !exists('g:rjscomplete_find_in_prototype')
-  let g:rjscomplete_find_in_prototype = '0'
+  let g:rjscomplete_find_in_prototype = 0
+endif
+
+if !exists('g:rjscomplete_ECMAScript_5')
+  let g:rjscomplete_ECMAScript_5 = 1
 endif
 
 let s:closures = {}
@@ -64,39 +68,74 @@ function! RjsComplete(findstart, base)
     let s:last_reduced_object = {'name': '', 'prefix': '', 'type': ''}
 
     call s:CompleteWord(a:base, 0)
-    unlet! b:compl_context
+    "unlet! b:compl_context
 
     return filter(extend(s:properties, s:methods), 'v:val.word =~? "^'.s:base.'"')
-    "list ret = []
-    "for hash in s:properties
-      "if hash.word =~? '^'.s:base
-        "call add(ret, hash)
-      "endif
-    "endfor
-    "for hash in s:methods
-      "if hash.word =~? '^'.s:base
-        "call add(ret, hash)
-      "endif
-    "endfor
-    "return ret
   endif
   " }}}
 endfunction
 
 
 function! s:FindStart()
-  " locate the start of the word
+  " Locate the start of the item, including ".", "->" and "[...]".
   let line = getline('.')
+  let begin = col('.') - 1
   let start = col('.') - 1
-  let curline = line('.')
-  let compl_begin = col('.') - 2
-  " Bit risky but JS is rather limited language and local chars shouldn't
-  " fint way into names
-  while start >= 0 && line[start - 1] =~ '\k'
-    let start -= 1
+  let lastword = -1
+  while start > 0
+    if line[start - 1] =~ '\w\|\$'
+      let start -= 1
+    elseif line[start - 1] =~ '\.'
+      if lastword == -1
+        let lastword = start
+      endif
+      let start -= 1
+    elseif line[start - 1] == ')'
+      " Skip over (...).
+      let n = 0
+      let start -= 1
+      while start > 0
+        let start -= 1
+        if line[start] == '('
+          if n == 0
+            break
+          endif
+          let n -= 1
+        elseif line[start] == ')'  " nested ()
+          let n += 1
+        endif
+      endwhile
+    elseif line[start - 1] == ']'
+      " Skip over [...].
+      let n = 0
+      let start -= 1
+      while start > 0
+        let start -= 1
+        if line[start] == '['
+          if n == 0
+            break
+          endif
+          let n -= 1
+        elseif line[start] == ']'  " nested []
+          let n += 1
+        endif
+      endwhile
+      else
+      break
+    endif
   endwhile
-  let b:compl_context = getline('.')[0:compl_begin]
-  return start
+
+  " Return the column of the last word, which is going to be changed.
+  " Remember the text that comes before it in s:prepended.
+  if lastword == -1
+    let b:compl_context = ''
+    return start
+  endif
+  let b:compl_context = strpart(line, start, lastword - start)
+  "echoe lastword
+  "echoe begin
+  "echoe b:compl_context
+  return lastword
 endfunction
 
 
@@ -122,6 +161,22 @@ function! s:CompleteWord(base, prototype)
       end
     end
 
+    " ExtJS block
+    if g:rjscomplete_library =~ 'ExtJS'
+      if match(s:shortcontext, '^Ext.get(.*)') != -1
+        let s:shortcontext = "Ext.Element."
+      end
+      if match(s:shortcontext, '^Ext.select(.*)') != -1
+        let s:shortcontext = "Ext.Element."
+      end
+      if match(s:shortcontext, '^Ext.query(.*)[') != -1
+        let s:shortcontext = "DOMElement."
+      end
+      if match(s:shortcontext, '^Ext.query(.*)') != -1
+        let s:shortcontext = "Array."
+      end
+    end
+
     let object.name = matchstr(s:shortcontext, '\zs\k\+\ze\(\[.\{-}\]\)\?\.$')
     let object.prefix = substitute(substitute(substitute(s:shortcontext, '\.$', '', ''), object.name.'$', '', ''), '\.$', '' ,'')
     let object.type = object_type
@@ -136,7 +191,29 @@ function! s:CompleteWord(base, prototype)
     "echoe 'name:'.object.name.', prefix:'.object.prefix.', type:'.object.type
     if object.type == 'undefined'
       call s:TagsMembers(object)
+    else
+      let object.type = 'undefined'
+      call s:TagsMembers(object)
     endif
+
+    " if no properties and methods were found and if object type is undefined
+    " let's try found object's type in object's parent children
+    if s:properties == [] && s:methods == [] && object.type == 'undefined' && object.prefix != ''
+      let tmp = b:compl_context
+      let b:compl_context = substitute(b:compl_context, '\(.*\)\..*\.', '\1.' ,'')
+      call s:CompleteWord("", 1)
+      let b:compl_context = tmp
+
+      let found_type = filter(extend(s:properties, s:methods), 'v:val.word == "'.object.name.'"')
+      for field in found_type
+        let object.type = field.kind
+        break
+      endfor
+      let s:properties = []
+      let s:methods = []
+      call s:TagsMembers(object)
+    end
+
     let s:properties = sort(s:properties, "s:PropCompare")
     let s:methods = sort(s:methods, "s:PropCompare")
 
@@ -227,20 +304,6 @@ function! s:TagsType(object)
     endif
   endfor
   return 'undefined'
-
-  "let object_type = 'undefined'
-  "let fnames = join(map(tagfiles(), 'escape(v:val, " #%")'))
-  "if fnames != ''
-    "exe 'silent! vimgrep /^'.escape(a:object.name, "$").'\t.*\tscope:\(::\|\.\|\)'.escape(a:object.prefix, "$").'\t.*language:js$/j '.fnames
-    "let qflist = getqflist()
-    "if len(qflist) > 0
-      "for field in qflist
-        "let object_type = substitute(field.text, '^.*\tkind:\([^\t]\+\)\tscope:\%(::\|\.\|\)'.escape(a:object.prefix, "$").'\t.*$', '\1', '')
-        "break
-      "endfor
-    "endif
-  "endif
-  "return object_type
   " }}}
 endfunction
 
@@ -250,13 +313,11 @@ function! s:TagsMembers(object)
   let fnames = join(map(tagfiles(), 'escape(v:val, " #%")'))
 
   if fnames != ''
-    "echoe 'silent! vimgrep /\tscope:\(::\|\.\|\)'.escape(a:object.prefix.".".a:object.name, "$").'\t/j '.fnames
-    exe 'silent! vimgrep /\tscope:\(::\|\.\|\)'.escape(a:object.prefix.".".a:object.name, "$").'\t/j '.fnames
+    exe 'silent! vimgrep /\tscope:\%(::\|\.\|\)\%('.escape(a:object.prefix.".".a:object.name, "$").'\|'.a:object.type.'\)\%(.prototype\)\?\t/j '.fnames
     let qflist = getqflist()
     if len(qflist) > 0
       for field in qflist
         let hash = s:Tag2Item(a:object, field)
-
         if hash != {}
         "&& hash.word =~? '^'.s:base
           if hash.kind == 'Function'
@@ -277,14 +338,6 @@ function! s:TagsResolve(object, add_properties)
   " Find object type declaration in tags {{{
   let a:object.type = s:TagsType(a:object)
   "echoe 'name:'.a:object.name.', prefix:'.a:object.prefix.', type:'.a:object.type
-
-  " if object's type contains :: or . lets check if its type is buildin
-  "if match(a:object.type, '\w\+::\w\+') != -1
-    "let tmp_type = substitute(a:object.type, '^.*::\(\w\+\)$', '\1', '')
-    "if s:IsBuildInType(tmp_type)
-      "let a:object.type = tmp_type
-    "endif
-  "endif
 
   " if object is not found but its prefix is not empty then lets try to reduce prefix
   if a:object.type == 'undefined' && a:object.prefix != ''
@@ -532,6 +585,10 @@ function! s:GetBuildInTypeProperties(object)
       "let values = s:xdomattrprop
     elseif s:shortcontext =~ 'arguments\.$'
       let values = s:args
+    elseif s:shortcontext =~ 'console\.$'
+      let values = s:consoleelems
+    elseif s:shortcontext =~ 'JSON\.$' && g:rjscomplete_ECMAScript_5
+      let values = s:jsons
     else
       let values = []
       "let values = objes
@@ -552,6 +609,10 @@ endfunction
 " Arrays
 let arrayprop = ['constructor', 'index', 'input', 'length', 'prototype']
 let arraymeth = ['concat', 'join', 'pop', 'push', 'reverse', 'shift', 'slice', 'splice', 'sort', 'toSource', 'toString', 'unshift', 'valueOf',  'watch', 'unwatch']
+if g:rjscomplete_ECMAScript_5
+  let arrayprop = arrayprop + []
+  let arraymeth = arraymeth + ['indexOf', 'lastIndexOf', 'every', 'some', 'forEach', 'map', 'filter', 'reduce', 'reduceRight']
+end
 let s:arrays = s:MakeProperties('Array', arrayprop, arraymeth)
 
 " Boolean - complete subset of array values
@@ -573,11 +634,19 @@ let datemeth = ['getDate', 'getDay', 'getFullYear', 'getHours', 'getMilliseconds
       \ 'setUTCMinutes', 'setUTCMonth', 'setUTCSeconds', 'setYear', 'setTime',
       \ 'toGMTString', 'toLocaleString', 'toLocaleDateString', 'toLocaleTimeString',
       \ 'toSource', 'toString', 'toUTCString', 'UTC', 'valueOf', 'watch', 'unwatch']
+if g:rjscomplete_ECMAScript_5
+  let dateprop = dateprop + []
+  let datemeth = datemeth + ['now', 'toISOString', 'toJSON']
+end
 let s:dates = s:MakeProperties('Date', dateprop, datemeth)
 
 " Function
 let funcprop = ['arguments', 'constructor', 'length', 'prototype']
 let funcmeth = ['apply', 'call', 'toSource', 'toString', 'valueOf']
+if g:rjscomplete_ECMAScript_5
+  let funcprop = funcprop + []
+  let funcmeth = funcmeth + ['bind']
+end
 let s:funcs = s:MakeProperties('Function', funcprop, funcmeth)
 
 " Arguments
@@ -592,6 +661,13 @@ let mathmeth = ['abs', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'exp', 'f
       \ 'watch', 'unwatch']
 let s:maths = s:MakeProperties('Math', mathprop, mathmeth)
 
+if g:rjscomplete_ECMAScript_5
+  let jsonprop = []
+  let jsonmeth = ['stringify', 'parse']
+  let s:jsons = s:MakeProperties('JSON', jsonprop, jsonmeth)
+end
+
+
 " Number
 let numbprop = ['MAX_VALUE', 'MIN_VALUE', 'NaN', 'NEGATIVE_INFINITY', 'POSITIVE_INFINITY',
       \ 'constructor', 'prototype']
@@ -602,6 +678,10 @@ let s:numbs = s:MakeProperties('Number', numbprop, numbmeth)
 " Object
 let objeprop = ['constructor', 'prototype']
 let objemeth = ['eval', 'toSource', 'toString', 'unwatch', 'watch', 'valueOf']
+if g:rjscomplete_ECMAScript_5
+  let objeprop = objeprop + ['isSealed', 'isFrozen', 'isExtensible']
+  let objemeth = objemeth + ['getPrototypeOf', 'getPrototypeOf', 'keys', 'defineProperty', 'defineProperties', 'create', 'getOwnPropertyNames', 'seal', 'freeze', 'preventExtensions']
+end
 let s:objes = s:MakeProperties('Object', objeprop, objemeth)
 
 " RegExp
@@ -616,6 +696,10 @@ let strimeth = ['anchor', 'big', 'blink', 'bold', 'charAt', 'charCodeAt', 'conca
       \ 'lastIndexOf', 'link', 'match', 'replace', 'search', 'slice', 'small',
       \ 'split', 'strike', 'sub', 'substr', 'substring', 'sup', 'toLowerCase',
       \ 'toSource', 'toString', 'toUpperCase', 'watch', 'unwatch']
+if g:rjscomplete_ECMAScript_5
+  let striprop = striprop + []
+  let strimeth = strimeth + ['trim']
+end
 let s:stris = s:MakeProperties('String', striprop, strimeth)
 
 " User created properties
@@ -839,7 +923,7 @@ let s:navis = s:MakeProperties('Navigator', naviprop, navimeth)
 "call map(taremeth, 'v:val."("')
 "let tares = tareprop + taremeth
 " Window - window.
-let windprop = ['frames', 'closed', 'defaultStatus', 'document', 'encodeURI', 'event', 'history',
+let windprop = ['frames', 'closed', 'console', 'defaultStatus', 'document', 'encodeURI', 'event', 'history',
       \ 'length', 'location', 'name', 'onload', 'opener', 'parent', 'screen', 'self',
       \ 'status', 'top', 'XMLHttpRequest', 'ActiveXObject']
 let windmeth = ['alert', 'blur', 'clearInterval', 'clearTimeout', 'close', 'confirm', 'focus',
@@ -878,6 +962,10 @@ let s:xdomelems = s:MakeProperties('DOMElement', xdomelemprop, xdomelemmeth)
 "let xdomnliss = ['length', 'item(']
 "" Error - parseError.
 "let xdomerror = ['errorCode', 'reason', 'line', 'linepos', 'srcText', 'url', 'filepos']
+" Console
+let consoleprop = []
+let consolemeth = ['debug','info','warn','error','assert','dir','dirxml','trace','group','groupCollapsed','groupEnd','time','timeEnd','profile','profileEnd','count']
+let s:consoleelems = s:MakeProperties('console', consoleprop, consolemeth)
 " }}}
 
 
