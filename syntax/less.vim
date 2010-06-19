@@ -44,7 +44,7 @@ syn match cssSelectorOp2 "[~|]\?=" contained
 syn region cssAttributeSelector matchgroup=cssSelectorOp start="\[" end="]" transparent contains=cssUnicodeEscape,cssSelectorOp2,cssStringQ,cssStringQQ
 
 try
-syn match cssIdentifier "#[A-Za-zУ�-УП_@][A-Za-zУ�-УП0-9_@-]*"
+syn match cssIdentifier "#[A-Za-zРЈпїЅ-РЈРџ_@][A-Za-zРЈпїЅ-РЈРџ0-9_@-]*"
 catch /^.*/
 syn match cssIdentifier "#[A-Za-z_@][A-Za-z0-9_@-]*"
 endtry

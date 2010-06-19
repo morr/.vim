@@ -464,7 +464,7 @@ let b:begdat=0
                 en
         en
         "We are not standing on a begin/end comment
-        "Is the first > aending comment?
+        "Is the first > aоЂЂending comment?
         if search('[<>]','W') >0
                 if getline('.')[col('.')-1] == '>'
                         if getline('.')[col('.')-2] == ']' && getline('.')[col('.')-3] == ']'
@@ -1711,7 +1711,7 @@ for details.
             <para><listitem>list item content</para></listitem>
 
 <LocalLeader>[        Delete <![CDATA[ ]]> delimiters               {{{2
-                                                                Removes Only <CDATA[ and ]]> 
+                                                                Removes Only <CDATA[ and В•]В•]> 
                                                                 handy when you want     to uncomment a section.
                                                                 You need to stand in the tag and not on an other tag
                                                                 <![CDATA[  <tag> ]]>

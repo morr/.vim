@@ -5,12 +5,12 @@
 " Last Change:	2007 Nov 06
 " CSS2 by Nikolai Weibull
 " Full CSS2, HTML4 support by Yeti
-" °Ñbg»»³É6Î»µÄÊ®Áù½øÖÆ´úÂë
+" Â°Ğ¡bgÂ»Â»Ñ–Ğ™6ĞÂ»ÂµĞ”ĞšÂ®Ğ‘Ñ‰Ğ…ÑˆĞ¦Ğ–Ò‘ÑŠĞ’Ğ»
 function! s:FGforBG(bg)
    " takes a 6hex color code and returns a matching color that is visible
-   " substitute É¾³ı¿ªÍ·µÄ#
+   " substitute Ğ™Ñ•Ñ–ÑÑ—Ğ„ĞÂ·ÂµĞ”#
    let pure = substitute(a:bg,'^#','','')
-   " °´Î»È¡³öRGB
+   " Â°Ò‘ĞÂ»Ğ˜ĞÑ–Ñ†RGB
    let r = eval('0x'.pure[0].pure[1])
    let g = eval('0x'.pure[2].pure[3])
    let b = eval('0x'.pure[4].pure[5])
@@ -179,7 +179,7 @@ syn match cssSelectorOp2 "[~|]\?=" contained
 syn region cssAttributeSelector matchgroup=cssSelectorOp start="\[" end="]" transparent contains=cssUnicodeEscape,cssSelectorOp2,cssStringQ,cssStringQQ
 
 try
-syn match cssIdentifier "#[A-Za-zÀ-ÿ_@][A-Za-zÀ-ÿ0-9_@-]*"
+syn match cssIdentifier "#[A-Za-zĞ-Ñ_@][A-Za-zĞ-Ñ0-9_@-]*"
 catch /^.*/
 syn match cssIdentifier "#[A-Za-z_@][A-Za-z0-9_@-]*"
 endtry
@@ -411,7 +411,7 @@ if version >= 508 || !exists("did_css_syn_inits")
   delcommand HiLink
 endif
 
-" ÎÒÃÇµÄÒªÇóÊÇ±ØĞëÔÚ256É«ÏÂ£¬ËùÒÔÒªÉèÖÃ:set t_Co=256
+" ĞĞ¢Ğ“Ğ—ÂµĞ”Ğ¢Ğ„Ğ—ÑƒĞšĞ—Â±Ğ¨Ğ Ğ»Ğ¤Ğª256Ğ™Â«ĞŸĞ’ĞˆÂ¬Ğ›Ñ‰Ğ¢Ğ¤Ğ¢Ğ„Ğ™Ğ¸Ğ¦Ğ“:set t_Co=256
 if has("gui_running") || &t_Co==256
    " HACK modify cssDefinition to add @cssColors to its contains
    redir => s:olddef

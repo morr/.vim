@@ -9,7 +9,7 @@ filetype plugin on
 " directory for swap files
 set directory=$HOME
 " russian language fix
-set langmap=¸`,éq,öw,óe,êr,åt,íy,ãu,øi,ùo,çp,ôa,ûs,âd,àf,ïg,ğh,îj,ëk,äl,ı',ÿz,÷x,ñc,ìv,èb,òn,üm,á\\,,ş.,¨~,ÉQ,ÖW,ÓE,ÊR,ÅT,ÍY,ÃU,ØI,ÙO,ÇP,ÔA,ÛS,ÂD,ÀF,ÏG,ĞH,ÎJ,ËK,ÄL,Æ:,İ\\",ßZ,×X,ÑC,ÌV,ÈB,ÒN,ÜM,Á<,Ş>
+set langmap=Ñ‘`,Ğ¹q,Ñ†w,Ñƒe,Ğºr,Ğµt,Ğ½y,Ğ³u,Ñˆi,Ñ‰o,Ğ·p,Ñ„a,Ñ‹s,Ğ²d,Ğ°f,Ğ¿g,Ñ€h,Ğ¾j,Ğ»k,Ğ´l,Ñ',Ñz,Ñ‡x,Ñc,Ğ¼v,Ğ¸b,Ñ‚n,ÑŒm,Ğ±\\,,Ñ.,Ğ~,Ğ™Q,Ğ¦W,Ğ£E,ĞšR,Ğ•T,ĞY,Ğ“U,Ğ¨I,Ğ©O,Ğ—P,Ğ¤A,Ğ«S,Ğ’D,ĞF,ĞŸG,Ğ H,ĞJ,Ğ›K,Ğ”L,Ğ–:,Ğ­\\",Ğ¯Z,Ğ§X,Ğ¡C,ĞœV,Ğ˜B,Ğ¢N,Ğ¬M,Ğ‘<,Ğ®>
 " one word symbol class
 set iskeyword=@,48-57,_,192-255,\$
 " encodings
@@ -592,7 +592,7 @@ function! BackupDir()
   if has("win32")
     let l:backupdir=$VIM.'\.backup\'.substitute(expand('%:p:h'), ':', '', '')
   else
-    let l:backupdir=$HOME.'/.backup/'.substitute(expand('%:p:h'), ':', '', '')
+    let l:backupdir=substitute($HOME.'/.backup/'.substitute(expand('%:p:h'), ':', '', ''), '//', '/', '')
   endif
 
   if !isdirectory(l:backupdir)
@@ -798,6 +798,22 @@ endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
+" The idea is to delete something anywhere, then go select characters elsewhere, and hit g" to swap the delete characters with the newly selected ones.
+function! s:SwapVisualWithCut()
+  print "test"
+  normal! `.``
+  if line(".")==line("'.") && col(".") < col("'.")
+    let c = col('.')
+    normal! gvp```]
+    let c = col('.') - c
+    normal! ``
+    :silent call cursor(line("."),col(".")+c)
+    normal! P
+  else
+    normal! gvp``P
+  endif
+endfunction
+vnoremap <silent> g" <esc>:call <sid>SwapVisualWithCut()<cr>
 
 "jump to last cursor position when opening a file
 "dont do it when writing a commit log entry
