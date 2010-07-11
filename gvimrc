@@ -309,9 +309,9 @@ vmap <c-z> <esc>:w!<cr>:make<cr>
 nmap <c-z> :w!<cr>:make<cr>
 imap <c-z> <esc>:w!<cr>:make<cr>
 " run
-vmap <leader>z <esc>:w!<cr>:!%<cr>
-nmap <leader>z :w!<cr>:!%<cr>
-imap <leader>z <esc>:w!<cr>:!%<cr>
+vmap <leader>z <esc>:w!<cr>:!./%<cr>
+nmap <leader>z :w!<cr>:!./%<cr>
+imap <leader>z <esc>:w!<cr>:!./%<cr>
 " Save
 "nnoremap <f2> :w!<cr>
 "inoremap <f2> <c-O>:w!<cr>
@@ -357,6 +357,9 @@ vnoremap <f11> <esc>:TlistToggle<cr>
 nnoremap <f12> :emenu Tags.<tab>
 inoremap <f12> <c-O>:emenu Tags.<tab>
 vnoremap <f12> <esc>:emenu Tags.<tab>
+" vimrc edit
+map ,v :vsp $MYGVIMRC<CR>
+map ,V :source $MYGVIMRC<CR>
 "  'Control + \' - Open a new tab and tag into the function/variable currently under cursor
 imap {<cr> {<cr>}<Esc>O
 imap <? <?  ?><left><left><left>
@@ -435,7 +438,6 @@ autocmd! bufwritepre * call BackupDir()
 if has("unix")
   autocmd! bufwritepost ~/.vimrc source ~/.vimrc
   autocmd! bufwritepost ~/.gvimrc source ~/.gvimrc
-
   autocmd! bufwritepost ~/.vim/vimrc source ~/.vim/vimrc
   autocmd! bufwritepost ~/.vim/gvimrc source ~/.vim/gvimrc
 else
@@ -488,6 +490,7 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 function! TryRubyDoc()
   let l:word = expand("<cword>")
   let l:path = $HOME.'/.vimdata/ruby'
+  let l:gems = '/var/lib/gems/1.8/doc'
 
   " try search in core help
   if findfile(l:path.'/core/'.l:word.'.html') != ''
@@ -499,6 +502,15 @@ function! TryRubyDoc()
     exec("Browse ".l:path.'/stdlib/'.l:word.'/rdoc/files/'.l:word.'_rb.html')
     return
   endif
+  " try to search in gems directory
+  if finddir(gems) != ''
+    let l:filepath = findfile(l:word.'.html', l:gems.'/**')
+    if l:filepath != ''
+      exec("Browse ".l:filepath)
+      return
+    endif
+  endif
+
   " perform vim help
   exec("help ".l:word)
 endfunction
