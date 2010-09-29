@@ -9,7 +9,7 @@ filetype plugin on
 " directory for swap files
 set directory=$HOME
 " russian language fix
-set langmap=—ë`,–πq,—Üw,—Ée,–∫r,–µt,–Ωy,–≥u,—ài,—âo,–∑p,—Ña,—ãs,–≤d,–∞f,–øg,—Äh,–æj,–ªk,–¥l,—ç',—èz,—áx,—Åc,–ºv,–∏b,—Çn,—åm,–±\\,,—é.,–Å~,–ôQ,–¶W,–£E,–öR,–ïT,–ùY,–ìU,–®I,–©O,–óP,–§A,–´S,–íD,–êF,–üG,–†H,–ûJ,–õK,–îL,–ñ:,–≠\\",–ØZ,–ßX,–°C,–úV,–òB,–¢N,–¨M,–ë<,–Æ>
+set langmap=∏`,Èq,ˆw,Ûe,Ír,Ât,Ìy,„u,¯i,˘o,Áp,Ùa,˚s,‚d,‡f,Ôg,h,Ój,Îk,‰l,˝',ˇz,˜x,Òc,Ïv,Ëb,Ún,¸m,·\\,,˛.,®~,…Q,÷W,”E, R,≈T,ÕY,√U,ÿI,ŸO,«P,‘A,€S,¬D,¿F,œG,–H,ŒJ,ÀK,ƒL,∆:,›\\",ﬂZ,◊X,—C,ÃV,»B,“N,‹M,¡<,ﬁ>
 " one word symbol class
 set iskeyword=@,48-57,_,192-255,\$
 " encodings
@@ -141,8 +141,10 @@ set runtimepath+=~/.vimdata
 " vim-ruby
 if has("unix")
   set runtimepath+=~/.vim/vim-ruby
+  "set runtimepath+=~/.vim/vim-ruby-debugger/vim
 else
   set runtimepath+=~/vimfiles/vim-ruby
+  "set runtimepath+=~/vimfiles/vim-ruby-debugger/vim
 endif
 "-----------------------------------------------------------------------------
 " hotkeys
@@ -309,9 +311,12 @@ vmap <c-z> <esc>:w!<cr>:make<cr>
 nmap <c-z> :w!<cr>:make<cr>
 imap <c-z> <esc>:w!<cr>:make<cr>
 " run
-vmap <leader>z <esc>:w!<cr>:!./%<cr>
-nmap <leader>z :w!<cr>:!./%<cr>
-imap <leader>z <esc>:w!<cr>:!./%<cr>
+vmap <leader>Z <esc>:w!<cr>:!./%<cr>
+nmap <leader>Z :w!<cr>:!./%<cr>
+imap <leader>Z <esc>:w!<cr>:!./%<cr>
+vmap <leader>z <esc>:w!<cr>:!%<cr>
+nmap <leader>z :w!<cr>:!%<cr>
+imap <leader>z <esc>:w!<cr>:!%<cr>
 " Save
 "nnoremap <f2> :w!<cr>
 "inoremap <f2> <c-O>:w!<cr>
@@ -334,14 +339,23 @@ vnoremap <f4> <esc>:setlocal wrap! wrap?<cr>
 nnoremap <f5> :emenu File.Subversion.<tab>
 inoremap <f5> <c-O>:emenu File.Subversion.<tab>
 vnoremap <f5> <esc>:emenu File.Subversion.<tab>
+" font
+nnoremap <c-f5> :emenu File.Font.<tab>
+inoremap <c-f5> <c-O>:emenu File.Font.<tab>
+vnoremap <c-f5> <esc>:emenu File.Font.<tab>
+
 " Encoding.Write
-"nnoremap <f6> :emenu File.Encoding.Write.<tab>
-"inoremap <f6> <c-O>:emenu File.Encoding.Write.<tab>
-"vnoremap <f6> <esc>:emenu File.Encoding.Write.<tab>
+nnoremap <f6> :emenu File.Encoding.Write.<tab>
+inoremap <f6> <c-O>:emenu File.Encoding.Write.<tab>
+vnoremap <f6> <esc>:emenu File.Encoding.Write.<tab>
 " Encoding.Read
-"nnoremap <f7> :emenu File.Encoding.Read.<tab>
-"inoremap <f7> <c-O>:emenu File.Encoding.Read.<tab>
-"vnoremap <f7> <esc>:emenu File.Encoding.Read.<tab>
+nnoremap <f7> :emenu File.Encoding.Read.<tab>
+inoremap <f7> <c-O>:emenu File.Encoding.Read.<tab>
+vnoremap <f7> <esc>:emenu File.Encoding.Read.<tab>
+" ToggleMatchParen
+nnoremap <f8> :call ToggleMatchParen()<cr>
+inoremap <f8> <c-O>:call ToggleMatchParen()<cr>
+vnoremap <f8> <esc>:call ToggleMatchParen()<cr>
 " Spelling
 "nnoremap <f8> :emenu File.Spell.<tab>
 "inoremap <f8> <c-O>:emenu File.Spell.<tab>
@@ -357,6 +371,8 @@ vnoremap <f11> <esc>:TlistToggle<cr>
 nnoremap <f12> :emenu Tags.<tab>
 inoremap <f12> <c-O>:emenu Tags.<tab>
 vnoremap <f12> <esc>:emenu Tags.<tab>
+" ruby debugger
+nnoremap <c-f11> :call EnableDebugger()<cr>
 " vimrc edit
 map ,v :vsp $MYGVIMRC<CR>
 map ,V :source $MYGVIMRC<CR>
@@ -381,6 +397,7 @@ map ,<space> <plug>NERDCommenterToggle
 "-----------------------------------------------------------------------------
 if !has("unix")
   anoremenu &File.&Font.&Monaco_10 :set guifont=Monaco:h10<cr>
+  anoremenu &File.&Font.&Consolas_10 :set guifont=Consolas:h12:cRUSSIAN<cr>
   anoremenu &File.&Font.&Monaco_12 :set guifont=Monaco:h10<cr>
   anoremenu &File.&Font.&Monaco_12_russian :set guifont=Monaco:h12:cRUSSIAN<cr>
 endif
@@ -438,6 +455,7 @@ autocmd! bufwritepre * call BackupDir()
 if has("unix")
   autocmd! bufwritepost ~/.vimrc source ~/.vimrc
   autocmd! bufwritepost ~/.gvimrc source ~/.gvimrc
+
   autocmd! bufwritepost ~/.vim/vimrc source ~/.vim/vimrc
   autocmd! bufwritepost ~/.vim/gvimrc source ~/.vim/gvimrc
 else
@@ -451,11 +469,11 @@ au BufNewFile,BufRead *.ctp set filetype=phtml
 au BufNewFile,BufRead *.php,*.phtml set dict+=~/.vimdata/php/keywords
 
 au BufNewFile,BufRead *.rb map <s-k> :call TryRubyDoc()<cr>
-if has("unix")
-  au BufNewFile,BufRead *.rb map <f9> <esc>:w<cr>:!./%<cr>
-else
-  au BufNewFile,BufRead *.rb map <f9> <esc>:w<cr>:!%<cr>
-endif
+"if has("unix")
+  "au BufNewFile,BufRead *.rb map <f9> <esc>:w<cr>:!./%<cr>
+"else
+  "au BufNewFile,BufRead *.rb map <f9> <esc>:w<cr>:!%<cr>
+"endif
 au BufNewFile,BufRead *.rb set makeprg=ruby\ -c\ %
 au BufNewFile,BufRead *.rb nnoremap <c-F12> :Rtags<cr>
 
@@ -463,16 +481,17 @@ au BufNewFile,BufRead *.rb nnoremap <c-F12> :Rtags<cr>
 " cursor) in command mode
 augroup RubyTests
   au!
-  autocmd BufRead,BufNewFile *_test.rb,test_*.rb
+  "autocmd BufRead,BufNewFile *_test.rb,test_*.rb
+  autocmd BufRead,BufNewFile *.rb
     \ :nmap rt V:<C-U>!$HOME/.vim/bin/ruby_run_focused_unit_test 
     \ % <C-R>=line("'<")<CR>p <CR>|
-    \ :nmap rT :<C-U>!rake TEST=%<CR>
+    \ :nmap rT :<C-U>w<CR>:!rake test<CR>
 augroup END
 
 au BufNewFile,BufRead *.cpp map <c-f12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
 au BufNewFile,BufRead *.cpp,*.h set tags+=~/.vimdata/c++/unix/std/tags
 
-au BufNewFile,BufRead *.ass set filetype=ssa
+au BufNewFile,BufRead *.ass,*.ssa set filetype=ssa
 "-----------------------------------------------------------------------------
 " omni completion
 "-----------------------------------------------------------------------------
@@ -602,7 +621,7 @@ endfunction
 
 function! BackupDir()
   if has("win32")
-    let l:backupdir=$VIM.'\.backup\'.substitute(expand('%:p:h'), ':', '', '')
+    let l:backupdir=$HOME.'\.backup\'.substitute(expand('%:p:h'), ':', '', '')
   else
     let l:backupdir=substitute($HOME.'/.backup/'.substitute(expand('%:p:h'), ':', '', ''), '//', '/', '')
   endif
@@ -851,6 +870,42 @@ function! s:HighlightLongLines(width)
     endif
 endfunction
 
+function! ToggleMatchParen()
+  if exists("g:loaded_matchparen")
+    :NoMatchParen
+    :echo 'MatchParen plugin turned off'
+  else
+    :DoMatchParen
+    :echo 'MatchParen plugin turned on'
+  endif
+endfunction
+
+function! EnableDebugger()
+  Rdebugger
+  nnoremap <f5> :Rdebugger %<cr>
+  inoremap <f5> <c-O>:Rdebugger %<cr>
+  vnoremap <f5> <esc>:Rdebugger %<cr>
+  nnoremap <s-f5> :call g:RubyDebugger.exit()<cr>
+  inoremap <s-f5> <c-O>:call g:RubyDebugger.exit()<cr>
+  vnoremap <s-f5> <esc>:call g:RubyDebugger.exit()<cr>
+  nnoremap <f8> :call g:RubyDebugger.continue()<cr>
+  inoremap <f8> <c-O>:call g:RubyDebugger.continue()<cr>
+  vnoremap <f8> <esc>:call g:RubyDebugger.continue()<cr>
+  nnoremap <f9> :call g:RubyDebugger.toggle_breakpoint()<cr>
+  inoremap <f9> <c-O>:call g:RubyDebugger.toggle_breakpoint()<cr>
+  vnoremap <f9> <esc>:call g:RubyDebugger.toggle_breakpoint()<cr>
+  nnoremap <f10> :call g:RubyDebugger.next()<cr>
+  inoremap <f10> <c-O>:call g:RubyDebugger.next()<cr>
+  vnoremap <f10> <esc>:call g:RubyDebugger.next()<cr>
+  nnoremap <f11> :call g:RubyDebugger.step()<cr>
+  inoremap <f11> <c-O>:call g:RubyDebugger.step()<cr>
+  vnoremap <f11> <esc>:call g:RubyDebugger.step()<cr>
+  nnoremap <s-f11> :call g:RubyDebugger.finish()<cr>
+  inoremap <s-f11> <c-O>:call g:RubyDebugger.finish()<cr>
+  vnoremap <s-f11> <esc>:call g:RubyDebugger.finish()<cr>
+endfunction
+
+
 "-----------------------------------------------------------------------------
 " plugins
 "-----------------------------------------------------------------------------
@@ -864,6 +919,9 @@ endfunction
 " ruby code completion
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_include_object = 1
+let g:rubycomplete_include_objectspace = 1
+let g:rubycomplete_rails = 1
 
 " Matchit
 "let b:match_words = '<:>,<tag>:</tag>'

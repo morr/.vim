@@ -254,7 +254,7 @@ set background=dark
 set backspace=indent,eol,start
 set backup
 set backupdir=~/.backup/home/morr/scripts/transmission-rss
-set backupext=~2010-07-09\ 00:16:43~
+set backupext=~2010-07-16\ 23:51:24~
 set cindent
 set complete=.,k,b,t
 set completeopt=menu,longest
@@ -306,7 +306,7 @@ set updatetime=200
 set whichwrap=b,s,,,<,>,[,]
 set wildcharm=<Tab>
 set wildmenu
-set window=49
+set window=45
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 let NERDTreeMapPreviewSplit = "gi"
@@ -467,9 +467,11 @@ badd +29 ../downsub.rb
 badd +312 ~/.vim/gvimrc
 badd +1 ~/scripts/fansubs/fansubs
 badd +1 ~/.transmission-rss.config.json
-badd +0 .transmission-rss.config.json.example
+badd +1 .transmission-rss.config.json.example
+badd +1 transmission-manager.rb
+badd +0 ~/scripts/conky/ktorrent.rb
 args transmission-rss.rb
-set lines=50 columns=156
+set lines=46 columns=156
 edit transmission-rss.rb
 set splitbelow splitright
 set nosplitbelow
@@ -508,10 +510,10 @@ setlocal filetype=ruby
 endif
 setlocal foldcolumn=0
 set nofoldenable
-setlocal nofoldenable
+setlocal foldenable
 setlocal foldexpr=0
 setlocal foldignore=#
-setlocal foldlevel=0
+setlocal foldlevel=6
 setlocal foldmarker={{{,}}}
 set foldmethod=syntax
 setlocal foldmethod=syntax
@@ -576,13 +578,31 @@ setlocal nowinfixwidth
 set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
-let s:l = 175 - ((32 * winheight(0) + 24) / 48)
+26
+normal zo
+42
+normal zo
+43
+normal zo
+57
+normal zo
+58
+normal zo
+57
+normal zo
+43
+normal zo
+42
+normal zo
+26
+normal zo
+let s:l = 108 - ((32 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-175
-normal! 082l
-tabedit .transmission-rss.config.json.example
+108
+normal! 036l
+tabedit transmission-manager.rb
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -592,7 +612,7 @@ argglobal
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
-setlocal balloonexpr=
+setlocal balloonexpr=RubyBalloonexpr()
 setlocal nobinary
 setlocal bufhidden=
 setlocal buflisted
@@ -601,8 +621,8 @@ setlocal cindent
 setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
 setlocal cinoptions=
 setlocal cinwords=if,else,while,do,for,switch
-setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=/*%s*/
+setlocal comments=:#
+setlocal commentstring=#\ %s
 setlocal complete=.,k,b,t
 setlocal completefunc=
 setlocal nocopyindent
@@ -615,8 +635,8 @@ setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
 setlocal expandtab
-if &filetype != ''
-setlocal filetype=
+if &filetype != 'ruby'
+setlocal filetype=ruby
 endif
 setlocal foldcolumn=0
 set nofoldenable
@@ -631,18 +651,18 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldtext=foldtext()
 setlocal formatexpr=
-setlocal formatoptions=tqcr
+setlocal formatoptions=croql
 setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
 setlocal grepprg=
 setlocal iminsert=2
-setlocal imsearch=2
-setlocal include=
-setlocal includeexpr=
+setlocal imsearch=0
+setlocal include=^\\s*\\<\\(load\\|w*require\\)\\>
+setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'$','.rb','')
 setlocal indentexpr=
 setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
 setlocal noinfercase
 setlocal iskeyword=@,48-57,_,192-255,$
-setlocal keywordprg=
+setlocal keywordprg=ri\ -T
 setlocal nolinebreak
 setlocal nolisp
 set list
@@ -656,7 +676,7 @@ set number
 setlocal number
 setlocal numberwidth=4
 setlocal omnifunc=rubycomplete#Complete
-setlocal path=
+setlocal path=.,/usr/local/lib/site_ruby/1.8,/usr/local/lib/site_ruby/1.8/i486-linux,/usr/local/lib/site_ruby/1.8/i386-linux,/usr/local/lib/site_ruby,/usr/lib/ruby/vendor_ruby/1.8,/usr/lib/ruby/vendor_ruby/1.8/i486-linux,/usr/lib/ruby/vendor_ruby,/usr/lib/ruby/1.8,/usr/lib/ruby/1.8/i486-linux,/usr/lib/ruby/1.8/i386-linux,,~/.gem/ruby/1.8/gems/ffi-0.6.3/lib,~/.gem/ruby/1.8/gems/json-1.4.3/ext,~/.gem/ruby/1.8/gems/json-1.4.3/ext/json/ext,~/.gem/ruby/1.8/gems/json-1.4.3/lib,~/.gem/ruby/1.8/gems/libnotify-0.1.3/lib,~/.gem/ruby/1.8/gems/rake-0.8.7/lib,~/.gem/ruby/1.8/gems/rdoc-2.5.8/lib,/var/lib/gems/1.8/gems/escape-0.0.4/lib,/var/lib/gems/1.8/gems/json-1.4.3/ext,/var/lib/gems/1.8/gems/json-1.4.3/ext/json/ext,/var/lib/gems/1.8/gems/json-1.4.3/lib,/var/lib/gems/1.8/gems/nokogiri-1.4.2/lib,/var/lib/gems/1.8/gems/torrentsync-0.0.0/lib
 setlocal nopreserveindent
 setlocal nopreviewwindow
 setlocal quoteescape=\\
@@ -673,11 +693,11 @@ setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
 setlocal statusline=
-setlocal suffixesadd=
+setlocal suffixesadd=.rb
 setlocal swapfile
 setlocal synmaxcol=3000
-if &syntax != ''
-setlocal syntax=
+if &syntax != 'ruby'
+setlocal syntax=ruby
 endif
 setlocal tabstop=2
 setlocal tags=
@@ -688,12 +708,124 @@ setlocal nowinfixwidth
 set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 24) / 48)
+let s:l = 89 - ((28 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+89
 normal! 0
+tabedit ~/scripts/conky/ktorrent.rb
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=RubyBalloonexpr()
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal comments=:#
+setlocal commentstring=#\ %s
+setlocal complete=.,k,b,t
+setlocal completefunc=
+setlocal nocopyindent
+setlocal nocursorcolumn
+set cursorline
+setlocal cursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'ruby'
+setlocal filetype=ruby
+endif
+setlocal foldcolumn=0
+set nofoldenable
+setlocal nofoldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+set foldmethod=syntax
+setlocal foldmethod=syntax
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=^\\s*\\<\\(load\\|w*require\\)\\>
+setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'$','.rb','')
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255,$
+setlocal keywordprg=ri\ -T
+setlocal nolinebreak
+setlocal nolisp
+set list
+setlocal list
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=rubycomplete#Complete
+setlocal path=.,/usr/local/lib/site_ruby/1.8,/usr/local/lib/site_ruby/1.8/i486-linux,/usr/local/lib/site_ruby/1.8/i386-linux,/usr/local/lib/site_ruby,/usr/lib/ruby/vendor_ruby/1.8,/usr/lib/ruby/vendor_ruby/1.8/i486-linux,/usr/lib/ruby/vendor_ruby,/usr/lib/ruby/1.8,/usr/lib/ruby/1.8/i486-linux,/usr/lib/ruby/1.8/i386-linux,,~/.gem/ruby/1.8/gems/ffi-0.6.3/lib,~/.gem/ruby/1.8/gems/json-1.4.3/ext,~/.gem/ruby/1.8/gems/json-1.4.3/ext/json/ext,~/.gem/ruby/1.8/gems/json-1.4.3/lib,~/.gem/ruby/1.8/gems/libnotify-0.1.3/lib,~/.gem/ruby/1.8/gems/rake-0.8.7/lib,~/.gem/ruby/1.8/gems/rdoc-2.5.8/lib,/var/lib/gems/1.8/gems/activesupport-2.3.8/lib,/var/lib/gems/1.8/gems/diff-lcs-1.1.2/lib,/var/lib/gems/1.8/gems/escape-0.0.4/lib,/var/lib/gems/1.8/gems/extlib-0.9.15/lib,/var/lib/gems/1.8/gems/highline-1.6.1/lib,/var/lib/gems/1.8/gems/json-1.4.3/ext,/var/lib/gems/1.8/gems/json-1.4.3/ext/json/ext,/var/lib/gems/1.8/gems/json-1.4.3/lib,/var/lib/gems/1.8/gems/nokogiri-1.4.2/lib,/var/lib/gems/1.8/gems/rhodes-2.0.2/lib,/var/lib/gems/1.8/gems/templater-1.0.0/lib,/var/lib/gems/1.8/gems/torrentsync-0.0.0/lib
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=2
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=2
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=.rb
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'ruby'
+setlocal syntax=ruby
+endif
+setlocal tabstop=2
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+set nowrap
+setlocal nowrap
+setlocal wrapmargin=0
+let s:l = 14 - ((13 * winheight(0) + 22) / 44)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+14
+normal! 08l
 tabedit ~/.transmission-rss.config.json
 set splitbelow splitright
 set nosplitbelow
@@ -800,7 +932,7 @@ setlocal nowinfixwidth
 set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
-let s:l = 1 - ((0 * winheight(0) + 24) / 48)
+let s:l = 1 - ((0 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -912,7 +1044,7 @@ setlocal nowinfixwidth
 set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
-let s:l = 14 - ((13 * winheight(0) + 24) / 48)
+let s:l = 14 - ((11 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
