@@ -141,9 +141,11 @@ set runtimepath+=~/.vimdata
 " vim-ruby
 if has("unix")
   set runtimepath+=~/.vim/vim-ruby
+  set runtimepath+=~/.vim/vim-rails
   "set runtimepath+=~/.vim/vim-ruby-debugger/vim
 else
   set runtimepath+=~/vimfiles/vim-ruby
+  set runtimepath+=~/vimfiles/vim-rails
   "set runtimepath+=~/vimfiles/vim-ruby-debugger/vim
 endif
 "-----------------------------------------------------------------------------
