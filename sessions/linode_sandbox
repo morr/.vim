@@ -1,0 +1,698 @@
+let SessionLoad = 1
+if &cp | set nocp | endif
+let s:cpo_save=&cpo
+set cpo&vim
+inoremap <F12> :emenu Tags.	
+inoremap <F11> :TlistToggle
+inoremap <F8> :call ToggleMatchParen()
+inoremap <F7> :emenu File.Encoding.Read.	
+inoremap <F6> :emenu File.Encoding.Write.	
+inoremap <C-F5> :emenu File.Font.	
+inoremap <F5> :emenu File.Subversion.	
+inoremap <F4> :setlocal wrap! wrap?
+imap <silent> <M-S-Right> :call TabMove('right')
+imap <silent> <M-S-Left> :call TabMove('left')
+imap <M-S-Down> :tabmove
+imap <M-S-Up> :tabmove 0
+imap <M-Down> :tablast
+imap <M-Up> :tabfirst
+imap <silent> <M-Right> :call TabJump('right')
+imap <silent> <M-Left> :call TabJump('left')
+imap <S-Tab> 
+imap <C-Tab> =InsertTabLineWrapper()
+imap <S-k6> Ea
+imap <S-k4> Bi
+imap <PageDown> 
+imap <PageUp> 
+imap <Up> gk
+imap <Down> gj
+inoremap <silent> <Plug>NERDCommenterInInsert  <BS>:call NERDComment(0, "insert")
+map! <S-Insert> <MiddleMouse>
+nmap  aggVG
+vmap  "+y
+nmap <NL> 10j
+vmap <NL> 10j
+vmap  10k
+nmap  10k
+nmap  :nohlsearch/<BS>
+vmap  :q!i
+nmap  :q!
+nmap  :w
+vmap  :wgv
+vmap  "+gP
+nmap  "+gP
+vmap  "+x
+map  :tab split:exec("tag ".expand("<cword>"))
+map ,  <Plug>NERDCommenterToggle
+map ,V :source $MYGVIMRC
+map ,v :vsp $MYGVIMRC
+nmap <silent> ,t :call RemoveTrailingSpaces():echo 'trailing spaces have been removed'
+nmap ,A <Plug>ZenCodingAnchorizeSummary
+nmap ,a <Plug>ZenCodingAnchorizeURL
+nmap ,k <Plug>ZenCodingRemoveTag
+nmap ,j <Plug>ZenCodingSplitJoinTagNormal
+nmap ,/ <Plug>ZenCodingToggleComment
+nmap ,i <Plug>ZenCodingImageSize
+nmap ,N <Plug>ZenCodingPrev
+nmap ,n <Plug>ZenCodingNext
+vmap ,D <Plug>ZenCodingBalanceTagOutwardVisual
+nmap ,D <Plug>ZenCodingBalanceTagOutwardNormal
+vmap ,d <Plug>ZenCodingBalanceTagInwardVisual
+nmap ,d <Plug>ZenCodingBalanceTagInwardNormal
+nmap ,; <Plug>ZenCodingExpandWord
+nmap ,c <Plug>ZenCodingExpandNormal
+vmap ,c <Plug>ZenCodingExpandVisual
+vmap <silent> ,e <Plug>CamelCaseMotion_e
+vmap <silent> ,b <Plug>CamelCaseMotion_b
+vmap <silent> ,w :call VisualTagWrap()
+omap <silent> ,e <Plug>CamelCaseMotion_e
+omap <silent> ,b <Plug>CamelCaseMotion_b
+omap <silent> ,w <Plug>CamelCaseMotion_w
+nmap <silent> ,e <Plug>CamelCaseMotion_e
+nmap <silent> ,b <Plug>CamelCaseMotion_b
+nmap <silent> ,w <Plug>CamelCaseMotion_w
+nmap ,ca <Plug>NERDCommenterAltDelims
+vmap ,cA <Plug>NERDCommenterAppend
+nmap ,cA <Plug>NERDCommenterAppend
+vmap ,c$ <Plug>NERDCommenterToEOL
+nmap ,c$ <Plug>NERDCommenterToEOL
+vmap ,cu <Plug>NERDCommenterUncomment
+nmap ,cu <Plug>NERDCommenterUncomment
+vmap ,cn <Plug>NERDCommenterNest
+nmap ,cn <Plug>NERDCommenterNest
+vmap ,cb <Plug>NERDCommenterAlignBoth
+nmap ,cb <Plug>NERDCommenterAlignBoth
+vmap ,cl <Plug>NERDCommenterAlignLeft
+nmap ,cl <Plug>NERDCommenterAlignLeft
+vmap ,cy <Plug>NERDCommenterYank
+nmap ,cy <Plug>NERDCommenterYank
+vmap ,ci <Plug>NERDCommenterInvert
+nmap ,ci <Plug>NERDCommenterInvert
+vmap ,cs <Plug>NERDCommenterSexy
+nmap ,cs <Plug>NERDCommenterSexy
+vmap ,cm <Plug>NERDCommenterMinimal
+nmap ,cm <Plug>NERDCommenterMinimal
+vmap ,c  <Plug>NERDCommenterToggle
+nmap ,c  <Plug>NERDCommenterToggle
+vmap ,cc <Plug>NERDCommenterComment
+nmap ,cc <Plug>NERDCommenterComment
+vmap < <gv
+vmap > >gv
+imap Â» =ShowAvailableSnips()
+map K :call TryRubyDoc()
+xmap S <Plug>VSurround
+nmap [xx <Plug>unimpairedLineXmlEncode
+xmap [x <Plug>unimpairedXmlEncode
+nmap [x <Plug>unimpairedXmlEncode
+nmap [uu <Plug>unimpairedLineUrlEncode
+xmap [u <Plug>unimpairedUrlEncode
+nmap [u <Plug>unimpairedUrlEncode
+nmap [yy <Plug>unimpairedLineStringEncode
+xmap [y <Plug>unimpairedStringEncode
+nmap [y <Plug>unimpairedStringEncode
+xmap [e <Plug>unimpairedMoveUp
+nmap [e <Plug>unimpairedMoveUp
+nmap [  <Plug>unimpairedBlankUp
+nmap [o <Plug>unimpairedOPrevious
+nmap <silent> [Q <Plug>unimpairedQFirst
+nmap <silent> [q <Plug>unimpairedQPrevious
+nmap <silent> [L <Plug>unimpairedLFirst
+nmap <silent> [l <Plug>unimpairedLPrevious
+nmap <silent> [B <Plug>unimpairedBFirst
+nmap <silent> [b <Plug>unimpairedBPrevious
+nmap <silent> [A <Plug>unimpairedAFirst
+nmap <silent> [a <Plug>unimpairedAPrevious
+vmap [% [%m'gv``
+nmap \z :w!:!%
+vmap \z :w!:!%
+nmap \Z :w!:!./%
+vmap \Z :w!:!./%
+nmap <silent> \r :CommandTFlush
+nnoremap <silent> \ff :call g:Jsbeautify()
+nnoremap \gp :GitPullRebase
+nnoremap \gc :GitCommit
+nnoremap \gA :GitAdd <cfile>
+nnoremap \ga :GitAdd
+nnoremap \gl :GitLog
+nnoremap \gs :GitStatus
+nnoremap \gD :GitDiff --cached
+nnoremap \gd :GitDiff
+nmap <silent> \t :CommandT
+nmap <silent> \bv :VSBufExplorer
+nmap <silent> \bs :HSBufExplorer
+nmap <silent> \be :BufExplorer
+nmap \ihn :IHN
+nmap \is :IHS:A
+nmap \ih :IHS
+nmap ]xx <Plug>unimpairedLineXmlDecode
+xmap ]x <Plug>unimpairedXmlDecode
+nmap ]x <Plug>unimpairedXmlDecode
+nmap ]uu <Plug>unimpairedLineUrlDecode
+xmap ]u <Plug>unimpairedUrlDecode
+nmap ]u <Plug>unimpairedUrlDecode
+nmap ]yy <Plug>unimpairedLineStringDecode
+xmap ]y <Plug>unimpairedStringDecode
+nmap ]y <Plug>unimpairedStringDecode
+xmap ]e <Plug>unimpairedMoveDown
+nmap ]e <Plug>unimpairedMoveDown
+nmap ]  <Plug>unimpairedBlankDown
+nmap ]o <Plug>unimpairedONext
+nmap <silent> ]Q <Plug>unimpairedQLast
+nmap <silent> ]q <Plug>unimpairedQNext
+nmap <silent> ]L <Plug>unimpairedLLast
+nmap <silent> ]l <Plug>unimpairedLNext
+nmap <silent> ]B <Plug>unimpairedBLast
+nmap <silent> ]b <Plug>unimpairedBNext
+nmap <silent> ]A <Plug>unimpairedALast
+nmap <silent> ]a <Plug>unimpairedANext
+vmap ]% ]%m'gv``
+vmap a% [%v]%
+map <silent> b <Plug>CamelCaseMotion_b
+nmap cs <Plug>Csurround
+nmap ds <Plug>Dsurround
+map <silent> e <Plug>CamelCaseMotion_e
+nmap gx <Plug>NetrwBrowseX
+vmap h <Left>
+nmap h <Left>
+vmap <silent> i,e <Plug>CamelCaseMotion_ie
+vmap <silent> i,b <Plug>CamelCaseMotion_ib
+vmap <silent> i,w <Plug>CamelCaseMotion_iw
+omap <silent> i,e <Plug>CamelCaseMotion_ie
+omap <silent> i,b <Plug>CamelCaseMotion_ib
+omap <silent> i,w <Plug>CamelCaseMotion_iw
+vmap j gj
+nmap j gj
+vmap k gk
+nmap k gk
+vmap l <Right>
+nmap l <Right>
+nmap rT :w:!rake test
+nmap rt V:!$HOME/.vim/bin/ruby_run_focused_unit_test % =line("'<")p 
+xmap s <Plug>Vsurround
+map <silent> w <Plug>CamelCaseMotion_w
+nmap ySS <Plug>YSsurround
+nmap ySs <Plug>YSsurround
+nmap yss <Plug>Yssurround
+nmap yS <Plug>YSurround
+nmap ys <Plug>Ysurround
+nnoremap <C-F12> :!rake mactag:create
+vnoremap <F12> :emenu Tags.	
+nnoremap <F12> :emenu Tags.	
+vnoremap <F11> :TlistToggle
+nnoremap <F11> :TlistToggle
+vnoremap <F8> :call ToggleMatchParen()
+nnoremap <F8> :call ToggleMatchParen()
+vnoremap <F7> :emenu File.Encoding.Read.	
+nnoremap <F7> :emenu File.Encoding.Read.	
+vnoremap <F6> :emenu File.Encoding.Write.	
+nnoremap <F6> :emenu File.Encoding.Write.	
+vnoremap <C-F5> :emenu File.Font.	
+nnoremap <C-F5> :emenu File.Font.	
+vnoremap <F5> :emenu File.Subversion.	
+nnoremap <F5> :emenu File.Subversion.	
+vnoremap <F4> :setlocal wrap! wrap?
+nnoremap <F4> :setlocal wrap! wrap?
+map <silent> <C-F3> <Plug>ToggleProject
+map <silent> <C-F9> :NERDTreeToggle %
+map <silent> <F9> :NERDTreeToggle
+vmap <silent> <M-S-Right> :call TabMove('right')
+nmap <silent> <M-S-Right> :call TabMove('right')
+vmap <silent> <M-S-Left> :call TabMove('left')
+nmap <silent> <M-S-Left> :call TabMove('left')
+vmap <M-S-Down> :tabmove
+nmap <M-S-Down> :tabmove
+vmap <M-S-Up> :tabmove 0
+nmap <M-S-Up> :tabmove 0
+vmap <M-Down> :tablast
+nmap <M-Down> :tablast
+vmap <M-Up> :tabfirst
+nmap <M-Up> :tabfirst
+vmap <silent> <M-Right> :call TabJump('right')
+nmap <silent> <M-Right> :call TabJump('right')
+vmap <silent> <M-Left> :call TabJump('left')
+nmap <silent> <M-Left> :call TabJump('left')
+nmap <kEnter> :nohlsearch/<BS>
+map <S-k2> <PageDown>
+map <S-k8> <PageUp>
+nmap <S-k6> E
+vmap <S-k6> E
+nmap <S-k4> B
+vmap <S-k4> B
+vmap <C-Down> ]egv
+vmap <C-Up> [egv
+nmap <C-Down> ]e
+nmap <C-Up> [e
+vmap <PageDown> 
+vmap <PageUp> 
+nmap <PageDown> 
+nmap <PageUp> 
+vmap <Up> gk
+vmap <Down> gj
+nmap <Up> gk
+nmap <Down> gj
+nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
+xnoremap <silent> <Plug>unimpairedMoveDown :exe 'norm m`'|exe '''<,''>move''>+'.v:count1``
+xnoremap <silent> <Plug>unimpairedMoveUp :exe 'norm m`'|exe '''<,''>move--'.v:count1``
+nnoremap <silent> <Plug>unimpairedMoveDown :exe 'norm m`'|exe 'move+'.v:count1``
+nnoremap <silent> <Plug>unimpairedMoveUp :exe 'norm m`'|exe 'move--'.v:count1``
+nnoremap <silent> <Plug>unimpairedBlankDown :put =repeat(nr2char(10),v:count)|'[-1
+nnoremap <silent> <Plug>unimpairedBlankUp :put!=repeat(nr2char(10),v:count)|']+1
+nmap <silent> <Plug>unimpairedQLast :exe "clast ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedQFirst :exe "cfirst ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedQNext :exe "cnext ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedQPrevious :exe "cprevious ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedLLast :exe "llast ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedLFirst :exe "lfirst ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedLNext :exe "lnext ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedLPrevious :exe "lprevious ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedBLast :exe "blast ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedBFirst :exe "bfirst ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedBNext :exe "bnext ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedBPrevious :exe "bprevious ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedALast :exe "last ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedAFirst :exe "first ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedANext :exe "next ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedAPrevious :exe "previous ".(v:count ? v:count : "")
+nmap <silent> <Plug>NERDCommenterAppend :call NERDComment(0, "append")
+nnoremap <silent> <Plug>NERDCommenterToEOL :call NERDComment(0, "toEOL")
+vnoremap <silent> <Plug>NERDCommenterUncomment :call NERDComment(1, "uncomment")
+nnoremap <silent> <Plug>NERDCommenterUncomment :call NERDComment(0, "uncomment")
+vnoremap <silent> <Plug>NERDCommenterNest :call NERDComment(1, "nested")
+nnoremap <silent> <Plug>NERDCommenterNest :call NERDComment(0, "nested")
+vnoremap <silent> <Plug>NERDCommenterAlignBoth :call NERDComment(1, "alignBoth")
+nnoremap <silent> <Plug>NERDCommenterAlignBoth :call NERDComment(0, "alignBoth")
+vnoremap <silent> <Plug>NERDCommenterAlignLeft :call NERDComment(1, "alignLeft")
+nnoremap <silent> <Plug>NERDCommenterAlignLeft :call NERDComment(0, "alignLeft")
+vmap <silent> <Plug>NERDCommenterYank :call NERDComment(1, "yank")
+nmap <silent> <Plug>NERDCommenterYank :call NERDComment(0, "yank")
+vnoremap <silent> <Plug>NERDCommenterInvert :call NERDComment(1, "invert")
+nnoremap <silent> <Plug>NERDCommenterInvert :call NERDComment(0, "invert")
+vnoremap <silent> <Plug>NERDCommenterSexy :call NERDComment(1, "sexy")
+nnoremap <silent> <Plug>NERDCommenterSexy :call NERDComment(0, "sexy")
+vnoremap <silent> <Plug>NERDCommenterMinimal :call NERDComment(1, "minimal")
+nnoremap <silent> <Plug>NERDCommenterMinimal :call NERDComment(0, "minimal")
+vnoremap <silent> <Plug>NERDCommenterToggle :call NERDComment(1, "toggle")
+nnoremap <silent> <Plug>NERDCommenterToggle :call NERDComment(0, "toggle")
+vnoremap <silent> <Plug>NERDCommenterComment :call NERDComment(1, "norm")
+nnoremap <silent> <Plug>NERDCommenterComment :call NERDComment(0, "norm")
+map <S-Insert> <MiddleMouse>
+imap S <Plug>ISurround
+imap s <Plug>Isurround
+cmap  <Left>
+imap  <Left>
+imap 	 =InsertTabWordWrapper()
+cmap <NL> <Down>
+imap <NL> <Down>
+cmap  <Up>
+imap  <Up>
+cmap  <Right>
+imap  <Right>
+imap  :q!i
+imap  :wa
+cmap  +
+imap   "+gP<Del>i
+imap ,A <Plug>ZenCodingAnchorizeSummary
+imap ,a <Plug>ZenCodingAnchorizeURL
+imap ,k <Plug>ZenCodingRemoveTag
+imap ,j <Plug>ZenCodingSplitJoinTagInsert
+imap ,/ <Plug>ZenCodingToggleComment
+imap ,i <Plug>ZenCodingImageSize
+imap ,N <Plug>ZenCodingPrev
+imap ,n <Plug>ZenCodingNext
+imap ,D <Plug>ZenCodingBalanceTagOutwardInsert
+imap ,d <Plug>ZenCodingBalanceTagInwardInsert
+imap ,; <Plug>ZenCodingExpandWord
+imap ,c <Plug>ZenCodingExpandAbbr
+imap /3 /2<Down><BS><BS>/1<Up><Up><Up><End>
+imap /2 /1 <BS><BS><BS>/1<Up><End>
+imap /1 //-----------------------------------------------------------------------------
+imap <silent> ; =InsertSnippetWrapper()
+imap <?/ <<Left><Right>? /*
+imap <%= <%= %><Left><Left><Left>
+imap <?= <?= ?><Left><Left><Left>
+imap <% <%  %><Left><Left><Left>
+imap <? <?  ?><Left><Left><Left>
+imap \z :w!:!%
+imap \Z :w!:!./%
+imap \ihn :IHN
+imap \is :IHS:A
+imap \ih :IHS
+imap ii <Right>
+imap { {}O
+let &cpo=s:cpo_save
+unlet s:cpo_save
+set autoindent
+set background=dark
+set backspace=indent,eol,start
+set backup
+set cindent
+set complete=.,k,b,t
+set completeopt=menu,longest
+set confirm
+set cpoptions=aABceFs$
+set directory=~/
+set expandtab
+set fileencodings=utf-8,windows-1251,iso-8859-15,koi8-r
+set formatoptions=tqcr
+set guifont=Monaco\ 12
+set guioptions=aegimrLt
+set noguipty
+set helplang=en
+set hidden
+set history=128
+set hlsearch
+set incsearch
+set iskeyword=@,48-57,_,192-255,$
+set nojoinspaces
+set langmap=¸`,éq,öw,óe,êr,åt,íy,ãu,øi,ùo,çp,ôa,ûs,âd,àf,ïg,ðh,îj,ëk,äl,ý',ÿz,÷x,ñc,ìv,èb,òn,üm,á\\,,þ.,¨~,ÉQ,ÖW,ÓE,ÊR,ÅT,ÍY,ÃU,ØI,ÙO,ÇP,ÔA,ÛS,ÂD,ÀF,ÏG,ÐH,ÎJ,ËK,ÄL,Æ:,Ý\",ßZ,×X,ÑC,ÌV,ÈB,ÒN,ÜM,Á<,Þ>
+set laststatus=2
+set lazyredraw
+set listchars=trail:.
+set makeprg=ruby\ -c\ %
+set mouse=a
+set mousemodel=popup
+set omnifunc=rubycomplete#Complete
+set printoptions=paper:letter
+set ruler
+set runtimepath=~/.vim,/var/lib/vim/addons,/usr/share/vim/vimfiles,/usr/share/vim/vim72,/usr/share/vim/vimfiles/after,/var/lib/vim/addons/after,~/.vim/after,~/.vimdata,~/.vim/vim-ruby,~/.vim/vim-rails,~/.vim/vim-fuzzyfinder
+set scrolloff=3
+set sessionoptions=curdir,buffers,tabpages,folds,options,resize,globals,localoptions
+set shiftround
+set shiftwidth=2
+set shortmess=fimnrxoOtTI
+set showcmd
+set showmatch
+set sidescroll=1
+set sidescrolloff=7
+set smartindent
+set softtabstop=2
+set nostartofline
+set statusline=%{expand('%:t')}%#warningmsg#%{&ff!='unix'?'['.&ff.']':''}%*%#warningmsg#%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}%*%h%y%r%m%#error#%{&paste?'[paste]':''}%*%=Col:%03c%*\ Ln:%l/%L\ %P
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+set tabstop=2
+set tags=./tags,./TAGS,tags,TAGS,tags2,~/.vimdata/javascript/libs/jQuery_1.4/tags
+set termencoding=utf-8
+set whichwrap=b,s,,,<,>,[,]
+set wildcharm=<Tab>
+set wildignore=*.o,*.obj,.git,.svn,vendor/**,public/images/**
+set wildmenu
+let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
+let v:this_session=expand("<sfile>:p")
+let NERDTreeMapPreviewSplit = "gi"
+let NERDTreeMapCloseChildren = "X"
+let NeoComplCache_CachingDisablePattern = ""
+let Grep_Default_Filelist = "*"
+let NERDTreeShowHidden = "0"
+let NeoComplCache_EnableSkipCompletion =  1 
+let Tlist_Enable_Fold_Column =  1 
+let NERDSpaceDelims = "0"
+let NERDTreeMapToggleZoom = "A"
+let NERDTreeMapCloseDir = "x"
+let NeoComplCache_CacheLineCount =  70 
+let Grep_Xargs_Path = "xargs"
+let Tlist_Show_One_File =  1 
+let Tlist_Auto_Highlight_Tag =  1 
+let NERDUsePlaceHolders = "1"
+let Tlist_Ctags_Cmd = "ctags"
+let NERDTreeShowLineNumbers = "0"
+let Tlist_Compact_Format =  0 
+let SessionMgr_AutoManage =  0 
+let NeoComplCache_DisableAutoComplete =  0 
+let NeoComplCache_KeywordCompletionStartLength =  2 
+let Grep_Find_Path = "find"
+let Tlist_Sort_Type = "order"
+let GetLatestVimScripts_wget = "wget"
+let Tlist_Use_Horiz_Window =  0 
+let NERDTreeBookmarksFile = "/home/morr/.NERDTreeBookmarks"
+let NERDTreeMapToggleHidden = "I"
+let NERDTreeWinSize = "31"
+let CSApprox_loaded =  1 
+let OmniCpp_ShowPrototypeInAbbr =  1 
+let Grep_Skip_Files = "*~ *,v s.*"
+let NeoComplCache_AlphabeticalOrder =  0 
+let NeoComplCache_EnableCamelCaseCompletion =  0 
+let NERDRemoveExtraSpaces = "1"
+let CommandTMaxHeight =  17 
+let NeoComplCache_SkipCompletionTime = "0.2"
+let OmniCpp_MayCompleteScope =  1 
+let NERDTreeMapPreview = "go"
+let Tlist_Use_SingleClick =  0 
+let CSApprox_verbose_level =  1 
+let NERDTreeMapActivateNode = "o"
+let NERDTreeWinPos = "left"
+let Grep_Find_Use_Xargs =  1 
+let TagList_title = "__Tag_List__"
+let NERDTreeMapMenu = "m"
+let NERDTreeStatusline = "%{exists('b:NERDTreeRoot')?b:NERDTreeRoot.path.str():''}"
+let Tlist_Display_Tag_Scope =  1 
+let NeoComplCache_ManualCompletionStartLength =  2 
+let NeoComplCache_MaxFilenameWidth =  15 
+let NERDTreeMapOpenInTabSilent = "T"
+let NERDTreeMapHelp = "?"
+let Grep_Shell_Quote_Char = "'"
+let NERDTreeMapJumpParent = "p"
+let NERDTreeMapToggleFilters = "f"
+let NERDTreeAutoCenter = "1"
+let NERDTreeMapJumpPrevSibling = "<C-k>"
+let IndSearchUT =  4000 
+let NERDTreeShowBookmarks = "0"
+let Grep_Null_Device = "/dev/null"
+let NERDDefaultNesting = "1"
+let NERDMenuMode = "3"
+let NERDTreeMapOpenInTab = "t"
+let NERDTreeRemoveDirCmd = "rm -rf "
+let Tlist_Process_File_Always =  0 
+let NERDTreeChDirMode = "0"
+let Egrep_Path = "egrep"
+let Tlist_Highlight_Tag_On_BufEnter =  1 
+let NERDTreeAutoCenterThreshold = "3"
+let NERDTreeMapOpenSplit = "i"
+let NERDTreeCaseSensitiveSort = "0"
+let NERDTreeHijackNetrw = "1"
+let Tlist_Max_Submenu_Items =  20 
+let NeoComplCache_CachingPercentInStatusline =  0 
+let NERDTreeMapRefresh = "r"
+let NERDTreeHighlightCursorline = "1"
+let NeoComplCache_MinKeywordLength =  4 
+let NERDDelimiterRequests = "1"
+let Tlist_GainFocus_On_ToggleOpen =  1 
+let NERDLPlace = "[>"
+let NERDTreeMouseMode = "1"
+let Tlist_WinHeight =  10 
+let NERDCreateDefaultMappings = "1"
+let Tlist_Inc_Winwidth =  1 
+let Tlist_Auto_Update =  1 
+let Grep_Shell_Escape_Char = "\\"
+let GetLatestVimScripts_allowautoinstall =  1 
+let Grep_OpenQuickfixWindow =  1 
+let NERDTreeNotificationThreshold = "100"
+let NERDTreeMapJumpRoot = "P"
+let NERDCommentWholeLinesInVMode = "0"
+let GetLatestVimScripts_options = "-q -O"
+let NeoComplCache_EnableRandomize =  1 
+let NERDChristmasTree = "1"
+let BufExplorer_title = "[Buf List]"
+let NERDTreeMapChdir = "cd"
+let NERDRPlace = "<]"
+let Tlist_Exit_OnlyWindow =  0 
+let JSLintHighlightErrorLine =  1 
+let NERDTreeMapPreviewVSplit = "gs"
+let Tlist_Display_Prototype =  0 
+let Agrep_Path = "agrep"
+let NeoComplCache_TemporaryDir = "/home/morr/.neocon"
+let NERDTreeMapRefreshRoot = "R"
+let Tlist_Max_Tag_Length =  10 
+let NERDRemoveAltComs = "1"
+let NERDTreeMapJumpLastChild = "J"
+let Tlist_Close_On_Select =  0 
+let NERDTreeMapOpenVSplit = "s"
+let SessionMgr_DefaultName = "last"
+let Tlist_WinWidth =  45 
+let NeoComplCache_MaxList =  100 
+let NERDTreeMapDeleteBookmark = "D"
+let NeoComplCache_EnableWildCard =  1 
+let NERDBlockComIgnoreEmpty = "0"
+let NeoComplCache_IgnoreCase =  1 
+let NERDTreeMapJumpNextSibling = "<C-j>"
+let Tlist_Auto_Open =  0 
+let NeoComplCache_EnableUnderbarCompletion =  0 
+let NeoComplCache_MaxKeywordWidth =  50 
+let NERDTreeShowFiles = "1"
+let NERDTreeCopyCmd = "cp -r "
+let OmniCpp_ShowScopeInAbbr =  1 
+let Tlist_File_Fold_Auto_Close =  0 
+let NERDTreeMapQuit = "q"
+let NERDTreeMapChangeRoot = "C"
+let Fgrep_Path = "fgrep"
+let NERDCompactSexyComs = "0"
+let Grep_Path = "grep"
+let NERDTreeSortDirs = "1"
+let NeoComplCache_CachingLimitFileSize =  1000000 
+let NERDTreeMapToggleFiles = "F"
+let NERDAllowAnyVisualDelims = "1"
+let NERDTreeMapOpenExpl = "e"
+let NERDTreeMapJumpFirstChild = "K"
+let NeoComplCache_EnableQuickMatch =  1 
+let NeoComplCache_SmartCase =  0 
+let Grep_Cygwin_Find =  0 
+let Grep_Skip_Dirs = "RCS CVS SCCS"
+let NERDTreeMapOpenRecursively = "O"
+let NERDTreeMapToggleBookmarks = "B"
+let Grep_Default_Options = ""
+let NERDTreeMapUpdir = "u"
+let NERDTreeMapUpdirKeepOpen = "U"
+let NERDTreeQuitOnOpen = "0"
+let Tlist_Show_Menu =  0 
+let NeoComplCache_EnableDispalyParameter =  1 
+let GetLatestVimScripts_mv = "mv"
+let Tlist_Use_Right_Window =  1 
+silent only
+cd /mnt/linode/var/www/site
+if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
+  let s:wipebuf = bufnr('%')
+endif
+set shortmess=aoO
+badd +0 lib/mal_parser.rb
+silent! argdel *
+set lines=50 columns=156
+edit lib/mal_parser.rb
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+let s:cpo_save=&cpo
+set cpo&vim
+nmap <buffer> gf <Plug>RailsTabFind
+nmap <buffer> f <Plug>RailsSplitFind
+nmap <buffer> [f <Plug>RailsAlternate
+nmap <buffer> ]f <Plug>RailsRelated
+nmap <buffer> gf <Plug>RailsFind
+nnoremap <buffer> <silent> <Plug>RailsTabFind :RTfind
+nnoremap <buffer> <silent> <Plug>RailsVSplitFind :RVfind
+nnoremap <buffer> <silent> <Plug>RailsSplitFind :RSfind
+nnoremap <buffer> <silent> <Plug>RailsFind :REfind
+nnoremap <buffer> <silent> <Plug>RailsRelated :R
+nnoremap <buffer> <silent> <Plug>RailsAlternate :A
+let &cpo=s:cpo_save
+unlet s:cpo_save
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=RubyBalloonexpr()
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal comments=:#
+setlocal commentstring=#\ %s
+setlocal complete=.,k,b,t
+setlocal completefunc=syntaxcomplete#Complete
+setlocal nocopyindent
+setlocal nocursorcolumn
+set cursorline
+setlocal cursorline
+setlocal define=^\\s*def\\s\\+\\(self\\.\\)\\=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'ruby'
+setlocal filetype=ruby
+endif
+setlocal foldcolumn=0
+set nofoldenable
+setlocal nofoldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+set foldmethod=syntax
+setlocal foldmethod=syntax
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=^\\s*\\<\\(load\\|w*require\\)\\>
+setlocal includeexpr=RailsIncludeexpr()
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255,$
+setlocal keywordprg=ri\ -T
+setlocal nolinebreak
+setlocal nolisp
+set list
+setlocal list
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=rubycomplete#Complete
+setlocal path=.,/mnt/linode/var/www/site,/mnt/linode/var/www/site/app,/mnt/linode/var/www/site/app/models,/mnt/linode/var/www/site/app/controllers,/mnt/linode/var/www/site/app/helpers,/mnt/linode/var/www/site/config,/mnt/linode/var/www/site/lib,/mnt/linode/var/www/site/app/views,/mnt/linode/var/www/site/test,/mnt/linode/var/www/site/test/unit,/mnt/linode/var/www/site/test/functional,/mnt/linode/var/www/site/test/integration,/mnt/linode/var/www/site/app/*,/mnt/linode/var/www/site/vendor,/mnt/linode/var/www/site/vendor/plugins/*/lib,/mnt/linode/var/www/site/vendor/plugins/*/test,/mnt/linode/var/www/site/vendor/rails/*/lib,/mnt/linode/var/www/site/vendor/rails/*/test,~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/site_ruby/1.8,~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/site_ruby/1.8/i686-linux,~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/site_ruby,~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/vendor_ruby/1.8,~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/vendor_ruby/1.8/i686-linux,~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/vendor_ruby,~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/1.8,~/.rvm/rubies/ruby-1.8.7-p302/lib/ruby/1.8/i686-linux,,~/.rvm/gems/ruby-1.8.7-p302/gems/SystemTimer-1.2/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/abstract-1.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/actionmailer-3.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/actionmailer-3.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/actionpack-3.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/actionpack-3.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/activemodel-3.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/activemodel-3.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/activerecord-3.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/activerecord-3.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/activeresource-3.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/activeresource-3.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/activesupport-3.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/activesupport-3.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/arel-1.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/arel-2.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/awesome_print-0.2.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/awesome_print-0.3.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/bb-ruby-0.9.5/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/bcrypt-ruby-2.1.2/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/builder-2.1.2/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/bundler-1.0.3/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/daemon_controller-0.2.5/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/devise-1.1.3/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/erubis-2.6.6/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/escape-0.0.4/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/fastthread-1.0.7/ext,~/.rvm/gems/ruby-1.8.7-p302/gems/fastthread-1.0.7/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/ffi-0.6.3/ext,~/.rvm/gems/ruby-1.8.7-p302/gems/ffi-0.6.3/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/file-tail-1.0.5/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/formtastic-1.1.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/http_status_exceptions-0.2.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/i18n-0.4.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/i18n-0.4.2/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/json-1.4.6/ext,~/.rvm/gems/ruby-1.8.7-p302/gems/json-1.4.6/ext/json/ext,~/.rvm/gems/ruby-1.8.7-p302/gems/json-1.4.6/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/libnotify-0.3.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/mactag-0.4.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/mail-2.2.7/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/mail-2.2.9/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/mime-types-1.16/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/moretea-awesome_nested_set-1.4.3.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/mysql-2.8.1/ext,~/.rvm/gems/ruby-1.8.7-p302/gems/mysql-2.8.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/nokogiri-1.4.3.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/orm_adapter-0.0.3/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/paperclip-2.3.5/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/passenger-3.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/polyglot-0.3.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/rack-1.2.1/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/rack-mount-0.6.13/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/rack-test-0.5.6/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/rails-3.0.0/lib,~/.rvm/gems/ruby-1.8.7-p302/gems/rails-3.0.1/lib,~/.rvm/gems/ruby-1.8.7-p302
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=2
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=2
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=%{expand('%:t')}%#warningmsg#%{&ff!='unix'?'['.&ff.']':''}%*%#warningmsg#%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}%*%h%y%{rails#statusline()}%r%m%#error#%{&paste?'[paste]':''}%*%=Col:%03c%*\ Ln:%l/%L\ %P
+setlocal suffixesadd=.rb,.rhtml,.erb,.rxml,.builder,.rjs,.mab,.liquid,.haml,.dryml,.mn,.yml,.csv,.rake,s.rb
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'ruby'
+setlocal syntax=ruby
+endif
+setlocal tabstop=2
+setlocal tags=/mnt/linode/var/www/site/tmp/tags,./tags,./TAGS,tags,TAGS,tags2,~/.vimdata/javascript/libs/jQuery_1.4/tags,/mnt/linode/var/www/site/tags
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal nowinfixheight
+setlocal nowinfixwidth
+set nowrap
+setlocal nowrap
+setlocal wrapmargin=0
+let s:l = 742 - ((23 * winheight(0) + 24) / 48)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+742
+normal! 07l
+tabnext 1
+if exists('s:wipebuf')
+  silent exe 'bwipe ' . s:wipebuf
+endif
+unlet! s:wipebuf
+set winheight=1 winwidth=20 shortmess=fimnrxoOtTI
+let s:sx = expand("<sfile>:p:r")."x.vim"
+if file_readable(s:sx)
+  exe "source " . fnameescape(s:sx)
+endif
+let &so = s:so_save | let &siso = s:siso_save
+doautoall SessionLoadPost
+unlet SessionLoad
+" vim: set ft=vim :

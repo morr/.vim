@@ -1,599 +1,200 @@
-" Vim syntax file
-" Language:	Cascading Style Sheets
-" Maintainer:	Claudio Fleiner <claudio@fleiner.com>
-" URL:		http://www.fleiner.com/vim/syntax/css.vim
-" Last Change:	2007 Nov 06
-" CSS2 by Nikolai Weibull
-" Full CSS2, HTML4 support by Yeti
-" °Сbg»»іЙ6О»µДК®БщЅшЦЖґъВл
-function! s:FGforBG(bg)
-   " takes a 6hex color code and returns a matching color that is visible
-   " substitute ЙѕіэїЄН·µД#
-   let pure = substitute(a:bg,'^#','','')
-   " °ґО»ИЎіцRGB
-   let r = eval('0x'.pure[0].pure[1])
-   let g = eval('0x'.pure[2].pure[3])
-   let b = eval('0x'.pure[4].pure[5])
-   if r*30 + g*59 + b*11 > 12000
-      return '#000000'
-   else
-      return '#ffffff'
-   end
-endfunction
+" Better CSS Syntax for Vim
+" Language: Cascading Style Sheets
+" Maintainer:   Chris Yip <yesu326@gmail.com>, twitter: @Chris_Ys
+" URL:  http://www.vim.org/scripts/script.php?script_id=3183
+" GIT:  http://github.com/ChrisYs/Better-CSS-Syntax-for-Vim
+" Last Change:  2010/08/27
+" Full CSS2, most of HTML5 & CSS3 properties (include prefix like -moz-) supported
 
-function! s:SetMatcher(clr,pat)
-   let group = 'cssColor'.substitute(a:clr,'^#','','')
-   " Redirect messages to a variable
-   redir => s:currentmatch
-      silent! exe 'syn list '.group
-   " End redirecting messages
-   redir END
-   " !~ regexp doesn't match
-   if s:currentmatch !~ a:pat.'\/'
-      exe 'syn match '.group.' /'.a:pat.'\>/ contained'
-      exe 'syn cluster cssColors add='.group
-      if has('gui_running')
-        exe 'hi '.group.' guifg='.s:FGforBG(a:clr)
-        exe 'hi '.group.' guibg='.a:clr
-      elseif &t_Co == 256
-        exe 'hi '.group.' ctermfg='.s:Rgb2xterm(s:FGforBG(a:clr))
-        exe 'hi '.group.' ctermbg='.s:Rgb2xterm(a:clr)
-      endif
-      return 1
-   else
-      return 0
-   endif
-endfunction
-
-"" the 6 value iterations in the xterm color cube
-let s:valuerange = [ 0x00, 0x5F, 0x87, 0xAF, 0xD7, 0xFF ]
-"
-"" 16 basic colors
-let s:basic16 = [ [ 0x00, 0x00, 0x00 ], [ 0xCD, 0x00, 0x00 ], [ 0x00, 0xCD, 0x00 ], [ 0xCD, 0xCD, 0x00 ], [ 0x00, 0x00, 0xEE ], [ 0xCD, 0x00, 0xCD ], [ 0x00, 0xCD, 0xCD ], [ 0xE5, 0xE5, 0xE5 ], [ 0x7F, 0x7F, 0x7F ], [ 0xFF, 0x00, 0x00 ], [ 0x00, 0xFF, 0x00 ], [ 0xFF, 0xFF, 0x00 ], [ 0x5C, 0x5C, 0xFF ], [ 0xFF, 0x00, 0xFF ], [ 0x00, 0xFF, 0xFF ], [ 0xFF, 0xFF, 0xFF ] ]
-:
-function! s:Xterm2rgb(color) 
-	" 16 basic colors
-   let r=0
-   let g=0
-   let b=0
-   if a:color<16
-      let r = s:basic16[a:color][0]
-      let g = s:basic16[a:color][1]
-      let b = s:basic16[a:color][2]
-   endif
-	
-	" color cube color
-   if a:color>=16 && a:color<=232
-      let color=a:color-16
-      let r = s:valuerange[(color/36)%6]
-      let g = s:valuerange[(color/6)%6]
-      let b = s:valuerange[color%6]
-   endif
-	
-	" gray tone
-	if a:color>=233 && a:color<=253
-      let r=8+(a:color-232)*0x0a
-      let g=r
-      let b=r
-   endif
-   let rgb=[r,g,b]
-   return rgb
-endfunction
-
-function! s:pow(x, n)
-   let x = a:x
-   for i in range(a:n-1)
-      let x = x*a:x
-   return x
-endfunction
-
-let s:colortable=[]
-for c in range(0, 254)
-   let color = s:Xterm2rgb(c)
-   call add(s:colortable, color)
-endfor
-
-" selects the nearest xterm color for a rgb value like #FF0000
-function! s:Rgb2xterm(color)
-   let best_match=0
-   let smallest_distance = 10000000000
-   let r = eval('0x'.a:color[1].a:color[2])
-   let g = eval('0x'.a:color[3].a:color[4])
-   let b = eval('0x'.a:color[5].a:color[6])
-   for c in range(0,254)
-      let d = s:pow(s:colortable[c][0]-r,2) + s:pow(s:colortable[c][1]-g,2) + s:pow(s:colortable[c][2]-b,2)
-      if d<smallest_distance
-      let smallest_distance = d
-      let best_match = c
-      endif
-   endfor
-   return best_match
-endfunction
-
-function! s:SetNamedColor(clr,name)
-   let group = 'cssColor'.substitute(a:clr,'^#','','')
-   exe 'syn keyword '.group.' '.a:name.' contained'
-   exe 'syn cluster cssColors add='.group
-   if has('gui_running')
-     exe 'hi '.group.' guifg='.s:FGforBG(a:clr)
-     exe 'hi '.group.' guibg='.a:clr
-   elseif &t_Co == 256
-     exe 'hi '.group.' ctermfg='.s:Rgb2xterm(s:FGforBG(a:clr))
-     exe 'hi '.group.' ctermbg='.s:Rgb2xterm(a:clr)
-   endif
-   return 23
-endfunction
-
-function! s:PreviewCSSColorInLine(where)
-   " TODO use cssColor matchdata
-   let foundcolor = matchstr( getline(a:where), '#[0-9A-Fa-f]\{3,6\}\>' )
-   let color = ''
-   if foundcolor != ''
-      if foundcolor =~ '#\x\{6}$'
-         let color = foundcolor
-      elseif foundcolor =~ '#\x\{3}$'
-         let color = substitute(foundcolor, '\(\x\)\(\x\)\(\x\)', '\1\1\2\2\3\3', '')
-      else
-         let color = ''
-      endif
-      if color != ''
-         return s:SetMatcher(color,foundcolor)
-      else
-         return 0
-      endif
-   else
-      return 0
-   endif
-endfunction
-
-" For version 5.x: Clear all syntax items
-" For version 6.x: Quit when a syntax file was already loaded
-if !exists("main_syntax")
-  if version < 600
-    syntax clear
-  elseif exists("b:current_syntax")
+" Quit when a syntax file was already loaded
+if exists("b:current_syntax")
   finish
 endif
-  let main_syntax = 'css'
-endif
 
 syn case ignore
 
-syn keyword cssTagName abbr acronym address applet area a b base
-syn keyword cssTagName basefont bdo big blockquote body br button
-syn keyword cssTagName caption center cite code col colgroup dd del
-syn keyword cssTagName dfn dir div dl dt em fieldset font form frame
-syn keyword cssTagName frameset h1 h2 h3 h4 h5 h6 head hr html img i
-syn keyword cssTagName iframe img input ins isindex kbd label legend li
-syn keyword cssTagName link map menu meta noframes noscript ol optgroup
-syn keyword cssTagName option p param pre q s samp script select small
-syn keyword cssTagName span strike strong style sub sup tbody td
-syn keyword cssTagName textarea tfoot th thead title tr tt ul u var
-syn match cssTagName "\<table\>"
-syn match cssTagName "\*"
+syn match cssTagName /\*/
+syn match cssTagName /\<\(a\|abbr\|acronym\|address\|applet\|area\|article\|aside\|audio\|b\|base\|basefont\|bdo\|big\|blockquote\|body\|br\|button\|canvas\|caption\|center\|cite\|code\|col\|colgroup\|command\|datalist\|dd\|del\|details\|dfn\|dir\|div\|dl\|dt\|em\|embed\|fieldset\|font\|form\|figcaption\|figure\|footer\|frame\|frameset\|h1\|h2\|h3\|h4\|h5\|h6\|head\|header\|hgroup\|hr\|html\|img\|i\|iframe\|img\|input\|ins\|isindex\|kbd\|keygen\|label\|legend\|li\|link\|map\|mark\|menu\|meta\|meter\|nav\|noframes\|noscript\|object\|ol\|optgroup\|option\|output\|p\|param\|pre\|progress\|q\|rp\|rt\|ruby\|s\|samp\|script\|section\|select\|small\|span\|strike\|strong\|style\|sub\|summary\|sup\|table\|tbody\|td\|textarea\|tfoot\|th\|thead\|time\|title\|tr\|tt\|ul\|u\|var\|variant\|video\|xmp\)\>/
 
-syn match cssTagName "@page\>" nextgroup=cssDefinition
+syn match cssClass "\.[A-Za-z][A-Za-z0-9_-]\{0,\}"
 
-syn match cssSelectorOp "[+>.]"
-syn match cssSelectorOp2 "[~|]\?=" contained
-syn region cssAttributeSelector matchgroup=cssSelectorOp start="\[" end="]" transparent contains=cssUnicodeEscape,cssSelectorOp2,cssStringQ,cssStringQQ
-
-try
-syn match cssIdentifier "#[A-Za-zА-я_@][A-Za-zА-я0-9_@-]*"
-catch /^.*/
 syn match cssIdentifier "#[A-Za-z_@][A-Za-z0-9_@-]*"
-endtry
 
+syn match cssPrefix /\(-\(webkit\|moz\|o\|ms\)-\)\|filter/
 
-syn match cssMedia "@media\>" nextgroup=cssMediaType skipwhite skipnl
-syn keyword cssMediaType contained screen print aural braile embosed handheld projection ty tv all nextgroup=cssMediaComma,cssMediaBlock skipwhite skipnl
-syn match cssMediaComma "," nextgroup=cssMediaType skipwhite skipnl
-syn region cssMediaBlock transparent matchgroup=cssBraces start='{' end='}' contains=cssTagName,cssError,cssComment,cssDefinition,cssURL,cssUnicodeEscape,cssIdentifier
+syn match cssNumber /\(-\)\=\(\.\d\+\|\d\+\(\.\d\+\)\{0,\}\)/ contained
 
-syn match cssValueInteger contained "[-+]\=\d\+"
-syn match cssValueNumber contained "[-+]\=\d\+\(\.\d*\)\="
-syn match cssValueLength contained "[-+]\=\d\+\(\.\d*\)\=\(%\|mm\|cm\|in\|pt\|pc\|em\|ex\|px\)"
-syn match cssValueAngle contained "[-+]\=\d\+\(\.\d*\)\=\(deg\|grad\|rad\)"
-syn match cssValueTime contained "+\=\d\+\(\.\d*\)\=\(ms\|s\)"
-syn match cssValueFrequency contained "+\=\d\+\(\.\d*\)\=\(Hz\|kHz\)"
+syn match cssPseudo /\:\{1,2\}\(link\|visited\|active\|hover\|focus\|before\|after\|left\|right\|root\|empty\|target\|enabled\|disabled\|checked\)\ze[ :,\.#\[\]{]\+/
+syn match cssPseudo /\:\{1,2\}first\-\(letter\|line\|child\)\ze[ :,\.#\[\]{]\+/
+syn match cssPseudo /\:\{1,2\}\(last\|only\)-child\ze[ :,\.#\[\]{]\+/
+syn match cssPseudo /\:\{1,2\}\(first\|last\|only\)-of-type)\ze[ :,\.#\[\]{]\+/
+syn match cssPseudo /\:\{1,2\}nth\(-last\)\{0,1\}-child([N0-9]\{0,\})\ze[ :,\.#\[\]{]\+/
+syn match cssPseudo /\:\{1,2\}nth\(-last\)\{0,1\}-of-type([N0-9]\{0,\})\ze[ :,\.#\[\]{]\+/
+syn match cssPseudo /\:\{1,2\}not([#\.]\{0,\}\S\+)\ze[ :,\.#\[\]{]\+/
+syn match cssPseudo /\:\{1,2\}lang([a-zA-Z]\{2\}\(-[a-zA-Z]\{2\}\)\{0,1\})\ze[ :,\.#\[\]{]\+/
 
-syn match cssFontDescriptor "@font-face\>" nextgroup=cssFontDescriptorBlock skipwhite skipnl
-syn region cssFontDescriptorBlock contained transparent matchgroup=cssBraces start="{" end="}" contains=cssComment,cssError,cssUnicodeEscape,cssFontProp,cssFontAttr,cssCommonAttr,cssStringQ,cssStringQQ,cssFontDescriptorProp,cssValue.*,cssFontDescriptorFunction,cssUnicodeRange,cssFontDescriptorAttr
-syn match cssFontDescriptorProp contained "\<\(unicode-range\|unit-per-em\|panose-1\|cap-height\|x-height\|definition-src\)\>"
-syn keyword cssFontDescriptorProp contained src stemv stemh slope ascent descent widths bbox baseline centerline mathline topline
-syn keyword cssFontDescriptorAttr contained all
-syn region cssFontDescriptorFunction contained matchgroup=cssFunctionName start="\<\(uri\|url\|local\|format\)\s*(" end=")" contains=cssStringQ,cssStringQQ oneline keepend
-syn match cssUnicodeRange contained "U+[0-9A-Fa-f?]\+"
-syn match cssUnicodeRange contained "U+\x\+-\x\+"
+syn region cssFuncRegion start=/{/ end=/}/ contains=cssPropRegion
 
-syn keyword cssColor contained aqua black blue fuchsia gray green lime maroon navy olive purple red silver teal yellow
-" FIXME: These are actually case-insentivie too, but (a) specs recommend using
-" mixed-case (b) it's hard to highlight the word `Background' correctly in
-" all situations
-syn case match
-syn keyword cssColor contained ActiveBorder ActiveCaption AppWorkspace ButtonFace ButtonHighlight ButtonShadow ButtonText CaptionText GrayText Highlight HighlightText InactiveBorder InactiveCaption InactiveCaptionText InfoBackground InfoText Menu MenuText Scrollbar ThreeDDarkShadow ThreeDFace ThreeDHighlight ThreeDLightShadow ThreeDShadow Window WindowFrame WindowText Background
-syn case ignore
-syn match cssColor contained "\<transparent\>"
-syn match cssColor contained "\<white\>"
-syn match cssColor contained "#[0-9A-Fa-f]\{3\}\>"
-syn match cssColor contained "#[0-9A-Fa-f]\{6\}\>"
-"syn match cssColor contained "\<rgb\s*(\s*\d\+\(\.\d*\)\=%\=\s*,\s*\d\+\(\.\d*\)\=%\=\s*,\s*\d\+\(\.\d*\)\=%\=\s*)"
-syn region cssURL contained matchgroup=cssFunctionName start="\<url\s*(" end=")" oneline keepend
-syn region cssFunction contained matchgroup=cssFunctionName start="\<\(rgb\|clip\|attr\|counter\|rect\)\s*(" end=")" oneline keepend
+syn match cssPropRegion /[^{}]*/ contained contains=cssProp,cssAttrBlock,cssPrefix,cssComment
 
-syn match cssImportant contained "!\s*important\>"
+syn region cssAttrBlock start=/:\zs/ end=/\ze[;}]\{1\}/ contained contains=cssAttr,cssColor,cssImportant,cssNumber,cssUnits,cssQuote,cssFunction
 
-syn keyword cssCommonAttr contained auto none inherit
-syn keyword cssCommonAttr contained top bottom
-syn keyword cssCommonAttr contained medium normal
+syn keyword cssAttr above absolute accent adjacent after alias all alphabetic alternate always auto avoid balance baseline back before behind below blink block bold bolder border both bottom capitalize caption cell center central circle clear clone code collapse compact copy crop cross crosshair current dashed default digits disc discard dot dotted double embed end fast faster fill first fixed forward front hanging help here hidden hide high higher horizontal icon ideographic inherit inhibit initial invert italic justify kashida landscape last left level lighter linear loud low lower ltr mathematical manual medium meet menu middle modal move multiple moderate narrower new none normal nowrap oblique overline parent perceptual pointer portrait progress reduced relative reverse ridge right root rtl same saturation scroll separate show silent single slice slide slow slower solid soft square start static stretch strong sub super suppress tab text tibetan top underline unrestricted vertical visible wait wider window contained
 
-syn match cssFontProp contained "\<font\>\(-\(family\|style\|variant\|weight\|size\(-adjust\)\=\|stretch\)\>\)\="
-syn match cssFontAttr contained "\<\(sans-\)\=\<serif\>"
-syn match cssFontAttr contained "\<small\>\(-\(caps\|caption\)\>\)\="
-syn match cssFontAttr contained "\<x\{1,2\}-\(large\|small\)\>"
-syn match cssFontAttr contained "\<message-box\>"
-syn match cssFontAttr contained "\<status-bar\>"
-syn match cssFontAttr contained "\<\(\(ultra\|extra\|semi\|status-bar\)-\)\=\(condensed\|expanded\)\>"
-syn keyword cssFontAttr contained cursive fantasy monospace italic oblique
-syn keyword cssFontAttr contained bold bolder lighter larger smaller
-syn keyword cssFontAttr contained icon menu
-syn match cssFontAttr contained "\<caption\>"
-syn keyword cssFontAttr contained large smaller larger
-syn keyword cssFontAttr contained narrower wider
+syn match cssAttr /\<transparent\>/ contained
 
-syn keyword cssColorProp contained color
-syn match cssColorProp contained "\<background\(-\(color\|image\|attachment\|position\)\)\="
-syn keyword cssColorAttr contained center scroll fixed
-syn match cssColorAttr contained "\<repeat\(-[xy]\)\=\>"
-syn match cssColorAttr contained "\<no-repeat\>"
+syn match cssAttr /\<\(absolute\|relative\)-colorimetric\>/ contained
+syn match cssAttr /<\(pause\|rest\)-\(after\|before\)\>/ contained
+syn match cssAttr /\<\(x-\)\=\(weak\|strong\|low\|high\)\>/ contained
+syn match cssAttr /\(in\|out\)\(set\|side\)/ contained
+syn match cssAttr /\<\(block\|inline\)-axis\>/ contained
+syn match cssAttr /\<\(border\|content\)-box\>/ contained
+syn match cssAttr /\<x-\(loud\|soft\|slow\|fast\|low\|high\)\>/ contained
+syn match cssAttr /\<context-menu\|not-allowed\|vertical-text\|all-scroll\|from-image\|spell-out\|line-through\|bidi-override\|keep-all\>/ contained
+syn match cssAttr /\<inline\(-\(block\|table\)\)\{0,1\}\>/ contained
+syn match cssAttr /\<table\(-\(caption\|cell\|column\|row\)\)\{0,1\}\>/ contained
+syn match cssAttr /\<table\(-\(column\|footer\|header\|row\)-group\)\>/ contained
+syn match cssAttr /\<ruby\(-\(base\|text\)\(-group\)\{0,1\}\)\{0,1\}\>/ contained
+syn match cssAttr /\<\(exclude\|include\)-ruby\>/ contained
+syn match cssAttr /\<\(consider\|disregard\)-shifts\>/ contained
+syn match cssAttr /\<list-item\|run-in\>/ contained
+syn match cssAttr /\<\(\(\(block\|inline\)-line\)\|max\|grid\)-height\>/ contained
+syn match cssAttr /\<\(far\|left\|right\)-side\>/ contained
+syn match cssAttr /\<\(left\|right\)wards\>/ contained
+syn match cssAttr /\<\(center\|far\)-\(left\|right\)\>/ contained
+syn match cssAttr /\<\(\(text-\)\=\(before\|after\)-\(edge\|central\|ideographic\|alphabetic\|hanging\|mathematical\|use-script\)\)\>/ contained
+syn match cssAttr /\<\([nwse]\{1,4\}\|col\|row\)-resize\>/ contained
+syn match cssAttr /\<use-scriot\|reset-size\|caps-height\|status-bar\|message-box\>/ contained
+syn match cssAttr /\<small-\(caps\|caption\)\>/ contained
+syn match cssAttr /\<\(\(ultra\|extra\|semi\)-\)\=\(condensed\|expanded\)\>/ contained
+syn match cssAttr /\<no-\(change\|content\|display\|drop\|limit\|repeat\)\>/ contained
+syn match cssAttr /\<repeat\(-\(x\|y\)\)\=\>/ contained
+syn match cssAttr /\<\(end\|line\)-edge\>/ contained
+syn match cssAttr /\<break-\(all\|word\|strict\)\>/ contained
+syn match cssAttr /\<\(upper\|lower\)case\>/ contained
+syn match cssAttr /\<distribute\(-\(letter\|space\)\)\=\>/ contained
+syn match cssAttr /\<\(literal\|no\)-punctuation\>/ contained
+syn match cssAttr /\<inter-\(word\|ideograph\|cluster\)\>/ contained
+syn match cssAttr /\<\(font\|text\|max\)-size\>/ contained
+syn match cssAttr /\<ease\(-\(in\|out\|in-out\)\)\=\>/ contained
+syn match cssAttr /\<text-\(top\|bottom\)\>/ contained
+syn match cssAttr /\<pre\(-\(wrap\|line\)\)\=\>/ contained
+syn match cssAttr /\<preserve\(-\(breaks\)\)\=\>/ contained
 
-syn match cssTextProp "\<\(\(word\|letter\)-spacing\|text\(-\(decoration\|transform\|align\|index\|shadow\)\)\=\|vertical-align\|unicode-bidi\|line-height\)\>"
-syn match cssTextAttr contained "\<line-through\>"
-syn match cssTextAttr contained "\<text-indent\>"
-syn match cssTextAttr contained "\<\(text-\)\=\(top\|bottom\)\>"
-syn keyword cssTextAttr contained underline overline blink sub super middle
-syn keyword cssTextAttr contained capitalize uppercase lowercase center justify baseline sub super
+syn match cssProp /\<\(appearance\|binding\|bottom\|clear\|clip\|color\|columns\|content\|crop\|cursor\|direction\|elevation\|empty-cells\|hanging-punctuation\|height\|hyphens\|icon\|inline-box-align\|left\|letter-spacing\|move-to\|opacity\|orphans\|phonemes\|position\|play-during\|presentation-level\|punctuation-trim\|quotes\|rendering-intent\|resize\|richness\|right\|size\|speech-rate\|stress\|string-set\|tab-size\|table-layout\|top\|unicode-bidi\|vertical-align\|visibility\|volume\|widows\|width\|z-index\|zimuth\)\>\ze\s*:/ contained
 
-syn match cssBoxProp contained "\<\(margin\|padding\|border\)\(-\(top\|right\|bottom\|left\)\)\=\>"
-syn match cssBoxProp contained "\<border-\(\(\(top\|right\|bottom\|left\)-\)\=\(width\|color\|style\)\)\=\>"
-syn match cssBoxProp contained "\<\(width\|z-index\)\>"
-syn match cssBoxProp contained "\<\(min\|max\)-\(width\|height\)\>"
-syn keyword cssBoxProp contained width height float clear overflow clip visibility
-syn keyword cssBoxAttr contained thin thick both
-syn keyword cssBoxAttr contained dotted dashed solid double groove ridge inset outset
-syn keyword cssBoxAttr contained hidden visible scroll collapse
+syn match cssProp /\<alignment-\(adjust\|baseline\)\>\ze\s*:/ contained
+syn match cssProp /\<animation\(-\(delay\|direction\|duration\|iteration-count\|name\|play-state\|timing-function\)\)\{0,1\}\>\ze\s*:/ contained
+syn match cssProp /\<background\(-\(attachment\|break\|clip\|color\|image\|origin\|position\|repeat\|size\)\)\{0,1\}\>\ze\s*:/ contained
+syn match cssProp /\<baseline-shift\|caption-side\|color-profile\>\ze\s*:/ contained
+syn match cssProp /\<bookmark-\(label\|level\|target\)\>\ze\s*:/ contained
+syn match cssProp /\<border\(-\(bottom\|collapse\|color\|image\|left\|length\|radius\|right\|spacing\|style\|top\|width\)\)\{0,1\}\>\ze\s*:/ contained
+syn match cssProp /\<border\(-\(bottom\|left\|right\|top\)\(-\(color\|style\|wdith\)\)\{0,1\}\)\{0,1\}\>\ze\s*:/ contained
+syn match cssProp /\<border-\(bottom\|top\)-\(left\|right\)-radius\>\ze\s*:/ contained
+syn match cssProp /\<box-\(align\|decoration-break\|direction\|flex\|\(flex\|ordinal\)-group\|lines\|orient\|pack\|shadow\|sizing\)\>\ze\s*:/ contained
+syn match cssProp /\<column\(-\(\break-\(after\|before\)\|count\|fill\|gap\|rule\(-\(color\|style\|width\)\)\{0,1\}\)\|span\|width\)\>\ze\s*:/ contained
+syn match cssProp /\<counter-\(increment\|reset\)\>\ze\s*:/ contained
+syn match cssProp /\<cue\(-\(after\|before\)\)\{0,1\}\>\ze\s*:/ contained
+syn match cssProp /\<display\(-\(model\|role\)\)\{0,1\}\>\ze\s*:/ contained
+syn match cssProp /\<dominant-baseline\>\ze\s*:/ contained
+syn match cssProp /\<drop-initial-\(\(\(after\|before\)-\(adjust\|align\)\)\|size\|value\)\>\ze\s*:/ contained
+syn match cssProp /\<fit\(-position\)\{0,1\}\>\ze\s*:/ contained
+syn match cssProp /\<float\>\(-offset\)\{0,1\}\ze\s*:/ contained
+syn match cssProp /\<font\(-\(family\|size\(-adjust\)\=\|stretch\|style\|variant\|weight\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<grid-\(columns\|rows\)\>\ze\s*:/ contained
+syn match cssProp /\<hyphenate-\(after\|before\|character\|lines\|resource\)\>\ze\s*:/ contained
+syn match cssProp /\<image-\(orientation\|resolution\)\>\ze\s*:/ contained
+syn match cssProp /\<line-\(height\|stacking\(-\(ruby\|shift\|strategy\)\)\=\)\>\ze\s*:/ contained
+syn match cssProp /\<list-style\(-\(image\|position\|type\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<\(margin\|padding\)\(-\(bottom\|left\|right\|top\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<mark\(s\|-\(after\|before\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<marquee-\(direction\|play-count\|speed\|style\)\>\ze\s*:/ contained
+syn match cssProp /\<\(max\|min\)-\(height\|width\)\>\ze\s*:/ contained
+syn match cssProp /\<nav-\(down\|index\|left\|right\|up\)\>\ze\s*:/ contained
+syn match cssProp /\<outline\(-\(color\|offset\|style\|width\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<overflow\(-\(style\|x\|y\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<page\(-\(break-\(after\|before\|inside\)\|policy\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<pause\(-\(after\|before\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<pitch\(-range\)\=\>\ze\s*:/ contained
+syn match cssProp /\<rest\(-\(after\|before\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<rotation\(-point\)\=\>\ze\s*:/ contained
+syn match cssProp /\<ruby-\(align\|overhang\|position\|span\)\>\ze\s*:/ contained
+syn match cssProp /\<speak\(-\(header\|numeral\|punctuation\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<target\(-\(name\|new\|position\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<text-\(align\(-last\)\=\|decoration\|emphasis\|height\|indent\|justify\|outline\|replace\|shadow\|transform\|wrap\|overflow\)\>\ze\s*:/ contained
+syn match cssProp /\<transition\(-\(delay\|duration\|property\|timing-function\)\)\=\>\ze\s*:/ contained
+syn match cssProp /\<voice-\(balance\|duration\|family\|pitch\(-range\)\=\|rate\|stress\|volume\)\>\ze\s*:/ contained
+syn match cssProp /\<white-space\(-collapse\)\=\>\ze\s*:/ contained
+syn match cssProp /\<word-\(break\|spacing\|wrap\)\>\ze\s*:/ contained
 
-syn keyword cssGeneratedContentProp contained content quotes
-syn match cssGeneratedContentProp contained "\<counter-\(reset\|increment\)\>"
-syn match cssGeneratedContentProp contained "\<list-style\(-\(type\|position\|image\)\)\=\>"
-syn match cssGeneratedContentAttr contained "\<\(no-\)\=\(open\|close\)-quote\>"
-syn match cssAuralAttr contained "\<lower\>"
-syn match cssGeneratedContentAttr contained "\<\(lower\|upper\)-\(roman\|alpha\|greek\|latin\)\>"
-syn match cssGeneratedContentAttr contained "\<\(hiragana\|katakana\)\(-iroha\)\=\>"
-syn match cssGeneratedContentAttr contained "\<\(decimal\(-leading-zero\)\=\|cjk-ideographic\)\>"
-syn keyword cssGeneratedContentAttr contained disc circle square hebrew armenian georgian
-syn keyword cssGeneratedContentAttr contained inside outside
+syn match cssSelector /\[[#\.]\{0,1\}\c[-a-z0-9]\+\([*^$]\{0,1\}=\c[-a-z0-9'"]\+\)\]/
 
-syn match cssPagingProp contained "\<page\(-break-\(before\|after\|inside\)\)\=\>"
-syn keyword cssPagingProp contained size marks inside orphans widows
-syn keyword cssPagingAttr contained landscape portrait crop cross always avoid
+syn match cssUnits /%\|\(cm\|deg\|dpi\|em\|ex|\in\|mm\|pc\|pt\|px\|s\)\>/ contained
 
-syn keyword cssUIProp contained cursor
-syn match cssUIProp contained "\<outline\(-\(width\|style\|color\)\)\=\>"
-syn match cssUIAttr contained "\<[ns]\=[ew]\=-resize\>"
-syn keyword cssUIAttr contained default crosshair pointer move wait help
-syn keyword cssUIAttr contained thin thick
-syn keyword cssUIAttr contained dotted dashed solid double groove ridge inset outset
-syn keyword cssUIAttr contained invert
+syn match cssColor /#\(\x\{6\}\|\x\{3\}\)/ contained
 
-syn match cssRenderAttr contained "\<marker\>"
-syn match cssRenderProp contained "\<\(display\|marker-offset\|unicode-bidi\|white-space\|list-item\|run-in\|inline-table\)\>"
-syn keyword cssRenderProp contained position top bottom direction
-syn match cssRenderProp contained "\<\(left\|right\)\>"
-syn keyword cssRenderAttr contained block inline compact
-syn match cssRenderAttr contained "\<table\(-\(row-gorup\|\(header\|footer\)-group\|row\|column\(-group\)\=\|cell\|caption\)\)\=\>"
-syn keyword cssRenderAttr contained static relative absolute fixed
-syn keyword cssRenderAttr contained ltr rtl embed bidi-override pre nowrap
-syn match cssRenderAttr contained "\<bidi-override\>"
+syn match cssImportant /!important\>/ contained
 
+syn region cssComment start=/\/\*/ end=/\*\// contains=@Spell
 
-syn match cssAuralProp contained "\<\(pause\|cue\)\(-\(before\|after\)\)\=\>"
-syn match cssAuralProp contained "\<\(play-during\|speech-rate\|voice-family\|pitch\(-range\)\=\|speak\(-\(punctuation\|numerals\)\)\=\)\>"
-syn keyword cssAuralProp contained volume during azimuth elevation stress richness
-syn match cssAuralAttr contained "\<\(x-\)\=\(soft\|loud\)\>"
-syn keyword cssAuralAttr contained silent
-syn match cssAuralAttr contained "\<spell-out\>"
-syn keyword cssAuralAttr contained non mix
-syn match cssAuralAttr contained "\<\(left\|right\)-side\>"
-syn match cssAuralAttr contained "\<\(far\|center\)-\(left\|center\|right\)\>"
-syn keyword cssAuralAttr contained leftwards rightwards behind
-syn keyword cssAuralAttr contained below level above higher
-syn match cssAuralAttr contained "\<\(x-\)\=\(slow\|fast\)\>"
-syn keyword cssAuralAttr contained faster slower
-syn keyword cssAuralAttr contained male female child code digits continuous
+syn region cssFunction start=/\c[-a-z0-9@]*(/ end=/)/ contained contains=cssFile
 
-syn match cssTableProp contained "\<\(caption-side\|table-layout\|border-collapse\|border-spacing\|empty-cells\|speak-header\)\>"
-syn keyword cssTableAttr contained fixed collapse separate show hide once always
+syn region cssFile start=/url(\zs/ end=/\ze)/ contained
 
-" FIXME: This allows cssMediaBlock before the semicolon, which is wrong.
-syn region cssInclude start="@import" end=";" contains=cssComment,cssURL,cssUnicodeEscape,cssMediaType
-syn match cssBraces contained "[{}]"
-syn match cssError contained "{@<>"
-syn region cssDefinition transparent matchgroup=cssBraces start='{' end='}' contains=css.*Attr,css.*Prop,cssComment,cssValue.*,cssColor,cssURL,cssImportant,cssError,cssStringQ,cssStringQQ,cssFunction,cssUnicodeEscape
-syn match cssBraceError "}"
+syn match cssBraket /[{}]/ contained
 
-syn match cssPseudoClass ":\S*" contains=cssPseudoClassId,cssUnicodeEscape
-syn keyword cssPseudoClassId contained link visited active hover focus before after left right
-syn match cssPseudoClassId contained "\<first\(-\(line\|letter\|child\)\)\=\>"
-syn region cssPseudoClassLang matchgroup=cssPseudoClassId start=":lang(" end=")" oneline
-
-syn region cssComment start="/\*" end="\*/" contains=@Spell
-
-syn match cssUnicodeEscape "\\\x\{1,6}\s\?"
-syn match cssSpecialCharQQ +\\"+ contained
-syn match cssSpecialCharQ +\\'+ contained
-syn region cssStringQQ start=+"+ skip=+\\\\\|\\"+ end=+"+ contains=cssUnicodeEscape,cssSpecialCharQQ
-syn region cssStringQ start=+'+ skip=+\\\\\|\\'+ end=+'+ contains=cssUnicodeEscape,cssSpecialCharQ
-syn match cssClassName "\.[A-Za-z][A-Za-z0-9_-]\+"
-
-if main_syntax == "css"
-  syn sync minlines=10
-endif
+syn match cssQuote /\('.*'\|".*"\)/ contained
 
 " Define the default highlighting.
-" For version 5.7 and earlier: only when not done already
-" For version 5.8 and later: only when an item doesn't have highlighting yet
-if version >= 508 || !exists("did_css_syn_inits")
-  if version < 508
-    let did_css_syn_inits = 1
-    command -nargs=+ HiLink hi link <args>
-  else
-    command -nargs=+ HiLink hi def link <args>
-  endif
+command -nargs=+ HL hi def link <args>
 
-  HiLink cssComment Comment
-  HiLink cssTagName Statement
-  HiLink cssSelectorOp Special
-  HiLink cssSelectorOp2 Special
-  HiLink cssFontProp StorageClass
-  HiLink cssColorProp StorageClass
-  HiLink cssTextProp StorageClass
-  HiLink cssBoxProp StorageClass
-  HiLink cssRenderProp StorageClass
-  HiLink cssAuralProp StorageClass
-  HiLink cssRenderProp StorageClass
-  HiLink cssGeneratedContentProp StorageClass
-  HiLink cssPagingProp StorageClass
-  HiLink cssTableProp StorageClass
-  HiLink cssUIProp StorageClass
-  HiLink cssFontAttr Type
-  HiLink cssColorAttr Type
-  HiLink cssTextAttr Type
-  HiLink cssBoxAttr Type
-  HiLink cssRenderAttr Type
-  HiLink cssAuralAttr Type
-  HiLink cssGeneratedContentAttr Type
-  HiLink cssPagingAttr Type
-  HiLink cssTableAttr Type
-  HiLink cssUIAttr Type
-  HiLink cssCommonAttr Type
-  HiLink cssPseudoClassId PreProc
-  HiLink cssPseudoClassLang Constant
-  HiLink cssValueLength Number
-  HiLink cssValueInteger Number
-  HiLink cssValueNumber Number
-  HiLink cssValueAngle Number
-  HiLink cssValueTime Number
-  HiLink cssValueFrequency Number
-  HiLink cssFunction Constant
-  HiLink cssURL String
-  HiLink cssFunctionName Function
-  HiLink cssColor Constant
-  HiLink cssIdentifier Function
-  HiLink cssInclude Include
-  HiLink cssImportant Special
-  HiLink cssBraces Function
-  HiLink cssBraceError Error
-  HiLink cssError Error
-  HiLink cssInclude Include
-  HiLink cssUnicodeEscape Special
-  HiLink cssStringQQ String
-  HiLink cssStringQ String
-  HiLink cssMedia Special
-  HiLink cssMediaType Special
-  HiLink cssMediaComma Normal
-  HiLink cssFontDescriptor Special
-  HiLink cssFontDescriptorFunction Constant
-  HiLink cssFontDescriptorProp StorageClass
-  HiLink cssFontDescriptorAttr Type
-  HiLink cssUnicodeRange Constant
-  HiLink cssClassName Function
-  delcommand HiLink
-endif
+HL cssAttr SpecialKey
 
-" ОТГЗµДТЄЗуКЗ±ШРлФЪ256Й«ПВЈ¬ЛщТФТЄЙиЦГ:set t_Co=256
-if has("gui_running") || &t_Co==256
-   " HACK modify cssDefinition to add @cssColors to its contains
-   redir => s:olddef
-      silent!  syn list cssDefinition
-   redir END
-   if s:olddef != ''
-      let s:b = strridx(s:olddef,'matchgroup')
-      if s:b != -1
-         exe 'syn region cssDefinition '.strpart(s:olddef,s:b).',@cssColors'
-      endif
-   endif
+HL cssAttrBlock Normal
 
-   " w3c Colors
-   let i = s:SetNamedColor('#800000', 'maroon')
-   let i = s:SetNamedColor('#ff0000', 'red')
-   let i = s:SetNamedColor('#ffA500', 'orange')
-   let i = s:SetNamedColor('#ffff00', 'yellow')
-   let i = s:SetNamedColor('#808000', 'olive')
-   let i = s:SetNamedColor('#800080', 'purple')
-   let i = s:SetNamedColor('#ff00ff', 'fuchsia')
-   let i = s:SetNamedColor('#ffffff', 'white')
-   let i = s:SetNamedColor('#00ff00', 'lime')
-   let i = s:SetNamedColor('#008000', 'green')
-   let i = s:SetNamedColor('#000080', 'navy')
-   let i = s:SetNamedColor('#0000ff', 'blue')
-   let i = s:SetNamedColor('#00ffff', 'aqua')
-   let i = s:SetNamedColor('#008080', 'teal')
-   let i = s:SetNamedColor('#000000', 'black')
-   let i = s:SetNamedColor('#c0c0c0', 'silver')
-   let i = s:SetNamedColor('#808080', 'gray')
+HL cssBraket Function
 
-   " extra colors
-   let i = s:SetNamedColor('#F0F8FF','AliceBlue')
-   let i = s:SetNamedColor('#FAEBD7','AntiqueWhite')
-   let i = s:SetNamedColor('#7FFFD4','Aquamarine')
-   let i = s:SetNamedColor('#F0FFFF','Azure')
-   let i = s:SetNamedColor('#F5F5DC','Beige')
-   let i = s:SetNamedColor('#FFE4C4','Bisque')
-   let i = s:SetNamedColor('#FFEBCD','BlanchedAlmond')
-   let i = s:SetNamedColor('#8A2BE2','BlueViolet')
-   let i = s:SetNamedColor('#A52A2A','Brown')
-   let i = s:SetNamedColor('#DEB887','BurlyWood')
-   let i = s:SetNamedColor('#5F9EA0','CadetBlue')
-   let i = s:SetNamedColor('#7FFF00','Chartreuse')
-   let i = s:SetNamedColor('#D2691E','Chocolate')
-   let i = s:SetNamedColor('#FF7F50','Coral')
-   let i = s:SetNamedColor('#6495ED','CornflowerBlue')
-   let i = s:SetNamedColor('#FFF8DC','Cornsilk')
-   let i = s:SetNamedColor('#DC143C','Crimson')
-   let i = s:SetNamedColor('#00FFFF','Cyan')
-   let i = s:SetNamedColor('#00008B','DarkBlue')
-   let i = s:SetNamedColor('#008B8B','DarkCyan')
-   let i = s:SetNamedColor('#B8860B','DarkGoldenRod')
-   let i = s:SetNamedColor('#A9A9A9','DarkGray')
-   let i = s:SetNamedColor('#A9A9A9','DarkGrey')
-   let i = s:SetNamedColor('#006400','DarkGreen')
-   let i = s:SetNamedColor('#BDB76B','DarkKhaki')
-   let i = s:SetNamedColor('#8B008B','DarkMagenta')
-   let i = s:SetNamedColor('#556B2F','DarkOliveGreen')
-   let i = s:SetNamedColor('#FF8C00','Darkorange')
-   let i = s:SetNamedColor('#9932CC','DarkOrchid')
-   let i = s:SetNamedColor('#8B0000','DarkRed')
-   let i = s:SetNamedColor('#E9967A','DarkSalmon')
-   let i = s:SetNamedColor('#8FBC8F','DarkSeaGreen')
-   let i = s:SetNamedColor('#483D8B','DarkSlateBlue')
-   let i = s:SetNamedColor('#2F4F4F','DarkSlateGray')
-   let i = s:SetNamedColor('#2F4F4F','DarkSlateGrey')
-   let i = s:SetNamedColor('#00CED1','DarkTurquoise')
-   let i = s:SetNamedColor('#9400D3','DarkViolet')
-   let i = s:SetNamedColor('#FF1493','DeepPink')
-   let i = s:SetNamedColor('#00BFFF','DeepSkyBlue')
-   let i = s:SetNamedColor('#696969','DimGray')
-   let i = s:SetNamedColor('#696969','DimGrey')
-   let i = s:SetNamedColor('#1E90FF','DodgerBlue')
-   let i = s:SetNamedColor('#B22222','FireBrick')
-   let i = s:SetNamedColor('#FFFAF0','FloralWhite')
-   let i = s:SetNamedColor('#228B22','ForestGreen')
-   let i = s:SetNamedColor('#DCDCDC','Gainsboro')
-   let i = s:SetNamedColor('#F8F8FF','GhostWhite')
-   let i = s:SetNamedColor('#FFD700','Gold')
-   let i = s:SetNamedColor('#DAA520','GoldenRod')
-   let i = s:SetNamedColor('#808080','Grey')
-   let i = s:SetNamedColor('#ADFF2F','GreenYellow')
-   let i = s:SetNamedColor('#F0FFF0','HoneyDew')
-   let i = s:SetNamedColor('#FF69B4','HotPink')
-   let i = s:SetNamedColor('#CD5C5C','IndianRed')
-   let i = s:SetNamedColor('#4B0082','Indigo')
-   let i = s:SetNamedColor('#FFFFF0','Ivory')
-   let i = s:SetNamedColor('#F0E68C','Khaki')
-   let i = s:SetNamedColor('#E6E6FA','Lavender')
-   let i = s:SetNamedColor('#FFF0F5','LavenderBlush')
-   let i = s:SetNamedColor('#7CFC00','LawnGreen')
-   let i = s:SetNamedColor('#FFFACD','LemonChiffon')
-   let i = s:SetNamedColor('#ADD8E6','LightBlue')
-   let i = s:SetNamedColor('#F08080','LightCoral')
-   let i = s:SetNamedColor('#E0FFFF','LightCyan')
-   let i = s:SetNamedColor('#FAFAD2','LightGoldenRodYellow')
-   let i = s:SetNamedColor('#D3D3D3','LightGray')
-   let i = s:SetNamedColor('#D3D3D3','LightGrey')
-   let i = s:SetNamedColor('#90EE90','LightGreen')
-   let i = s:SetNamedColor('#FFB6C1','LightPink')
-   let i = s:SetNamedColor('#FFA07A','LightSalmon')
-   let i = s:SetNamedColor('#20B2AA','LightSeaGreen')
-   let i = s:SetNamedColor('#87CEFA','LightSkyBlue')
-   let i = s:SetNamedColor('#778899','LightSlateGray')
-   let i = s:SetNamedColor('#778899','LightSlateGrey')
-   let i = s:SetNamedColor('#B0C4DE','LightSteelBlue')
-   let i = s:SetNamedColor('#FFFFE0','LightYellow')
-   let i = s:SetNamedColor('#32CD32','LimeGreen')
-   let i = s:SetNamedColor('#FAF0E6','Linen')
-   let i = s:SetNamedColor('#FF00FF','Magenta')
-   let i = s:SetNamedColor('#66CDAA','MediumAquaMarine')
-   let i = s:SetNamedColor('#0000CD','MediumBlue')
-   let i = s:SetNamedColor('#BA55D3','MediumOrchid')
-   let i = s:SetNamedColor('#9370D8','MediumPurple')
-   let i = s:SetNamedColor('#3CB371','MediumSeaGreen')
-   let i = s:SetNamedColor('#7B68EE','MediumSlateBlue')
-   let i = s:SetNamedColor('#00FA9A','MediumSpringGreen')
-   let i = s:SetNamedColor('#48D1CC','MediumTurquoise')
-   let i = s:SetNamedColor('#C71585','MediumVioletRed')
-   let i = s:SetNamedColor('#191970','MidnightBlue')
-   let i = s:SetNamedColor('#F5FFFA','MintCream')
-   let i = s:SetNamedColor('#FFE4E1','MistyRose')
-   let i = s:SetNamedColor('#FFE4B5','Moccasin')
-   let i = s:SetNamedColor('#FFDEAD','NavajoWhite')
-   let i = s:SetNamedColor('#FDF5E6','OldLace')
-   let i = s:SetNamedColor('#6B8E23','OliveDrab')
-   let i = s:SetNamedColor('#FF4500','OrangeRed')
-   let i = s:SetNamedColor('#DA70D6','Orchid')
-   let i = s:SetNamedColor('#EEE8AA','PaleGoldenRod')
-   let i = s:SetNamedColor('#98FB98','PaleGreen')
-   let i = s:SetNamedColor('#AFEEEE','PaleTurquoise')
-   let i = s:SetNamedColor('#D87093','PaleVioletRed')
-   let i = s:SetNamedColor('#FFEFD5','PapayaWhip')
-   let i = s:SetNamedColor('#FFDAB9','PeachPuff')
-   let i = s:SetNamedColor('#CD853F','Peru')
-   let i = s:SetNamedColor('#FFC0CB','Pink')
-   let i = s:SetNamedColor('#DDA0DD','Plum')
-   let i = s:SetNamedColor('#B0E0E6','PowderBlue')
-   let i = s:SetNamedColor('#BC8F8F','RosyBrown')
-   let i = s:SetNamedColor('#4169E1','RoyalBlue')
-   let i = s:SetNamedColor('#8B4513','SaddleBrown')
-   let i = s:SetNamedColor('#FA8072','Salmon')
-   let i = s:SetNamedColor('#F4A460','SandyBrown')
-   let i = s:SetNamedColor('#2E8B57','SeaGreen')
-   let i = s:SetNamedColor('#FFF5EE','SeaShell')
-   let i = s:SetNamedColor('#A0522D','Sienna')
-   let i = s:SetNamedColor('#87CEEB','SkyBlue')
-   let i = s:SetNamedColor('#6A5ACD','SlateBlue')
-   let i = s:SetNamedColor('#708090','SlateGray')
-   let i = s:SetNamedColor('#708090','SlateGrey')
-   let i = s:SetNamedColor('#FFFAFA','Snow')
-   let i = s:SetNamedColor('#00FF7F','SpringGreen')
-   let i = s:SetNamedColor('#4682B4','SteelBlue')
-   let i = s:SetNamedColor('#D2B48C','Tan')
-   let i = s:SetNamedColor('#D8BFD8','Thistle')
-   let i = s:SetNamedColor('#FF6347','Tomato')
-   let i = s:SetNamedColor('#40E0D0','Turquoise')
-   let i = s:SetNamedColor('#EE82EE','Violet')
-   let i = s:SetNamedColor('#F5DEB3','Wheat')
-   let i = s:SetNamedColor('#F5F5F5','WhiteSmoke')
-   let i = s:SetNamedColor('#9ACD32','YellowGreen')
+HL cssClass Function
 
+HL cssColor Constant
 
+HL cssComment Comment
 
-   let i = 1
-   while i <= line("$")
-      call s:PreviewCSSColorInLine(i)
-      let i = i+1
-   endwhile
-   unlet i
+HL cssError ErrorMsg
 
-   autocmd CursorHold * silent call s:PreviewCSSColorInLine('.')
-   "autocmd CursorHoldI * silent call s:PreviewCSSColorInLine('.')
-   set ut=100
-endif		" has("gui_running")
+HL cssFile Directory
+
+HL cssFunction Function
+
+HL cssFuncRegion Function
+
+HL cssIdentifier Identifier
+
+HL cssImportant PreProc
+
+HL cssUnits Special
+
+HL cssNumber Number
+
+HL cssPrefix Special
+
+HL cssProp Type
+
+HL cssPropRegion Normal
+
+HL cssPseudo Structure
+
+HL cssQuote String
+
+HL cssSelector Structure
+
+HL cssString String
+
+HL cssTagName Statement
+
+HL cssURL String
+
+delcommand HL
 
 let b:current_syntax = "css"
-
-if main_syntax == 'css'
-  unlet main_syntax
-endif
-
-" vim: ts=8
-
+"syn sync minlines=10

@@ -13,7 +13,7 @@ set langmap=¸`,éq,öw,óe,êr,åt,íy,ãu,øi,ùo,çp,ôa,ûs,âd,àf,ïg,ðh,îj,ëk,äl,ý',ÿz,÷x
 " one word symbol class
 set iskeyword=@,48-57,_,192-255,\$
 " encodings
-set fileencodings=windows-1251,utf-8,iso-8859-15,koi8-r
+set fileencodings=utf-8,windows-1251,iso-8859-15,koi8-r
 " fileformat
 "set fileformats=dos
 " sessions
@@ -130,6 +130,7 @@ set complete+=t
 
 set wildmenu
 set wcm=<Tab>
+"dont fold by default
 
 "dont fold by default
 set nofoldenable
@@ -142,10 +143,12 @@ set runtimepath+=~/.vimdata
 if has("unix")
   set runtimepath+=~/.vim/vim-ruby
   set runtimepath+=~/.vim/vim-rails
+  set runtimepath+=~/.vim/vim-fuzzyfinder
   "set runtimepath+=~/.vim/vim-ruby-debugger/vim
 else
   set runtimepath+=~/vimfiles/vim-ruby
   set runtimepath+=~/vimfiles/vim-rails
+  set runtimepath+=~/vimfiles/vim-fuzzyfinder
   "set runtimepath+=~/vimfiles/vim-ruby-debugger/vim
 endif
 "-----------------------------------------------------------------------------
@@ -214,12 +217,18 @@ map <silent> w <plug>CamelCaseMotion_w
 map <silent> b <plug>CamelCaseMotion_b
 map <silent> e <plug>CamelCaseMotion_e
 " move with control
-vmap <c-up> 10k
-nmap <c-up> 10k
-imap <c-up> <esc>10ki
-vmap <c-down> 10j
-nmap <c-down> 10j
-imap <c-down> <esc>10ji
+"vmap <c-up> 10k
+"nmap <c-up> 10k
+"imap <c-up> <esc>10ki
+"vmap <c-down> 10j
+"nmap <c-down> 10j
+"imap <c-down> <esc>10ji
+" Bubble single lines
+nmap <c-up> [e
+nmap <c-down> ]e
+" Bubble multiple lines
+vmap <c-up> [egv
+vmap <c-down> ]egv
 " move with shift
 imap <s-k4> <esc>Bi
 vmap <s-k4> B
@@ -261,18 +270,21 @@ vmap <c-q> <esc>:q!<cr>i
 imap <c-q> <esc>:q!<cr>i
 " save
 nmap <c-s> :w<cr>
-vmap <c-s> <esc>:w<cr>i
+vmap <c-s> <esc>:w<cr>gv
+imap <c-s> <esc>:w<cr>a
 "imap <c-s> <esc>:w<cr>i
 " FuzzyFinder
-nmap <silent> <leader>t :FuzzyFinderTextMate<cr>
-nmap <silent> <leader>b :FuzzyFinderBuffer<cr>
+nmap <silent> <leader>t :CommandT<cr>
+nmap <silent> <leader>r :CommandTFlush<cr>
+"nmap <silent> <leader>t :FuzzyFinderTextMate<cr>
+"nmap <silent> <leader>b :FuzzyFinderBuffer<cr>
 "nnoremap <silent> <c-b> :FuzzyFinderBookmark<cr>
 "nnoremap <silent> <leader>b :FuzzyFinderAddBookmark<cr><cr>
-nmap <silent> <leader>f :FuzzyFinderFile<cr>
-nmap <silent> <leader>d :FuzzyFinderDir<cr>
-nmap <silent> <leader>r :FuzzyFinderRemoveCache<cr>
-nmap <silent> <leader>d :FuzzyFinderDir<cr>
-nmap <silent> <leader>r :call RemoveFuzzyCache()<cr>
+"nmap <silent> <leader>f :FuzzyFinderFile<cr>
+"nmap <silent> <leader>d :FuzzyFinderDir<cr>
+"nmap <silent> <leader>r :FuzzyFinderRemoveCache<cr>
+"nmap <silent> <leader>d :FuzzyFinderDir<cr>
+"nmap <silent> <leader>r :call RemoveFuzzyCache()<cr>
 " tabs
 "nnoremap <c-T> :tabnew<cr>
 "inoremap <c-T> <c-O>:tabnew<cr>
@@ -309,9 +321,9 @@ vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
 " Trailing Spaces
 nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
 " make
-vmap <c-z> <esc>:w!<cr>:make<cr>
-nmap <c-z> :w!<cr>:make<cr>
-imap <c-z> <esc>:w!<cr>:make<cr>
+"vmap <c-z> <esc>:w!<cr>:make<cr>
+"nmap <c-z> :w!<cr>:make<cr>
+"imap <c-z> <esc>:w!<cr>:make<cr>
 " run
 vmap <leader>Z <esc>:w!<cr>:!./%<cr>
 nmap <leader>Z :w!<cr>:!./%<cr>
@@ -328,7 +340,8 @@ imap <leader>z <esc>:w!<cr>:!%<cr>
 "inoremap <c-F2> <c-O>:wall!<cr>
 "vnoremap <c-F2> <esc>:wall!<cr>
 " NerdTree
-map <silent> <f3> :NERDTreeToggle<cr>
+map <silent> <f9> :NERDTreeToggle<cr>
+map <silent> <c-f9> :NERDTreeToggle %<cr>
 " Project
 map <silent> <c-F3> <plug>ToggleProject
 " Wrap
@@ -374,19 +387,21 @@ nnoremap <f12> :emenu Tags.<tab>
 inoremap <f12> <c-O>:emenu Tags.<tab>
 vnoremap <f12> <esc>:emenu Tags.<tab>
 " ruby debugger
-nnoremap <c-f11> :call EnableDebugger()<cr>
+"nnoremap <c-f11> :call EnableDebugger()<cr>
 " vimrc edit
 map ,v :vsp $MYGVIMRC<CR>
 map ,V :source $MYGVIMRC<CR>
 "  'Control + \' - Open a new tab and tag into the function/variable currently under cursor
 imap {<cr> {<cr>}<Esc>O
 imap <? <?  ?><left><left><left>
+imap <% <%  %><left><left><left>
 imap <?= <?= ?><left><left><left>
+imap <%= <%= %><left><left><left>
 imap <?/ <<left><right>? /*
 
-imap /1 //-----------------------------------------------------------------------------
-imap /2 /1<cr> <cr><backspace><backspace><backspace>/1<up><end>
-imap /3 /2<down><cr><backspace><backspace><cr>/1<up><up><up><end>
+"imap /1 //-----------------------------------------------------------------------------
+"imap /2 /1<cr> <cr><backspace><backspace><backspace>/1<up><end>
+"imap /3 /2<down><cr><backspace><backspace><cr>/1<up><up><up><end>
 
 map <s-k> :exec("help ".expand("<cword>"))<cr>
 map <c-\> :tab split<cr>:exec("tag ".expand("<cword>"))<cr>
@@ -467,6 +482,10 @@ else
   autocmd! bufwritepost $VIM/_vimrc source $VIM/_vimrc
 endif
 
+au BufNewFile,BufRead *.scss set filetype=css
+
+au BufNewFile,BufRead *.json set filetype=javascript
+
 au BufNewFile,BufRead *.ctp set filetype=phtml
 au BufNewFile,BufRead *.php,*.phtml set dict+=~/.vimdata/php/keywords
 
@@ -477,18 +496,12 @@ au BufNewFile,BufRead *.rb map <s-k> :call TryRubyDoc()<cr>
   "au BufNewFile,BufRead *.rb map <f9> <esc>:w<cr>:!%<cr>
 "endif
 au BufNewFile,BufRead *.rb set makeprg=ruby\ -c\ %
-au BufNewFile,BufRead *.rb nnoremap <c-F12> :Rtags<cr>
+"au BufNewFile,BufRead *.rb nnoremap <c-f12> :Rtags<cr>
+au BufNewFile,BufRead *.rb nnoremap <c-f12> :!rake mactag<cr>
 
-" Run Ruby unit tests with gT (for all) or gt (only test under
-" cursor) in command mode
-augroup RubyTests
-  au!
-  "autocmd BufRead,BufNewFile *_test.rb,test_*.rb
-  autocmd BufRead,BufNewFile *.rb
-    \ :nmap rt V:<C-U>!$HOME/.vim/bin/ruby_run_focused_unit_test 
-    \ % <C-R>=line("'<")<CR>p <CR>|
-    \ :nmap rT :<C-U>w<CR>:!rake test<CR>
-augroup END
+" Run Ruby unit tests with rT (for all) or rt (only test under cursor) in command mode
+autocmd BufRead,BufNewFile *.rb :nmap rt :<C-U>w<CR>:!rake test:units TEST=%<CR>
+autocmd BufRead,BufNewFile *.rb :nmap rT :<C-U>w<CR>:!rake test<CR>
 
 au BufNewFile,BufRead *.cpp map <c-f12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
 au BufNewFile,BufRead *.cpp,*.h set tags+=~/.vimdata/c++/unix/std/tags
@@ -833,7 +846,6 @@ vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 " The idea is to delete something anywhere, then go select characters elsewhere, and hit g" to swap the delete characters with the newly selected ones.
 function! s:SwapVisualWithCut()
-  print "test"
   normal! `.``
   if line(".")==line("'.") && col(".") < col("'.")
     let c = col('.')
@@ -939,6 +951,10 @@ let g:Tlist_Use_Right_Window = 1
 let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
+" Command-T settings
+set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,tmp/cache/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**
+let g:CommandTMaxHeight = 17
+
 "set mps+=[:]
 " netrw settings
 "let g:netrw_ftp_cmd = "ftp -p"
@@ -954,7 +970,7 @@ let php_folding = 2
 let php_fold_arrays = 1
 let php_fold_heredoc = 1
 " fuzzyfinder
-let g:fuzzy_ignore = "*/log/*;*.swf;*.cache;*.ttf;*.jpg;*.png;*/doc/*;*/etc/*;*/ckeditor/*;*/ckfinder/*;*/fckeditor/*;*/vendor/*;*tmp/*;*/.svn/*;*/public/images/*;*/ufiles/*;*/.git/*;*/script/*"
+let g:fuzzy_ignore = "*/log/*;*.swf;*.cache;*.ttf;*.jpg;*.png;*/doc/*;*/etc/*;*/ckeditor/*;*/ckfinder/*;*/fckeditor/*;*/vendor/*;*tmp/*;*/.svn/*;*/controllers/admin/*;*/public/images/*;*/ufiles/*;*/.git/*;*/compiled/*;*/script/*"
 " notes
 let g:notesRoot = '~/notes'
 
@@ -976,18 +992,18 @@ else
   source ~/vimfiles/snippets/support_functions.vim
 endif
 
-autocmd vimenter * call s:SetupSnippets()
-function! s:SetupSnippets()
-  "if we're in a rails env then read in the rails snippets
-  if filereadable("./config/environment.rb")
-    call ExtractSnips("~/.vim/snippets/ruby-rails", "ruby")
-    call ExtractSnips("~/.vim/snippets/eruby-rails", "eruby")
-  endif
-
-  call ExtractSnips("~/.vim/snippets/html", "eruby")
-  call ExtractSnips("~/.vim/snippets/html", "xhtml")
-  call ExtractSnips("~/.vim/snippets/html", "php")
-endfunction
+"autocmd vimenter * call s:SetupSnippets()
+"function! s:SetupSnippets()
+"  "if we're in a rails env then read in the rails snippets
+"  if filereadable("./config/environment.rb")
+"    call ExtractSnips("~/.vim/snippets/ruby-rails", "ruby")
+"    call ExtractSnips("~/.vim/snippets/eruby-rails", "eruby")
+"  endif
+"
+"  call ExtractSnips("~/.vim/snippets/html", "eruby")
+"  call ExtractSnips("~/.vim/snippets/html", "xhtml")
+"  call ExtractSnips("~/.vim/snippets/html", "php")
+"endfunction
 
 " used to make vim default 'man' viewer
 " see http://vim.wikia.com/wiki/Using_vim_as_a_man-page_viewer_under_Unix

@@ -354,3 +354,8 @@ class FuzzyFileFinder
       return roots.first.name
     end
 end
+
+#finder = FuzzyFileFinder.new
+#finder.search("plugin") do |match|
+  #puts match[:highlighted_path]
+#end

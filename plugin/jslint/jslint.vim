@@ -77,9 +77,9 @@ function! g:JSLint(args) range
       let b:has_errors = 1
       let l:line = b:parts[1] + (b:firstline - 1 - len(s:jslintrc)) " Get line relative to selection
       " Add line to match list
-	  if g:JSLintHighlightErrorLine == 1
-	    call add(b:errors, matchadd('Error', '\%' . l:line . 'l'))
-	  endif
+      if g:JSLintHighlightErrorLine == 1
+        call add(b:errors, matchadd('Error', '\%' . l:line . 'l'))
+      endif
 
       " Store the error for an error under the cursor
       if l:line == line('.')
@@ -100,7 +100,7 @@ function! g:JSLint(args) range
       echo b:error_under_cursor
     endif
   else
-"    echo "JSLint: All good."
+    echo "JSLint: All good."
   endif
 endfunction
 
