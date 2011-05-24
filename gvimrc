@@ -4,7 +4,8 @@
 set nocompatible
 set backup
 set nowrap
-set history=128
+set history=1000
+set undolevels=1000
 filetype plugin on
 " directory for swap files
 set directory=$HOME
@@ -22,12 +23,15 @@ set sessionoptions=curdir,buffers,tabpages,folds,options,resize,globals,localopt
 " keep more context when scrolling off the end of a buffer
 " indents
 set cindent
-set autoindent
-set shiftround
+set autoindent    " always set autoindenting on
+set copyindent    " copy the previous indentation on autoindenting
+set shiftround    " use multiple of shiftwidth when indenting with '<' and '>'
+                  "    shiftwidth, not tabstop
 set nojoinspaces
 set smartindent
 set expandtab
-set shiftwidth=2
+set shiftwidth=2  " number of spaces to use for autoindenting
+
 set softtabstop=2
 set tabstop=2
 set softtabstop=2
@@ -35,7 +39,12 @@ set softtabstop=2
 set incsearch
 set hlsearch
 set showmatch
-set noignorecase
+"set noignorecase
+set ignorecase    " ignore case when searching
+set smartcase     " ignore case if search pattern is all lowercase,
+                  "    case-sensitive otherwise
+set smarttab      " insert tabs on the start of a line according to
+set noswapfile
 " gui
 syntax on
 colors ir_black
@@ -45,7 +54,7 @@ else
   set guifont=Monaco:h10
 endif
 " strings numeration
-set number
+set number " always show line numbers
 set guioptions-=T
 set ch=1
 set noguipty
@@ -110,7 +119,8 @@ set noerrorbells
 set cpoptions+=$
 "set nocp " option for cppomnicomplete
 set list
-set listchars=trail:.
+"set listchars=trail:.
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
 " allow to use backspace instead of "x"
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 " do not abandon buffer when it is unloaded
@@ -252,8 +262,8 @@ imap <tab> <c-r>=InsertTabWordWrapper()<cr>
 imap <c-tab> <c-r>=InsertTabLineWrapper()<cr>
 imap <s-tab> <c-n>
 " snippet
-imap <silent> ; <c-r>=InsertSnippetWrapper()<cr>
-imap <a-;> <c-r>=ShowAvailableSnips()<cr>
+"imap <silent> ; <c-r>=InsertSnippetWrapper()<cr>
+"imap <a-;> <c-r>=ShowAvailableSnips()<cr>
 "imap <c-;> <c-r>=ShowAvailableSnips()<cr>
 "imap <c-space> <c-r>=InsertSnippetWrapper()<cr>
 "ino <silent> <c-space> <c-r>=TriggerSnippet()<cr>
@@ -274,9 +284,9 @@ vmap <c-s> <esc>:w<cr>gv
 imap <c-s> <esc>:w<cr>a
 "imap <c-s> <esc>:w<cr>i
 " FuzzyFinder
-nmap <silent> <leader>t :CommandT<cr>
-nmap <silent> <leader>r :CommandTFlush<cr>
-"nmap <silent> <leader>t :FuzzyFinderTextMate<cr>
+"nmap <silent> <leader>t :CommandT<cr>
+"nmap <silent> <leader>r :CommandTFlush<cr>
+nmap <silent> <leader>t :FuzzyFinderTextMate<cr>
 "nmap <silent> <leader>b :FuzzyFinderBuffer<cr>
 "nnoremap <silent> <c-b> :FuzzyFinderBookmark<cr>
 "nnoremap <silent> <leader>b :FuzzyFinderAddBookmark<cr><cr>
@@ -284,7 +294,7 @@ nmap <silent> <leader>r :CommandTFlush<cr>
 "nmap <silent> <leader>d :FuzzyFinderDir<cr>
 "nmap <silent> <leader>r :FuzzyFinderRemoveCache<cr>
 "nmap <silent> <leader>d :FuzzyFinderDir<cr>
-"nmap <silent> <leader>r :call RemoveFuzzyCache()<cr>
+nmap <silent> <leader>r :call RemoveFuzzyCache()<cr>
 " tabs
 "nnoremap <c-T> :tabnew<cr>
 "inoremap <c-T> <c-O>:tabnew<cr>
@@ -393,11 +403,11 @@ map ,v :vsp $MYGVIMRC<CR>
 map ,V :source $MYGVIMRC<CR>
 "  'Control + \' - Open a new tab and tag into the function/variable currently under cursor
 imap {<cr> {<cr>}<Esc>O
-imap <? <?  ?><left><left><left>
+"imap <? <?  ?><left><left><left>
 imap <% <%  %><left><left><left>
-imap <?= <?= ?><left><left><left>
+"imap <?= <?= ?><left><left><left>
 imap <%= <%= %><left><left><left>
-imap <?/ <<left><right>? /*
+"imap <?/ <<left><right>? /*
 
 "imap /1 //-----------------------------------------------------------------------------
 "imap /2 /1<cr> <cr><backspace><backspace><backspace>/1<up><end>
@@ -482,8 +492,8 @@ else
   autocmd! bufwritepost $VIM/_vimrc source $VIM/_vimrc
 endif
 
-au BufNewFile,BufRead *.scss set filetype=css
-
+"au BufRead,BufNewFile *.scss set filetype=scss
+"au BufNewFile,BufRead *.scss set filetype=css
 au BufNewFile,BufRead *.json set filetype=javascript
 
 au BufNewFile,BufRead *.ctp set filetype=phtml
@@ -952,8 +962,10 @@ let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
 " Command-T settings
-set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,tmp/cache/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**
+set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,tmp/cache/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,test/pages/**
 let g:CommandTMaxHeight = 17
+" fuzzyfinder
+let g:fuzzy_ignore = "*log/*;*.swf;*.cache;*.ttf;*.jpg;*.png;*/doc/*;*/etc/*;*/ckeditor/*;*/ckfinder/*;*/fckeditor/*;*vendor/*;*tmp/*;*/.svn/*;*/controllers/admin/*;*public/images/*;*/ufiles/*;*.git/*;*/compiled/*;*/script/*;*test/pages/*;*public/assets/*"
 
 "set mps+=[:]
 " netrw settings
@@ -969,8 +981,6 @@ let php_alt_construct_parents = 1
 let php_folding = 2
 let php_fold_arrays = 1
 let php_fold_heredoc = 1
-" fuzzyfinder
-let g:fuzzy_ignore = "*/log/*;*.swf;*.cache;*.ttf;*.jpg;*.png;*/doc/*;*/etc/*;*/ckeditor/*;*/ckfinder/*;*/fckeditor/*;*/vendor/*;*tmp/*;*/.svn/*;*/controllers/admin/*;*/public/images/*;*/ufiles/*;*/.git/*;*/compiled/*;*/script/*"
 " notes
 let g:notesRoot = '~/notes'
 
