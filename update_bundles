@@ -21,6 +21,13 @@ git_bundles = [
   #"git://github.com/tsaleh/vim-supertab.git",
   #"git://github.com/tsaleh/vim-tcomment.git",
   "git://github.com/cakebaker/scss-syntax.vim.git",
+  "git://github.com/majutsushi/tagbar.git",
+  "git://github.com/jeetsukumaran/vim-buffergator.git"
+  #"git://github.com/taq/vim-rspec.git"
+]
+
+git_keep = [
+  "specky"
 ]
 
 vim_org_scripts = [
@@ -37,7 +44,9 @@ bundles_dir = File.join(File.dirname(__FILE__), "bundle")
 FileUtils.cd(bundles_dir)
 
 puts "Trashing everything (lookout!)"
-Dir["*"].each {|d| FileUtils.rm_rf d }
+Dir["*"].each do |d|
+  FileUtils.rm_rf d unless git_keep.include?(d)
+end
 
 git_bundles.each do |url|
   dir = url.split('/').last.sub(/\.git$/, '')

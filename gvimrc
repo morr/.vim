@@ -284,9 +284,10 @@ vmap <c-s> <esc>:w<cr>gv
 imap <c-s> <esc>:w<cr>a
 "imap <c-s> <esc>:w<cr>i
 " FuzzyFinder
-"nmap <silent> <leader>t :CommandT<cr>
-"nmap <silent> <leader>r :CommandTFlush<cr>
-nmap <silent> <leader>t :FuzzyFinderTextMate<cr>
+nmap <silent> <leader>t :CommandT<cr>
+nmap <silent> <leader>r :CommandTFlush<cr>
+"nmap <silent> <leader>t :FuzzyFinderTextMate<cr>
+"nmap <silent> <leader>r :call RemoveFuzzyCache()<cr>
 "nmap <silent> <leader>b :FuzzyFinderBuffer<cr>
 "nnoremap <silent> <c-b> :FuzzyFinderBookmark<cr>
 "nnoremap <silent> <leader>b :FuzzyFinderAddBookmark<cr><cr>
@@ -294,7 +295,6 @@ nmap <silent> <leader>t :FuzzyFinderTextMate<cr>
 "nmap <silent> <leader>d :FuzzyFinderDir<cr>
 "nmap <silent> <leader>r :FuzzyFinderRemoveCache<cr>
 "nmap <silent> <leader>d :FuzzyFinderDir<cr>
-nmap <silent> <leader>r :call RemoveFuzzyCache()<cr>
 " tabs
 "nnoremap <c-T> :tabnew<cr>
 "inoremap <c-T> <c-O>:tabnew<cr>
@@ -390,9 +390,12 @@ vnoremap <f8> <esc>:call ToggleMatchParen()<cr>
 "inoremap <f9> <c-O>:emenu File.Preview.<tab>
 "vnoremap <f9> <esc>:emenu File.Preview.<tab>
 " Tags
-nnoremap <f11> :TlistToggle<cr>
-inoremap <f11> <c-O>:TlistToggle<cr>
-vnoremap <f11> <esc>:TlistToggle<cr>
+"nnoremap <f11> :TlistToggle<cr>
+"inoremap <f11> <c-O>:TlistToggle<cr>
+"vnoremap <f11> <esc>:TlistToggle<cr>
+nnoremap <f11> :TagbarToggle<cr>
+inoremap <f11> <c-O>:TagbarToggle<cr>
+vnoremap <f11> <esc>:TagbarToggle<cr>
 nnoremap <f12> :emenu Tags.<tab>
 inoremap <f12> <c-O>:emenu Tags.<tab>
 vnoremap <f12> <esc>:emenu Tags.<tab>
@@ -453,6 +456,7 @@ anoremenu &File.&Preview.&Opera :!opera %<cr>
 anoremenu &File.&Preview.&Midori :!midori %<cr>
 
 " tag list
+anoremenu &Tags.&Tagbar :TagbarToggle<cr>
 anoremenu &Tags.&TagList :TlistToggle<cr>
 anoremenu &Tags.&ctags :exec("!ctags -R --fields=+zitKSla --extra=+q --exclude=.svn --exclude=fckeditor --exclude=editor --exclude=ckeditor --exclude=ckfinder --exclude=suilib_packed.js --exclude=jquery-1.3.2.min.js --exclude=jquery.plugins.js --exclude=highslide.packed.js --exclude=sui.js --exclude=codemirror --exclude=jTweener.js --exclude=swfobject.js --exclude=community_map.packed.js --exclude=order_base.packed.js --exclude=special_header.packed.js --exclude=prototype-1.4.0.js --exclude=raphael-min.js  --exclude=frontend.js --exclude=packed.js .")<cr>
 if has("unix")
@@ -505,6 +509,9 @@ au BufNewFile,BufRead *.rb map <s-k> :call TryRubyDoc()<cr>
 "else
   "au BufNewFile,BufRead *.rb map <f9> <esc>:w<cr>:!%<cr>
 "endif
+
+au BufRead,BufNewFile *_spec.rb set filetype=rspec
+
 au BufNewFile,BufRead *.rb set makeprg=ruby\ -c\ %
 "au BufNewFile,BufRead *.rb nnoremap <c-f12> :Rtags<cr>
 au BufNewFile,BufRead *.rb nnoremap <c-f12> :!rake mactag<cr>
@@ -576,15 +583,16 @@ function! InitSubversion()
     anoremenu &File.&Subversion.&Update\ Project :call system("TortoiseProc.exe /command:update /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
     anoremenu &File.&Subversion.&Log\ Project :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
     anoremenu &File.&Subversion.&Clean\ up\ Project :call system("TortoiseProc.exe /command:cleanup /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
-  elseif finddir(".git") != ""
+  else
+"if finddir(".git") != ""
     if exists('g:subversion_menu')
       unmenu &File.&Subversion
     end
     let g:subversion_menu = 1
 
+    anoremenu &File.&Subversion.&Add\ Buffer :call system("git add ".shellescape(expand('%')))<cr>
     anoremenu &File.&Subversion.&Commit\ Project :GitCommit<cr>
     anoremenu &File.&Subversion.&Push\ Project :GitPush<cr>
-    anoremenu &File.&Subversion.&Add\ Buffer :call system("git add ".shellescape(expand('%')))<cr>
     anoremenu &File.&Subversion.&Add\ Buffers :call system("git add ".shellescape(GetBuffersList(" ")))<cr>
     anoremenu &File.&Subversion.&Pull\ Project :GitPull<cr>
   endif
@@ -962,7 +970,7 @@ let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
 " Command-T settings
-set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,tmp/cache/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,test/pages/**
+set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,test/pages/**
 let g:CommandTMaxHeight = 17
 " fuzzyfinder
 let g:fuzzy_ignore = "*log/*;*.swf;*.cache;*.ttf;*.jpg;*.png;*/doc/*;*/etc/*;*/ckeditor/*;*/ckfinder/*;*/fckeditor/*;*vendor/*;*tmp/*;*/.svn/*;*/controllers/admin/*;*public/images/*;*/ufiles/*;*.git/*;*/compiled/*;*/script/*;*test/pages/*;*public/assets/*"

@@ -1,7 +1,5 @@
-http://dictionary.reference.com/browse/IMAGE?db=* 1276945156 Image | Define Image at Dictionary.com
 file:/home/morr/.vimdata/ruby/core/Class.html 1278525002 Class: Class
 file:/home/morr/.vimdata/ruby/core/Interrupt.html 1278617289 Class: Interrupt
-file:/home/morr/.vimdata/ruby/stdlib/find/rdoc/files/find_rb.html 1278709205 File: find.rb
 file:/var/lib/gems/1.8/doc/json-1.4.3/rdoc/JSON.html 1278709774 Module: JSON
 file:/home/morr/.vimdata/ruby/core/Generator.html 1278710115 Class: Generator
 file:/var/lib/gems/1.8/doc/json-1.4.3/rdoc/JSON/Pure.html 1278710123 Module: JSON::Pure
@@ -26,5 +24,7 @@ file:/home/morr/.vimdata/ruby/core/StandardError.html 1290847259 Class: Standard
 file:/home/morr/.vimdata/ruby/core/RSS.html 1291476242 Module: RSS
 file:/home/morr/.vimdata/ruby/core/Hash.html 1295770510 Class: Hash
 file:/home/morr/.vimdata/ruby/core/URI.html 1297834693 Module: URI
-file:/home/morr/.vimdata/ruby/core/Enumerable.html 1301237639 Module: Enumerable
-file:/home/morr/.vimdata/ruby/core/Array.html 1303024136 Class: Array
+file:/home/morr/.vimdata/ruby/stdlib/find/rdoc/files/find_rb.html 1306419151 File: find.rb
+file:/home/morr/.vimdata/ruby/core/Process.html 1306830444 Module: Process
+file:/home/morr/.vimdata/ruby/core/Array.html 1312443046 Class: Array
+file:/home/morr/.vimdata/ruby/core/Enumerable.html 1312443069 Module: Enumerable

@@ -43,6 +43,7 @@ syn match   htmlTagError contained "[^>]<"ms=s+1
 
 
 " tag names
+syn keyword htmlTagName contained aside header footer article section nav
 syn keyword htmlTagName contained address applet area a base basefont
 syn keyword htmlTagName contained big blockquote br caption center
 syn keyword htmlTagName contained cite code dd dfn dir div dl dt font
