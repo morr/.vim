@@ -1,7 +1,13 @@
 " Copy right : T.N.Satish. Send all your comments to the following address.
 " tnsatish < a t > g m a i l < d o t > c o m
 " This can be redistributed under BSD license.
-au TabEnter * call ShowTab()
+"
+" Change History
+" version 1.3	- Fixed the problem when opened from the shell. Courtesy: Martin Filser
+"
+if has('gui_running')
+  au TabEnter * call ShowTab()
+endif
 
 function! ShowTab()
   silent! aunmenu T&ab
@@ -72,3 +78,4 @@ endfunc
 
 " Hare Krishna Hare Krishna Krishna Krishna Hare Hare
 " Hare Rama Hare Rama Rama Rama Hare Hare
+

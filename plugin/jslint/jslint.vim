@@ -48,7 +48,7 @@ function! g:JSLint(args) range
     if has("gui_macvim") && filereadable('/System/Library/Frameworks/JavaScriptCore.framework/Resources/jsc')
       let s:cmd = '/System/Library/Frameworks/JavaScriptCore.framework/Resources/jsc'
     else
-      let s:cmd = 'js'
+      let s:cmd = 'rhino'
     endif
     let s:plugin_path = s:plugin_path . ".vim"
     let s:runjslint_ext = 'js'

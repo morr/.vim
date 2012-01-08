@@ -71,6 +71,7 @@ syn keyword htmlArg contained marginwidth maxlength method name prompt
 syn keyword htmlArg contained rel rev rows rowspan scrolling selected shape
 syn keyword htmlArg contained size src start target text type url
 syn keyword htmlArg contained usemap ismap valign value vlink vspace width wrap
+syn keyword htmlArg contained itemscope itemprop itemtype
 syn match   htmlArg contained "\<\(http-equiv\|href\|title\)="me=e-1
 
 " Netscape extensions
