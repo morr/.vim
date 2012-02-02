@@ -23,6 +23,15 @@ filetype off
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
 filetype on
+"-----------------------------------------------------------------------------
+" fugitive
+"-----------------------------------------------------------------------------
+autocmd User fugitive
+  \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+  \   nnoremap <buffer> .. :edit %:h<CR> |
+  \ endif
+autocmd BufReadPost fugitive://* set bufhidden=delete
+
 
 "-----------------------------------------------------------------------------
 " options
@@ -114,6 +123,7 @@ set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
 set statusline+=%*
 set statusline+=%h      "help file flag
 set statusline+=%y      "filetype
+set statusline+=%{fugitive#statusline()}      " branch name
 set statusline+=%r      "read only flag
 set statusline+=%m      "modified flag
 "display a warning if &et is wrong, or we have mixed-indenting
