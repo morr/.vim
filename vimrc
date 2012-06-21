@@ -74,6 +74,8 @@ set softtabstop=2
 set incsearch
 set hlsearch
 set showmatch
+" clipboard
+"set clipboard=unnamedplus
 "set noignorecase
 set ignorecase    " ignore case when searching
 set smartcase     " ignore case if search pattern is all lowercase,
@@ -82,6 +84,7 @@ set smarttab      " insert tabs on the start of a line according to
 set noswapfile
 " gui
 syntax on
+set t_Co=256
 colors ir_black
 if has("gui_gtk2")
   set guifont=Monaco\ 12
@@ -201,15 +204,62 @@ endif
 vmap < <gv
 vmap > >gv
 
+" clipboard
+"noremap  yy "+yy
+"noremap  y "+y
+"noremap  Y "+Y
+"noremap  p "+p
+"noremap  P "+P
+"vnoremap y "+y
+"vnoremap Y "+Y
+"vnoremap p "+p
+"vnoremap P "+P
+"vnoremap r "+d
+
 " CTRL+x is Cut
-vmap <c-x> "+x
+"vmap <c-x> "+x
 " CTRL+c is Copy
-vmap <c-c> "+y
+"vmap <c-c> "+y
 " CTRL+v is Paste
-nmap <c-v> "+gP
-vmap <c-v> "+gP
-imap <c-v> <space><esc>"+gP<del>i
-cmap <c-v> <c-R>+
+"nmap <c-v> "+gP
+"vmap <c-v> "+gP
+"imap <c-v> <space><esc>"+gP<del>i
+"cmap <c-v> <c-R>+
+
+" CTRL-X and SHIFT-Del are Cut
+vnoremap <C-X> "+x
+vnoremap <S-Del> "+x
+
+" CTRL-C and CTRL-Insert are Copy
+vnoremap <C-C> "+y
+vnoremap <C-Insert> "+y
+
+" CTRL-V and SHIFT-Insert are Paste
+map <C-V>   	"+gP
+map <S-Insert>  	"+gP
+
+cmap <C-V>  	<C-R>+
+cmap <S-Insert> 	<C-R>+
+
+" Pasting blockwise and linewise selections is not possible in Insert and
+" Visual mode without the +virtualedit feature.  They are pasted as if they
+" were characterwise instead.
+" Uses the paste.vim autoload script.
+
+exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
+exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
+
+imap <S-Insert> 	<C-V>
+vmap <S-Insert> 	<C-V>
+
+" Use CTRL-Q to do what CTRL-V used to do
+noremap <C-G>   	<C-V>
+
+
+
+nmap <a-v> <c-v>
+vmap <a-v> <c-v>
+"imap <c-v> <space><esc>"+gP<del>i
 " movement
 vmap <c-k> 10k
 nmap <c-k> 10k
@@ -283,7 +333,7 @@ nmap <s-k6> E
 map <s-k8> <pageup>
 map <s-k2> <pagedown>
 " CTRL-A is Select all
-nmap <c-A> <esc>a<esc>ggVG
+"nmap <c-A> <esc>a<esc>ggVG
 " clear the search buffer when hitting return
 nmap <cr> :nohlsearch<cr>/<BS>
 nmap <kEnter> :nohlsearch<cr>/<BS>
@@ -370,12 +420,12 @@ nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been
 "nmap <c-z> :w!<cr>:make<cr>
 "imap <c-z> <esc>:w!<cr>:make<cr>
 " run
-vmap <leader>Z <esc>:w!<cr>:!./%<cr>
-nmap <leader>Z :w!<cr>:!./%<cr>
-imap <leader>Z <esc>:w!<cr>:!./%<cr>
-vmap <leader>z <esc>:w!<cr>:!%<cr>
-nmap <leader>z :w!<cr>:!%<cr>
-imap <leader>z <esc>:w!<cr>:!%<cr>
+"vmap <leader>Z <esc>:w!<cr>:!./%<cr>
+"nmap <leader>Z :w!<cr>:!./%<cr>
+"imap <leader>Z <esc>:w!<cr>:!./%<cr>
+"vmap <leader>z <esc>:w!<cr>:!%<cr>
+"nmap <leader>z :w!<cr>:!%<cr>
+"imap <leader>z <esc>:w!<cr>:!%<cr>
 " Save
 "nnoremap <f2> :w!<cr>
 "inoremap <f2> <c-O>:w!<cr>
@@ -395,14 +445,14 @@ inoremap <f4> <c-O>:setlocal wrap! wrap?<cr>
 vnoremap <f4> <esc>:setlocal wrap! wrap?<cr>
 " bufexplorer
 "map <silent> <c-F5> :BufExplorer<cr>
-" Subversion
-nnoremap <f5> :emenu File.Subversion.<tab>
-inoremap <f5> <c-O>:emenu File.Subversion.<tab>
-vnoremap <f5> <esc>:emenu File.Subversion.<tab>
+" Git
+"nnoremap <f5> :emenu File.Git.<tab>
+"inoremap <f5> <c-O>:emenu File.Git.<tab>
+"vnoremap <f5> <esc>:emenu File.Git.<tab>
 " font
-nnoremap <c-f5> :emenu File.Font.<tab>
-inoremap <c-f5> <c-O>:emenu File.Font.<tab>
-vnoremap <c-f5> <esc>:emenu File.Font.<tab>
+"nnoremap <c-f5> :emenu File.Font.<tab>
+"inoremap <c-f5> <c-O>:emenu File.Font.<tab>
+"vnoremap <c-f5> <esc>:emenu File.Font.<tab>
 
 " Encoding.Write
 nnoremap <f6> :emenu File.Encoding.Write.<tab>
@@ -518,7 +568,7 @@ endif
 "  call system("open -a Safari ". rdocoutput . "index.html")
 "endfunction
 
-autocmd VimEnter * call InitSubversion()
+autocmd VimEnter * call InitGit()
 
 " backups
 autocmd! bufwritepre * call BackupDir()
@@ -606,36 +656,43 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 "  exec("help ".l:word)
 "endfunction
 
-function! InitSubversion()
-  if finddir(".svn") != ""
-    if exists('g:subversion_menu')
-      unmenu &File.&Subversion
-    end
-    let g:subversion_menu = 1
+function! InitGit()
+  "if exists('g:git_menu')
+    "unmenu &File.&Git
+  "end
 
-    anoremenu &File.&Subversion.&Commit\ File :call system("TortoiseProc.exe /command:commit /path:".shellescape(expand("%"))." /notempfile /closeonend:1")<cr>
-    anoremenu &File.&Subversion.&Update\ File :call system("TortoiseProc.exe /command:update /path:".shellescape(expand("%"))." /notempfile")<cr>
-    anoremenu &File.&Subversion.&Diff\ File :call system("TortoiseProc.exe /command:diff /path:".shellescape(expand("%"))." /notempfile")<cr>
-    anoremenu &File.&Subversion.&Log\ File :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%"))." /notempfile")<cr>
-    anoremenu &File.&Subversion.&Commit\ Buffers :call system("TortoiseProc.exe /command:commit /path:".shellescape(GetBuffersList("*"))." /notempfile /closeonend:1")<cr>
-    anoremenu &File.&Subversion.&Update\ Buffers :call system("TortoiseProc.exe /command:update /path:".shellescape(GetBuffersList("*"))." /notempfile")<cr>
-    anoremenu &File.&Subversion.&Commit\ Project :call system("TortoiseProc.exe /command:commit /path:".shellescape(expand("%:p:h"))." /notempfile /closeonend:1")<cr>
-    anoremenu &File.&Subversion.&Update\ Project :call system("TortoiseProc.exe /command:update /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
-    anoremenu &File.&Subversion.&Log\ Project :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
-    anoremenu &File.&Subversion.&Clean\ up\ Project :call system("TortoiseProc.exe /command:cleanup /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
-  else
-"if finddir(".git") != ""
-    if exists('g:subversion_menu')
-      unmenu &File.&Subversion
-    end
-    let g:subversion_menu = 1
+  "if finddir(".svn") != ""
+    "let g:git_menu = 1
 
-    anoremenu &File.&Subversion.&Add\ Buffer :call system("git add ".shellescape(expand('%')))<cr>
-    anoremenu &File.&Subversion.&Commit\ Project :GitCommit<cr>
-    anoremenu &File.&Subversion.&Push\ Project :GitPush<cr>
-    anoremenu &File.&Subversion.&Add\ Buffers :call system("git add ".shellescape(GetBuffersList(" ")))<cr>
-    anoremenu &File.&Subversion.&Pull\ Project :GitPull<cr>
-  endif
+    "anoremenu &File.&Git.&Commit\ File :call system("TortoiseProc.exe /command:commit /path:".shellescape(expand("%"))." /notempfile /closeonend:1")<cr>
+    "anoremenu &File.&Git.&Update\ File :call system("TortoiseProc.exe /command:update /path:".shellescape(expand("%"))." /notempfile")<cr>
+    "anoremenu &File.&Git.&Diff\ File :call system("TortoiseProc.exe /command:diff /path:".shellescape(expand("%"))." /notempfile")<cr>
+    "anoremenu &File.&Git.&Log\ File :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%"))." /notempfile")<cr>
+    "anoremenu &File.&Git.&Commit\ Buffers :call system("TortoiseProc.exe /command:commit /path:".shellescape(GetBuffersList("*"))." /notempfile /closeonend:1")<cr>
+    "anoremenu &File.&Git.&Update\ Buffers :call system("TortoiseProc.exe /command:update /path:".shellescape(GetBuffersList("*"))." /notempfile")<cr>
+    "anoremenu &File.&Git.&Commit\ Project :call system("TortoiseProc.exe /command:commit /path:".shellescape(expand("%:p:h"))." /notempfile /closeonend:1")<cr>
+    "anoremenu &File.&Git.&Update\ Project :call system("TortoiseProc.exe /command:update /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
+    "anoremenu &File.&Git.&Log\ Project :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
+    "anoremenu &File.&Git.&Clean\ up\ Project :call system("TortoiseProc.exe /command:cleanup /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
+  "endif
+  "if finddir(".git") != ""
+    "let g:git_menu = 1
+
+    nnoremap <f5> :Gcommit<cr>
+    inoremap <f5> <c-O>:Gcommit<cr>
+    vnoremap <f5> <esc>:Gcommit<cr>
+
+    nnoremap <f6> :Gdiff<cr>
+    inoremap <f6> <c-O>:Gdiff<cr>
+    vnoremap <f6> <esc>:Gdiff<cr>
+
+    "anoremenu &File.&Git :Gcommit<cr>
+    "anoremenu &File.&Git.&Add\ Buffer :call system("git add ".shellescape(expand('%')))<cr>
+    "anoremenu &File.&Git.&Commit\ Project :GitCommit<cr>
+    "anoremenu &File.&Git.&Push\ Project :GitPush<cr>
+    "anoremenu &File.&Git.&Add\ Buffers :call system("git add ".shellescape(GetBuffersList(" ")))<cr>
+    "anoremenu &File.&Git.&Pull\ Project :GitPull<cr>
+  "endif
 endfunction
 
 function! TabJump(direction)
@@ -1009,7 +1066,7 @@ let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
 " Command-T settings
-set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,test/pages/**,spec/pages/**
+set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,tmp/pages/**,test/pages/**,spec/pages/**
 let g:CommandTMaxHeight = 17
 " fuzzyfinder
 let g:fuzzy_ignore = "*log/*;*.swf;*.cache;*.ttf;*.jpg;*.png;*/doc/*;*/etc/*;*/ckeditor/*;*/ckfinder/*;*/fckeditor/*;*vendor/*;*tmp/*;*/.svn/*;*/controllers/admin/*;*public/images/*;*/ufiles/*;*.git/*;*/compiled/*;*/script/*;*test/pages/*;*spec/pages/*;*public/assets/*"
