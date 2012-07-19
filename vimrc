@@ -590,6 +590,11 @@ endif
 "au BufNewFile,BufRead *.scss set filetype=css
 au BufNewFile,BufRead *.json set filetype=javascript
 
+" coffeescript
+au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw!
+au BufWritePost *.coffee silent exec('!rm '.substitute(shellescape(expand('%')), '.coffee', '.js', '').' &>1 /dev/null')
+au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+
 au BufNewFile,BufRead *.ctp set filetype=phtml
 au BufNewFile,BufRead *.php,*.phtml set dict+=~/.vimdata/php/keywords
 
