@@ -592,7 +592,7 @@ au BufNewFile,BufRead *.json set filetype=javascript
 
 " coffeescript
 au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw!
-au BufWritePost *.coffee silent exec('!rm '.substitute(shellescape(expand('%')), '.coffee', '.js', '').' &>1 /dev/null')
+au BufWritePost *.coffee silent exec('!rm '.substitute(shellescape(expand('%')), '.coffee', '.js', '').' > /dev/null 2>&1')
 au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 
 au BufNewFile,BufRead *.ctp set filetype=phtml
