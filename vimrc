@@ -4,7 +4,8 @@
 "let g:speckyBannerKey        = "rb"
 "let g:speckyQuoteSwitcherKey = "r'"
 "let g:speckyRunRdocKey       = "rd"
-let g:speckySpecSwitcherKey  = "gs"
+let g:speckySpecSwitcherKey  = "gS"
+  nmap gs <c-w><c-v><c-w>lgS<c-w>j:q<cr>
 "let g:speckyRunSpecKey       = "rs"
 "let g:speckyRunRdocCmd       = "fri -L -f plain"
 "let g:speckyWindowType       = 2
@@ -506,7 +507,7 @@ imap <%= <%= %><left><left><left>
 "imap /2 /1<cr> <cr><backspace><backspace><backspace>/1<up><end>
 "imap /3 /2<down><cr><backspace><backspace><cr>/1<up><up><up><end>
 
-map <s-k> :exec("help ".expand("<cword>"))<cr>
+"map <s-k> :exec("help ".expand("<cword>"))<cr>
 map <c-\> :tab split<cr>:exec("tag ".expand("<cword>"))<cr>
 " 'Alt + \' - Open a vertical split and tag into the function/variable currently under cursor
 "map <A-\> :vsplit<cr>:exec("tag ".expand("<cword>"))<cr><c-W>r
@@ -586,7 +587,7 @@ else
   autocmd! bufwritepost $VIM/_vimrc source $VIM/_vimrc
 endif
 
-"au BufRead,BufNewFile *.scss set filetype=scss
+au BufRead,BufNewFile *.scss set filetype=scss
 "au BufNewFile,BufRead *.scss set filetype=css
 au BufNewFile,BufRead *.json set filetype=javascript
 
@@ -1071,7 +1072,7 @@ let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
 " Command-T settings
-set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,tmp/pages/**,test/pages/**,spec/pages/**
+set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,public/coffeescripts/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,tmp/pages/**,test/pages/**,spec/pages/**
 let g:CommandTMaxHeight = 17
 " fuzzyfinder
 let g:fuzzy_ignore = "*log/*;*.swf;*.cache;*.ttf;*.jpg;*.png;*/doc/*;*/etc/*;*/ckeditor/*;*/ckfinder/*;*/fckeditor/*;*vendor/*;*tmp/*;*/.svn/*;*/controllers/admin/*;*public/images/*;*/ufiles/*;*.git/*;*/compiled/*;*/script/*;*test/pages/*;*spec/pages/*;*public/assets/*"

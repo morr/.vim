@@ -1,4 +1,4 @@
-# Copyright 2010 Wincent Colaiuta. All rights reserved.
+# Copyright 2011-2012 Wincent Colaiuta. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -21,31 +21,29 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-require 'command-t/ext' # CommandT::Matcher
+require 'command-t/vim'
 require 'command-t/scanner'
 
 module CommandT
-  # Encapsulates a Scanner instance (which builds up a list of available files
-  # in a directory) and a Matcher instance (which selects from that list based
-  # on a search string).
-  class Finder
-    def initialize path = Dir.pwd, options = {}
-      @scanner = Scanner.new path, options
-      @matcher = Matcher.new @scanner, options
+  class TagScanner < Scanner
+    attr_reader :include_filenames
+
+    def initialize options = {}
+      @include_filenames = options[:include_filenames] || false
     end
 
-    # Options:
-    #   :limit (integer): limit the number of returned matches
-    def sorted_matches_for str, options = {}
-      @matcher.sorted_matches_for str, options
+    def paths
+      taglist.map do |tag|
+        path = tag['name']
+        path << ":#{tag['filename']}" if @include_filenames
+        path
+      end.uniq.sort
     end
 
-    def flush
-      @scanner.flush
-    end
+  private
 
-    def path= path
-      @scanner.path = path
+    def taglist
+      ::VIM::evaluate 'taglist(".")'
     end
-  end # class Finder
-end # CommandT
+  end # class TagScanner
+end # module CommandT

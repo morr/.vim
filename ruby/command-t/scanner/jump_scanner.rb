@@ -1,4 +1,4 @@
-# Copyright 2010 Wincent Colaiuta. All rights reserved.
+# Copyright 2011 Wincent Colaiuta. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -21,12 +21,34 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-require 'mkmf'
+require 'command-t/vim'
+require 'command-t/vim/path_utilities'
+require 'command-t/scanner'
 
-def missing item
-  puts "couldn't find #{item} (required)"
-  exit 1
-end
+module CommandT
+  # Returns a list of files in the jumplist.
+  class JumpScanner < Scanner
+    include VIM::PathUtilities
 
-have_header('ruby.h') or missing('ruby.h')
-create_makefile('ext')
+    def paths
+      jumps_with_filename = jumps.lines.select do |line|
+        line_contains_filename?(line)
+      end
+      filenames = jumps_with_filename[1..-2].map do |line|
+        relative_path_under_working_directory line.split[3]
+      end
+
+      filenames.sort.uniq
+    end
+
+  private
+
+    def line_contains_filename? line
+      line.split.count > 3
+    end
+
+    def jumps
+      VIM::capture 'silent jumps'
+    end
+  end # class JumpScanner
+end # module CommandT
