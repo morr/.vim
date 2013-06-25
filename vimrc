@@ -5,7 +5,7 @@
 "let g:speckyQuoteSwitcherKey = "r'"
 "let g:speckyRunRdocKey       = "rd"
 let g:speckySpecSwitcherKey  = "gS"
-  nmap gs <c-w><c-v><c-w>lgS<c-w>j:q<cr>
+nmap gs <c-w><c-v><c-w>lgS<c-w>j:q<cr>
 "let g:speckyRunSpecKey       = "rs"
 "let g:speckyRunRdocCmd       = "fri -L -f plain"
 "let g:speckyWindowType       = 2
@@ -87,7 +87,9 @@ set noswapfile
 syntax on
 set t_Co=256
 colors ir_black
-if has("gui_gtk2")
+if has("mac")
+  set guifont=Monaco:h14
+elseif has("gui_gtk2")
   set guifont=Monaco\ 12
 else
   set guifont=Monaco:h10
@@ -191,13 +193,9 @@ set runtimepath+=~/.vimdata
 if has("unix")
   set runtimepath+=~/.vim/vim-ruby
   set runtimepath+=~/.vim/vim-rails
-  "set runtimepath+=~/.vim/vim-fuzzyfinder
-  "set runtimepath+=~/.vim/vim-ruby-debugger/vim
 else
   set runtimepath+=~/vimfiles/vim-ruby
   set runtimepath+=~/vimfiles/vim-rails
-  "set runtimepath+=~/vimfiles/vim-fuzzyfinder
-  "set runtimepath+=~/vimfiles/vim-ruby-debugger/vim
 endif
 "-----------------------------------------------------------------------------
 " hotkeys
@@ -369,18 +367,9 @@ imap <c-q> <esc>:q!<cr>i
 "vmap <c-s> <esc>:w<cr>gv
 "imap <c-s> <esc>:w<cr>a
 "imap <c-s> <esc>:w<cr>i
-" FuzzyFinder
+" Command-T
 nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>
-"nmap <silent> <leader>t :FuzzyFinderTextMate<cr>
-"nmap <silent> <leader>r :call RemoveFuzzyCache()<cr>
-"nmap <silent> <leader>b :FuzzyFinderBuffer<cr>
-"nnoremap <silent> <c-b> :FuzzyFinderBookmark<cr>
-"nnoremap <silent> <leader>b :FuzzyFinderAddBookmark<cr><cr>
-"nmap <silent> <leader>f :FuzzyFinderFile<cr>
-"nmap <silent> <leader>d :FuzzyFinderDir<cr>
-"nmap <silent> <leader>r :FuzzyFinderRemoveCache<cr>
-"nmap <silent> <leader>d :FuzzyFinderDir<cr>
 " tabs
 "nnoremap <c-T> :tabnew<cr>
 "inoremap <c-T> <c-O>:tabnew<cr>
@@ -503,6 +492,10 @@ imap <% <%  %><left><left><left>
 imap <%= <%= %><left><left><left>
 "imap <?/ <<left><right>? /*
 
+map <Leader>f :call GrepIt()<cr>
+" quotes replacement
+nnoremap <silent><leader>'  :<C-U>call <SID>ToggleQuote()<CR>
+nnoremap <silent><leader>"  :<C-U>call <SID>ToggleDoubleQuote()<CR>
 "imap /1 //-----------------------------------------------------------------------------
 "imap /2 /1<cr> <cr><backspace><backspace><backspace>/1<up><end>
 "imap /3 /2<down><cr><backspace><backspace><cr>/1<up><up><up><end>
@@ -634,6 +627,11 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 "-----------------------------------------------------------------------------
 " functions
 "-----------------------------------------------------------------------------
+function! GrepIt()
+  let l:word = expand("<cword>")
+  echo 'Searching for "'.l:word.'"...'
+  exec('Grep '.l:word.' **/*')
+endfunction
 "function! TryRubyDoc()
 "  let l:word = expand("<cword>")
 "  let l:path = $HOME.'/.vimdata/ruby'
@@ -800,33 +798,6 @@ function! InsertSnippetWrapper()
  else
    return inserted
  endif
-endfunction
-
-function! RemoveFuzzyCache()
-  if has('ruby')
-ruby << RUBY
-    $reset_cache = true
-    def finder
-      if $reset_cache
-        @finder = begin
-          roots = VIM.evaluate("g:fuzzy_roots").split("\n")
-          ceiling = VIM.evaluate("g:fuzzy_ceiling").to_i
-          ignore = VIM.evaluate("g:fuzzy_ignore").split(/[;,]/)
-          FuzzyFileFinder.new(roots, ceiling, ignore)
-        end
-        $reset_cache = false
-      else
-        @finder ||= begin
-          roots = VIM.evaluate("g:fuzzy_roots").split("\n")
-          ceiling = VIM.evaluate("g:fuzzy_ceiling").to_i
-          ignore = VIM.evaluate("g:fuzzy_ignore").split(/[;,]/)
-          FuzzyFileFinder.new(roots, ceiling, ignore)
-        end
-      end
-    end
-RUBY
-  endif
-
 endfunction
 
 function! GetBuffersList(delimiter)
@@ -1039,6 +1010,33 @@ function! EnableDebugger()
   vnoremap <s-f11> <esc>:call g:RubyDebugger.finish()<cr>
 endfunction
 
+" replacement for quotes
+function! s:ToggleQuote()
+    let q = searchpos("'", 'n', line('.'))
+    let qb = searchpos("'", 'bn', line('.'))
+    let dq = searchpos('"', 'n', line('.'))
+    let dqb = searchpos('"', 'bn', line('.'))
+
+    if q[0] > 0 && qb[0] > 0 && (dq[0] == 0 || dq[0] > q[0])
+        execute "normal mzcs'\"`z"
+    elseif dq[0] > 0 && dqb[0] > 0
+        execute "normal mzcs\"'`z"
+    endif
+endfunction
+
+" replacement for double quotes
+function! s:ToggleDoubleQuote()
+    let q = searchpos('"', 'n', line('.'))
+    let qb = searchpos('"', 'bn', line('.'))
+    let dq = searchpos("'", 'n', line('.'))
+    let dqb = searchpos("'", 'bn', line('.'))
+
+    if q[0] > 0 && qb[0] > 0 && (dq[0] == 0 || dq[0] > q[0])
+        execute "normal mzcs\"'`z"
+    elseif dq[0] > 0 && dqb[0] > 0
+        execute "normal mzcs'\"`z"
+    endif
+endfunction
 
 "-----------------------------------------------------------------------------
 " plugins
@@ -1072,32 +1070,9 @@ let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
 " Command-T settings
-set wildignore+=*.o,*.obj,.git,.svn,vendor/**,public/images/**,public/coffeescripts/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,tmp/pages/**,test/pages/**,spec/pages/**
+set wildignore+=*.o,*.obj,.git,.svn,*.log,vendor/**,public/images/**,public/coffeescripts/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**,coverage/**,flights_csv/**
 let g:CommandTMaxHeight = 17
-" fuzzyfinder
-let g:fuzzy_ignore = "*log/*;*.swf;*.cache;*.ttf;*.jpg;*.png;*/doc/*;*/etc/*;*/ckeditor/*;*/ckfinder/*;*/fckeditor/*;*vendor/*;*tmp/*;*/.svn/*;*/controllers/admin/*;*public/images/*;*/ufiles/*;*.git/*;*/compiled/*;*/script/*;*test/pages/*;*spec/pages/*;*public/assets/*"
-
-"set mps+=[:]
-" netrw settings
-"let g:netrw_ftp_cmd = "ftp -p"
-" php settings
-let php_sql_query = 1
-let php_htmlInStrings = 1
-let php_baselib = 1
-let php_smart_members = 1
-let php_alt_properties = 1
-let php_highlight_quotes = 1
-let php_alt_construct_parents = 1
-let php_folding = 2
-let php_fold_arrays = 1
-let php_fold_heredoc = 1
-" notes
-let g:notesRoot = '~/notes'
-
-" omnicppcomplete options
-let OmniCpp_ShowScopeInAbbr = 1
-let OmniCpp_MayCompleteScope = 1
-let OmniCpp_ShowPrototypeInAbbr = 1
+let g:CommandTMaxFiles = 25000
 
 " javascript omnicomplete
 let g:rjscomplete_library = 'jQuery_1.4'
@@ -1106,11 +1081,11 @@ let g:rjscomplete_find_in_prototype = 0
 "let g:tlist_javascript_settings = 'javascript;v:var;c:class;p:prototype;m:method;f:function;o:object'
 
 "snipmate setup
-if has("unix")
-  source ~/.vim/snippets/support_functions.vim
-else
-  source ~/vimfiles/snippets/support_functions.vim
-endif
+"if has("unix")
+  "source ~/.vim/snippets/support_functions.vim
+"else
+  "source ~/vimfiles/snippets/support_functions.vim
+"endif
 
 "autocmd vimenter * call s:SetupSnippets()
 "function! s:SetupSnippets()
