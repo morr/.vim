@@ -1070,7 +1070,7 @@ let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
 " Command-T settings
-set wildignore+=*.o,*.obj,.git,.svn,*.log,vendor/**,public/images/**,public/coffeescripts/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**,coverage/**,flights_csv/**
+set wildignore+=*.o,*.obj,.git,.svn,*.log,vendor/**,public/uploads/**,public/images/**,public/coffeescripts/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**,coverage/**,flights_csv/**
 let g:CommandTMaxHeight = 17
 let g:CommandTMaxFiles = 25000
 
