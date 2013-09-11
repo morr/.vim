@@ -33,14 +33,13 @@ git_bundles = [
   'git://github.com/wincent/Command-T',
   'git://github.com/vim-scripts/grep.vim.git',
   'git://github.com/vim-scripts/vimgrep.vim.git',
-  'git://github.com/tpope/vim-endwise.git'
-  #'git://github.com/hallettj/jslint.vim.git'
-  #'git://github.com/taq/vim-rspec.git'
+  'git://github.com/tpope/vim-endwise.git',
+  #'git://github.com/hallettj/jslint.vim.git',
+  'git://github.com/Keithbsmiley/rspec.vim.git',
+  'git://github.com/saks/Specky.git',
 ]
 
-git_keep = [
-  "specky"
-]
+git_keep = []
 
 vim_org_scripts = [
   #["IndexedSearch", "7062",  "plugin"],

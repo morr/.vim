@@ -5,7 +5,7 @@
 "let g:speckyQuoteSwitcherKey = "r'"
 "let g:speckyRunRdocKey       = "rd"
 let g:speckySpecSwitcherKey  = "gS"
-nmap gs <c-w><c-v><c-w>lgS<c-w>j:q<cr>
+nmap gs <c-w><c-v><c-w>lgS
 "let g:speckyRunSpecKey       = "rs"
 "let g:speckyRunRdocCmd       = "fri -L -f plain"
 "let g:speckyWindowType       = 2
@@ -88,6 +88,7 @@ syntax on
 set t_Co=256
 colors ir_black
 if has("mac")
+  "set guifont=Source\ Code\ Pro:h14
   set guifont=Monaco:h14
 elseif has("gui_gtk2")
   set guifont=Monaco\ 12
@@ -115,6 +116,7 @@ set ruler
 " ringbell
 set novisualbell
 set t_vb=
+set vb t_vb=
 " show unfinished commands in statusbar
 set showcmd
 " status line
@@ -369,7 +371,7 @@ imap <c-q> <esc>:q!<cr>i
 "imap <c-s> <esc>:w<cr>i
 " Command-T
 nmap <silent> <leader>t :CommandT<cr>
-nmap <silent> <leader>r :CommandTFlush<cr>
+nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
 " tabs
 "nnoremap <c-T> :tabnew<cr>
 "inoremap <c-T> <c-O>:tabnew<cr>
@@ -583,6 +585,7 @@ endif
 au BufRead,BufNewFile *.scss set filetype=scss
 "au BufNewFile,BufRead *.scss set filetype=css
 au BufNewFile,BufRead *.json set filetype=javascript
+au BufNewFile,BufRead *.slim set filetype=slim
 
 " coffeescript
 au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw!
