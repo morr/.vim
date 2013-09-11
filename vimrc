@@ -427,6 +427,7 @@ nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been
 "inoremap <c-F2> <c-O>:wall!<cr>
 "vnoremap <c-F2> <esc>:wall!<cr>
 " NerdTree
+map <silent> <leader>n :NERDTree<cr>
 map <silent> <f9> :NERDTreeToggle<cr>
 map <silent> <c-f9> :NERDTreeToggle %<cr>
 " Project
