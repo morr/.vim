@@ -287,7 +287,7 @@ vmap l <right>
 imap <c-l> <right>
 cmap <c-l> <right>
 " ESC button
-imap ii <Esc><right>
+imap jj <Esc><right>
 "imap <c-d> <esc>ddI
 "imap <c-a> <esc>A
 "imap <c-o> <esc>O
@@ -589,7 +589,8 @@ au BufNewFile,BufRead *.json set filetype=javascript
 au BufNewFile,BufRead *.slim set filetype=slim
 
 " coffeescript
-au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw!
+au BufWritePost *.coffee silent make! -b | cwindow | redraw!
+"au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw!
 au BufWritePost *.coffee silent exec('!rm '.substitute(shellescape(expand('%')), '.coffee', '.js', '').' > /dev/null 2>&1')
 au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 
