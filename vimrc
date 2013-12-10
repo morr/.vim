@@ -37,6 +37,7 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 "-----------------------------------------------------------------------------
 let g:syntastic_ruby_checkers=['mri'] ", 'rubylint', 'rubocop'
 let g:syntastic_coffee_checkers=['coffee'] ", 'coffeelint'
+let g:syntastic_slim_checkers=['slimrb'] ", 'coffeelint'
 "let g:syntastic_enable_signs=1
 "let g:syntastic_auto_loc_list=1
 
