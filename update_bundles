@@ -26,8 +26,8 @@ git_bundles = [
   'git://github.com/tpope/vim-haml.git',
   'git://github.com/slim-template/vim-slim.git',
   'git://github.com/ap/vim-css-color.git',
-  'git://github.com/kchmck/vim-coffee-scriptt.git',
-  "git://github.com/othree/coffee-check.vim.git",
+  'git://github.com/kchmck/vim-coffee-script.git',
+  #"git://github.com/othree/coffee-check.vim.git",
   'git://github.com/briancollins/vim-jst.git',
   'git://github.com/sstephenson/eco',
   'git://github.com/wincent/Command-T',
@@ -36,7 +36,8 @@ git_bundles = [
   'git://github.com/tpope/vim-endwise.git',
   #'git://github.com/hallettj/jslint.vim.git',
   'git://github.com/Keithbsmiley/rspec.vim.git',
-  'git://github.com/saks/Specky.git'
+  'git://github.com/saks/Specky.git',
+  'git://github.com/scrooloose/syntastic.git'
 ]
 
 git_keep = []

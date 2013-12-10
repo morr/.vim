@@ -32,7 +32,13 @@ autocmd User fugitive
   \   nnoremap <buffer> .. :edit %:h<CR> |
   \ endif
 autocmd BufReadPost fugitive://* set bufhidden=delete
-
+"-----------------------------------------------------------------------------
+" sytanstic
+"-----------------------------------------------------------------------------
+let g:syntastic_ruby_checkers=['mri'] ", 'rubylint', 'rubocop'
+let g:syntastic_coffee_checkers=['coffee'] ", 'coffeelint'
+"let g:syntastic_enable_signs=1
+"let g:syntastic_auto_loc_list=1
 
 "-----------------------------------------------------------------------------
 " options
@@ -135,6 +141,9 @@ set statusline+=%{fugitive#statusline()}      " branch name
 set statusline+=%r      "read only flag
 set statusline+=%m      "modified flag
 "display a warning if &et is wrong, or we have mixed-indenting
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 "set statusline+=%#error#
 "set statusline+=%{StatuslineTabWarning()}
 "set statusline+=%*
@@ -589,10 +598,10 @@ au BufNewFile,BufRead *.json set filetype=javascript
 au BufNewFile,BufRead *.slim set filetype=slim
 
 " coffeescript
-au BufWritePost *.coffee silent make! -b | cwindow | redraw!
+"au BufWritePost *.coffee silent make! -b | cwindow | redraw!
 "au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw!
-au BufWritePost *.coffee silent exec('!rm '.substitute(shellescape(expand('%')), '.coffee', '.js', '').' > /dev/null 2>&1')
-au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+"au BufWritePost *.coffee silent exec('!rm '.substitute(shellescape(expand('%')), '.coffee', '.js', '').' > /dev/null 2>&1')
+"au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 
 au BufNewFile,BufRead *.ctp set filetype=phtml
 au BufNewFile,BufRead *.php,*.phtml set dict+=~/.vimdata/php/keywords
