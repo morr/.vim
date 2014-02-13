@@ -1,9 +1,8 @@
 h1. Usage
 
-Clone this repo into your home directory either as .vim (linux) or vimfiles (MF
-Windows).
+Clone this repo into your home directory either as .vim (linux) or vimfiles (windows).
 
-Then cd into the repo and run this to get plugins:
+Then cd into the repo and run this to get all plugins installed:
 
 <pre><code>./update_bundles
 </code></pre>
