@@ -36,19 +36,25 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 " sytanstic
 "-----------------------------------------------------------------------------
 let g:syntastic_ruby_checkers=['mri'] ", 'rubylint', 'rubocop'
+let g:syntastic_ruby_mri_args='-T1 -c'
 let g:syntastic_coffee_checkers=['coffee'] ", 'coffeelint'
-let g:syntastic_slim_checkers=['slimrb'] ", 'coffeelint'
+let g:syntastic_slim_checkers=['slimrb']
+let g:syntastic_json_checkers=['jsonlint'] " npm install -g jsonlint
+let g:vim_json_syntax_conceal = 0
 "let g:syntastic_enable_signs=1
 "let g:syntastic_auto_loc_list=1
-
+"-----------------------------------------------------------------------------
+" matchit
+"-----------------------------------------------------------------------------
+runtime macros/matchit.vim
 "-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
 set nocompatible
 set backup
 set nowrap
-set history=1000
-set undolevels=1000
+set history=9999
+set undolevels=9999
 filetype plugin on
 " directory for swap files
 set directory=$HOME
@@ -176,7 +182,7 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 " allow to use backspace instead of "x"
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 " do not abandon buffer when it is unloaded
-set hidden
+"set hidden
 " mouse
 set mousemodel=popup
 set mouse=a
@@ -437,7 +443,7 @@ nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been
 "inoremap <c-F2> <c-O>:wall!<cr>
 "vnoremap <c-F2> <esc>:wall!<cr>
 " NerdTree
-map <silent> <leader>n :NERDTree<cr>
+map <silent> <leader>n :NERDTreeToggle<cr>
 map <silent> <f9> :NERDTreeToggle<cr>
 map <silent> <c-f9> :NERDTreeToggle %<cr>
 " Project
@@ -597,6 +603,7 @@ au BufRead,BufNewFile *.scss set filetype=scss
 "au BufNewFile,BufRead *.scss set filetype=css
 au BufNewFile,BufRead *.json set filetype=javascript
 au BufNewFile,BufRead *.slim set filetype=slim
+au BufNewFile,BufRead *.json set filetype=json
 
 " coffeescript
 "au BufWritePost *.coffee silent make! -b | cwindow | redraw!
@@ -618,14 +625,14 @@ au BufRead,BufNewFile *_spec.rb set filetype=rspec
 
 au BufNewFile,BufRead *.rb set makeprg=ruby\ -c\ %
 "au BufNewFile,BufRead *.rb nnoremap <c-f12> :Rtags<cr>
-au BufNewFile,BufRead *.rb nnoremap <c-f12> :!rake mactag<cr>
+"au BufNewFile,BufRead *.rb nnoremap <c-f12> :!rake mactag<cr>
 
 " Run Ruby unit tests with rT (for all) or rt (only test under cursor) in command mode
-autocmd BufRead,BufNewFile *.rb :nmap rt :<C-U>w<CR>:!rake test:units TEST=%<CR>
-autocmd BufRead,BufNewFile *.rb :nmap rT :<C-U>w<CR>:!rake test<CR>
+"autocmd BufRead,BufNewFile *.rb :nmap rt :<C-U>w<CR>:!rake test:units TEST=%<CR>
+"autocmd BufRead,BufNewFile *.rb :nmap rT :<C-U>w<CR>:!rake test<CR>
 
-au BufNewFile,BufRead *.cpp map <c-f12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
-au BufNewFile,BufRead *.cpp,*.h set tags+=~/.vimdata/c++/unix/std/tags
+"au BufNewFile,BufRead *.cpp map <c-f12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+"au BufNewFile,BufRead *.cpp,*.h set tags+=~/.vimdata/c++/unix/std/tags
 
 au BufNewFile,BufRead *.ass,*.ssa set filetype=ssa
 "-----------------------------------------------------------------------------

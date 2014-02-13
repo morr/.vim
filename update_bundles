@@ -37,7 +37,9 @@ git_bundles = [
   #'git://github.com/hallettj/jslint.vim.git',
   'git://github.com/Keithbsmiley/rspec.vim.git',
   'git://github.com/saks/Specky.git',
-  'git://github.com/scrooloose/syntastic.git'
+  'git://github.com/scrooloose/syntastic.git',
+  'git://github.com/elzr/vim-json.git',
+  'git://github.com/bkad/CamelCaseMotion.git'
 ]
 
 git_keep = []
