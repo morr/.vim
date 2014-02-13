@@ -9,6 +9,13 @@ Then cd into the repo and run this to get plugins:
 </code></pre>
 
 Put this in your ~/.vimrc along with your personal hacks:
-<pre><code>source ~/.vim/gvimrc      "linux
-source ~/vimfiles/gvimrc  "windows
+
+for linux
+<pre><code>source ~/.vim/vimrc
+source ~/.vim/gvimrc
+</code></pre>
+
+for windows
+<pre><code>source ~/vimfiles/vimrc
+source ~/vimfiles/gvimrc  
 </code></pre>
