@@ -16,5 +16,7 @@ source ~/.vim/gvimrc
 
 for windows
 <pre><code>source ~/vimfiles/vimrc
-source ~/vimfiles/gvimrc  
+source ~/vimfiles/gvimrc
 </code></pre>
+
+Also download "Monaco for Powerline.otf" from https://gist.github.com/baopham/1838072

@@ -1,15 +1,4 @@
 "-----------------------------------------------------------------------------
-" specky
-"-----------------------------------------------------------------------------
-"let g:speckyBannerKey        = "rb"
-"let g:speckyQuoteSwitcherKey = "r'"
-"let g:speckyRunRdocKey       = "rd"
-let g:speckySpecSwitcherKey  = "gS"
-nmap gs <c-w><c-v><c-w>lgS
-"let g:speckyRunSpecKey       = "rs"
-"let g:speckyRunRdocCmd       = "fri -L -f plain"
-"let g:speckyWindowType       = 2
-"-----------------------------------------------------------------------------
 "  Buffergator
 "-----------------------------------------------------------------------------
 let g:buffergator_suppress_keymaps = 1
@@ -47,6 +36,11 @@ let g:vim_json_syntax_conceal = 0
 " matchit
 "-----------------------------------------------------------------------------
 runtime macros/matchit.vim
+"-----------------------------------------------------------------------------
+" powerline
+"-----------------------------------------------------------------------------
+let g:airline_powerline_fonts = 1
+set laststatus=2
 "-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
@@ -100,9 +94,12 @@ set noswapfile
 syntax on
 set t_Co=256
 colors ir_black
+"colors sebocean
 if has("mac")
   "set guifont=Source\ Code\ Pro:h14
-  set guifont=Monaco:h14
+  "set guifont=Monaco:h14
+  " download Monaco for Powerline.otf from https://gist.github.com/baopham/1838072
+  set guifont=Monaco\ for\ Powerline:h14
 elseif has("gui_gtk2")
   set guifont=Monaco\ 12
 else
@@ -133,46 +130,46 @@ set vb t_vb=
 " show unfinished commands in statusbar
 set showcmd
 " status line
-set statusline=%{expand('%:t')}       "tail of the filename
-"display a warning if fileformat isnt unix
-set statusline+=%#warningmsg#
-set statusline+=%{&ff!='unix'?'['.&ff.']':''}
-set statusline+=%*
-"display a warning if file encoding isnt utf-8
-set statusline+=%#warningmsg#
-set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
-set statusline+=%*
-set statusline+=%h      "help file flag
-set statusline+=%y      "filetype
-set statusline+=%{fugitive#statusline()}      " branch name
-set statusline+=%r      "read only flag
-set statusline+=%m      "modified flag
-"display a warning if &et is wrong, or we have mixed-indenting
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-"set statusline+=%#error#
-"set statusline+=%{StatuslineTabWarning()}
+"set statusline=%{expand('%:t')}       "tail of the filename
+""display a warning if fileformat isnt unix
+"set statusline+=%#warningmsg#
+"set statusline+=%{&ff!='unix'?'['.&ff.']':''}
 "set statusline+=%*
-"set statusline+=%{StatuslineTrailingSpaceWarning()}
-"set statusline+=%{StatuslineLongLineWarning()}
+""display a warning if file encoding isnt utf-8
+"set statusline+=%#warningmsg#
+"set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
+"set statusline+=%*
+"set statusline+=%h      "help file flag
+"set statusline+=%y      "filetype
+"set statusline+=%{fugitive#statusline()}      " branch name
+"set statusline+=%r      "read only flag
+"set statusline+=%m      "modified flag
+""display a warning if &et is wrong, or we have mixed-indenting
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
 "set statusline+=%*
-"display a warning if &paste is set
-set statusline+=%#error#
-set statusline+=%{&paste?'[paste]':''}
-set statusline+=%*
-set statusline+=%=      "left/right separator
-"set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
-set statusline+=Col:%03c%*\     "cursor column
-set statusline+=Ln:%l/%L   "cursor line/total lines
-set statusline+=\ %P    "percent through file
-set laststatus=2
-set laststatus=2
+""set statusline+=%#error#
+""set statusline+=%{StatuslineTabWarning()}
+""set statusline+=%*
+""set statusline+=%{StatuslineTrailingSpaceWarning()}
+""set statusline+=%{StatuslineLongLineWarning()}
+""set statusline+=%#warningmsg#
+""set statusline+=%{SyntasticStatuslineFlag()}
+""set statusline+=%*
+""display a warning if &paste is set
+"set statusline+=%#error#
+"set statusline+=%{&paste?'[paste]':''}
+"set statusline+=%*
+"set statusline+=%=      "left/right separator
+""set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
+"set statusline+=Col:%03c%*\     "cursor column
+"set statusline+=Ln:%l/%L   "cursor line/total lines
+"set statusline+=\ %P    "percent through file
 set cursorline
 "norm \[i
-set showmode
+" display current mode
+"set showmode
+set noshowmode
 set noerrorbells
 set cpoptions+=$
 "set nocp " option for cppomnicomplete
@@ -248,15 +245,15 @@ vnoremap <C-X> "+x
 vnoremap <S-Del> "+x
 
 " CTRL-C and CTRL-Insert are Copy
-vnoremap <C-C> "+y
-vnoremap <C-Insert> "+y
+vnoremap <c-c> "+y
+vnoremap <c-insert> "+y
 
 " CTRL-V and SHIFT-Insert are Paste
-map <C-V>   	"+gP
-map <S-Insert>  	"+gP
+"map <c-v>     "+gP
+map <s-insert>    "+gP
 
-cmap <C-V>  	<C-R>+
-cmap <S-Insert> 	<C-R>+
+"cmap <c-v>    <c-r>+
+cmap <s-insert>   <c-r>+
 
 " Pasting blockwise and linewise selections is not possible in Insert and
 " Visual mode without the +virtualedit feature.  They are pasted as if they
@@ -266,11 +263,11 @@ cmap <S-Insert> 	<C-R>+
 exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 
-imap <S-Insert> 	<C-V>
-vmap <S-Insert> 	<C-V>
+imap <s-insert>   <c-v>
+vmap <s-insert>   <c-v>
 
-" Use CTRL-Q to do what CTRL-V used to do
-noremap <C-G>   	<C-V>
+" Use CTRL-G to do what CTRL-V used to do
+"noremap <c-g>     <c-v>
 
 
 
@@ -352,8 +349,14 @@ map <s-k2> <pagedown>
 " CTRL-A is Select all
 "nmap <c-A> <esc>a<esc>ggVG
 " clear the search buffer when hitting return
-nmap <cr> :nohlsearch<cr>/<BS>
-nmap <kEnter> :nohlsearch<cr>/<BS>
+"nmap <cr> :nohlsearch<cr>/<BS>
+"nmap <kEnter> :nohlsearch<cr>/<BS>
+" insert newline after current line
+nmap <silent> <cr> o<Esc>
+" insert newline before current line
+nmap <silent> <s-cr> O<Esc>
+" turn off highlighting and clear messages
+nmap <silent> <space> :nohlsearch<Bar>:echo<cr>
 " comments
 "vmap <c-a> di<?/ */ ?><left><left><left><left><left><esc>Pi<right>
 " translate
@@ -446,12 +449,23 @@ nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been
 map <silent> <leader>n :NERDTreeToggle<cr>
 map <silent> <f9> :NERDTreeToggle<cr>
 map <silent> <c-f9> :NERDTreeToggle %<cr>
+
+nmap <f1> :CommandT<cr>
+nmap ,<f1>r :CommandTFlush<cr>:CommandT<cr>
+
+nmap <f2> :NERDTreeToggle<cr>
+nmap ,<f2> :NERDTree<cr>
+
+nmap <f3> :BuffergatorToggle<cr>
+
+let g:speckySpecSwitcherKey="<f4>"
+nmap gs <c-w><c-v><c-w>l<f4>
 " Project
-map <silent> <c-F3> <plug>ToggleProject
+"map <silent> <c-F3> <plug>ToggleProject
 " Wrap
-nnoremap <f4> :setlocal wrap! wrap?<cr>
-inoremap <f4> <c-O>:setlocal wrap! wrap?<cr>
-vnoremap <f4> <esc>:setlocal wrap! wrap?<cr>
+"nnoremap <f4> :setlocal wrap! wrap?<cr>
+"inoremap <f4> <c-O>:setlocal wrap! wrap?<cr>
+"vnoremap <f4> <esc>:setlocal wrap! wrap?<cr>
 " bufexplorer
 "map <silent> <c-F5> :BufExplorer<cr>
 " Git
