@@ -179,7 +179,7 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 " allow to use backspace instead of "x"
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 " do not abandon buffer when it is unloaded
-"set hidden
+set hidden
 " mouse
 set mousemodel=popup
 set mouse=a
