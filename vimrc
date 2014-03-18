@@ -24,8 +24,8 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 "-----------------------------------------------------------------------------
 " sytanstic
 "-----------------------------------------------------------------------------
-let g:syntastic_ruby_checkers=['mri'] ", 'rubylint', 'rubocop'
-let g:syntastic_ruby_mri_args='-T1 -c'
+"let g:syntastic_ruby_checkers=['mri'] ", 'rubylint', 'rubocop'
+"let g:syntastic_ruby_mri_args='-T1 -c'
 let g:syntastic_coffee_checkers=['coffee'] ", 'coffeelint'
 let g:syntastic_slim_checkers=['slimrb']
 let g:syntastic_json_checkers=['jsonlint'] " npm install -g jsonlint
@@ -65,7 +65,7 @@ set sessionoptions=curdir,buffers,tabpages,folds,options,resize,globals,localopt
 "set noeol bin
 " keep more context when scrolling off the end of a buffer
 " indents
-set cindent
+"set cindent
 set autoindent    " always set autoindenting on
 set copyindent    " copy the previous indentation on autoindenting
 set shiftround    " use multiple of shiftwidth when indenting with '<' and '>'
@@ -365,17 +365,9 @@ nmap <silent> <space> :nohlsearch<Bar>:echo<cr>
 imap <tab> <c-r>=InsertTabWordWrapper()<cr>
 imap <c-tab> <c-r>=InsertTabLineWrapper()<cr>
 imap <s-tab> <c-n>
-" snippet
-"imap <silent> ; <c-r>=InsertSnippetWrapper()<cr>
-"imap <a-;> <c-r>=ShowAvailableSnips()<cr>
-"imap <c-;> <c-r>=ShowAvailableSnips()<cr>
-"imap <c-space> <c-r>=InsertSnippetWrapper()<cr>
-"ino <silent> <c-space> <c-r>=TriggerSnippet()<cr>
-"ino <silent> <c-space> <c-r>=TriggerSnippet()<cr>
-"snor <silent> <c-space> <esc>i<right><c-r>=TriggerSnippet()<cr>
-"ino <silent> <s-space> <c-r>=BackwardsSnippet()<cr>
-"snor <silent> <s-space> <esc>i<right><c-r>=BackwardsSnippet()<cr>
-"ino <silent> <c-s-space> <c-r>=ShowAvailableSnips()<cr>
+" не работает
+"let g:SuperTabDefaultCompletionType = "<C-n>"
+"let g:SuperTabContextDefaultCompletionType = "<c-n>"
 " select text inside of block
 "imap <c-v> <esc>v<up><end>o%<down><home>o
 " quit
