@@ -383,34 +383,11 @@ imap <c-q> <esc>:q!<cr>i
 " Command-T
 nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
-" tabs
-"nnoremap <c-T> :tabnew<cr>
-"inoremap <c-T> <c-O>:tabnew<cr>
-"vnoremap <c-T> <esc>:tabnew<cr>
-nmap <silent><a-left> :call TabJump('left')<cr>
-imap <silent><a-left> <c-O>:call TabJump('left')<cr>
-vmap <silent><a-left> <esc>:call TabJump('left')<cr>
-nmap <silent><a-right> :call TabJump('right')<cr>
-imap <silent><a-right> <c-O>:call TabJump('right')<cr>
-vmap <silent><a-right> <esc>:call TabJump('right')<cr>
-nmap <a-up> :tabfirst<cr>
-imap <a-up> <c-O>:tabfirst<cr>
-vmap <a-up> <esc>:tabfirst<cr>
-nmap <a-down> :tablast<cr>
-imap <a-down> <c-O>:tablast<cr>
-vmap <a-down> <esc>:tablast<cr>
-nmap <a-S-up> :tabmove 0<cr>
-imap <a-S-up> <c-O>:tabmove 0<cr>
-vmap <a-S-up> <esc>:tabmove 0<cr>
-nmap <a-S-down> :tabmove<cr>
-imap <a-S-down> <c-O>:tabmove<cr>
-vmap <a-S-down> <esc>:tabmove<cr>
-nmap <silent><a-S-left> :call TabMove('left')<cr>
-imap <silent><a-S-left> <c-O>:call TabMove('left')<cr>
-vmap <silent><a-S-left> <esc>:call TabMove('left')<cr>
-nmap <silent><a-S-right> :call TabMove('right')<cr>
-imap <silent><a-S-right> <c-O>:call TabMove('right')<cr>
-vmap <silent><a-S-right> <esc>:call TabMove('right')<cr>
+
+nmap <silent><a-S-left> :tabmove -1<cr>
+imap <silent><a-S-left> <c-O>:tabmove -1<cr>
+nmap <silent><a-S-right> :tabmove +1<cr>
+imap <silent><a-S-right> <c-O>:tabmove +1<cr>
 " wrap text into tag
 vmap <silent>,w <esc>:call VisualTagWrap()<cr>
 " search selected text
@@ -725,34 +702,6 @@ function! InitGit()
     "anoremenu &File.&Git.&Add\ Buffers :call system("git add ".shellescape(GetBuffersList(" ")))<cr>
     "anoremenu &File.&Git.&Pull\ Project :GitPull<cr>
   "endif
-endfunction
-
-function! TabJump(direction)
-  let l:tablen=tabpagenr('$')
-  let l:tabcur=tabpagenr()
-  if a:direction=='left'
-    if l:tabcur>1
-      execute 'tabprevious'
-    endif
-  else
-    if l:tabcur!=l:tablen
-      execute 'tabnext'
-    endif
-  endif
-endfunction
-
-function! TabMove(direction)
-  let l:tablen=tabpagenr('$')
-  let l:tabcur=tabpagenr()
-  if a:direction=='left'
-    if l:tabcur>1
-      execute 'tabmove' l:tabcur-2
-    endif
-  else
-    if l:tabcur!=l:tablen
-      execute 'tabmove' l:tabcur
-    endif
-  endif
 endfunction
 
 function! VisualTagWrap()
