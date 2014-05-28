@@ -39,6 +39,7 @@ git_bundles = [
   'git://github.com/elzr/vim-json',
   'git://github.com/bkad/CamelCaseMotion',
   'git://github.com/bling/vim-airline',
+  'git://github.com/jrhorn424/vim-multiple-cursors',
   #'git://github.com/gregsexton/gitv',
 ]
 
