@@ -42,6 +42,49 @@ runtime macros/matchit.vim
 let g:airline_powerline_fonts = 1
 set laststatus=2
 "-----------------------------------------------------------------------------
+" Command-T
+"-----------------------------------------------------------------------------
+set switchbuf=usetab,newtab
+"set wildignore+=*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/images/**,tmp/cache/**,,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**
+let g:CommandTMatchWindowReverse = 0
+let g:CommandTMaxHeight = 17
+let g:CommandTMaxFiles = 25000
+let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/images/**,tmp/cache/**,,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**"
+
+if &term =~ 'screen' || &term =~ 'xterm'
+  let g:CommandTCancelMap = ['<ESC>', '<C-c>']
+endif
+
+nmap <silent> <leader>t :CommandT<cr>
+nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
+nmap <silent> <leader>j :CommandTJump<CR>
+
+function! GotoOrOpen(...)
+  for file in a:000
+    if bufnr(file) != -1
+      exec "sbuffer " . file
+    else
+      exec "edit " . file
+    endif
+  endfor
+endfunction
+
+function! GotoOrOpenTab(...)
+  for file in a:000
+    if bufnr(file) != -1
+      exec "sbuffer " . file
+    else
+      exec "tabedit " . file
+    endif
+  endfor
+endfunction
+
+command! -nargs=+ GotoOrOpen call GotoOrOpen("<args>")
+command! -nargs=+ GotoOrOpenTab call GotoOrOpenTab("<args>")
+
+let g:CommandTAcceptSelectionCommand = 'GotoOrOpen'
+let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpenTab'
+"-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
 set nocompatible
@@ -380,9 +423,6 @@ imap <c-q> <esc>:q!<cr>i
 "vmap <c-s> <esc>:w<cr>gv
 "imap <c-s> <esc>:w<cr>a
 "imap <c-s> <esc>:w<cr>i
-" Command-T
-nmap <silent> <leader>t :CommandT<cr>
-nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
 
 nmap <silent><a-S-left> :tabmove -1<cr>
 imap <silent><a-S-left> <c-O>:tabmove -1<cr>
@@ -438,6 +478,13 @@ nmap gs <c-w><c-v><c-w>l<f4>
 " bufexplorer
 "map <silent> <c-F5> :BufExplorer<cr>
 " Git
+nnoremap <f5> :Gcommit<cr>
+inoremap <f5> <c-O>:Gcommit<cr>
+vnoremap <f5> <esc>:Gcommit<cr>
+
+nnoremap <f6> :Gdiff<cr>
+inoremap <f6> <c-O>:Gdiff<cr>
+vnoremap <f6> <esc>:Gdiff<cr>
 "nnoremap <f5> :emenu File.Git.<tab>
 "inoremap <f5> <c-O>:emenu File.Git.<tab>
 "vnoremap <f5> <esc>:emenu File.Git.<tab>
@@ -447,13 +494,13 @@ nmap gs <c-w><c-v><c-w>l<f4>
 "vnoremap <c-f5> <esc>:emenu File.Font.<tab>
 
 " Encoding.Write
-nnoremap <f6> :emenu File.Encoding.Write.<tab>
-inoremap <f6> <c-O>:emenu File.Encoding.Write.<tab>
-vnoremap <f6> <esc>:emenu File.Encoding.Write.<tab>
+"nnoremap <f6> :emenu File.Encoding.Write.<tab>
+"inoremap <f6> <c-O>:emenu File.Encoding.Write.<tab>
+"vnoremap <f6> <esc>:emenu File.Encoding.Write.<tab>
 " Encoding.Read
-nnoremap <f7> :emenu File.Encoding.Read.<tab>
-inoremap <f7> <c-O>:emenu File.Encoding.Read.<tab>
-vnoremap <f7> <esc>:emenu File.Encoding.Read.<tab>
+"nnoremap <f7> :emenu File.Encoding.Read.<tab>
+"inoremap <f7> <c-O>:emenu File.Encoding.Read.<tab>
+"vnoremap <f7> <esc>:emenu File.Encoding.Read.<tab>
 " ToggleMatchParen
 nnoremap <f8> :call ToggleMatchParen()<cr>
 inoremap <f8> <c-O>:call ToggleMatchParen()<cr>
@@ -564,8 +611,6 @@ endif
 "  call system("open -a Safari ". rdocoutput . "index.html")
 "endfunction
 
-autocmd VimEnter * call InitGit()
-
 " backups
 autocmd! bufwritepre * call BackupDir()
 " reload vimrc
@@ -632,76 +677,30 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 "-----------------------------------------------------------------------------
 " functions
 "-----------------------------------------------------------------------------
+"function! GotoOrOpen(...)
+  "for file in a:000
+    "if bufnr(file) != -1
+      "exec "sbuffer " . file
+    "else
+      "exec "edit " . file
+    "endif
+  "endfor
+"endfunction
+
+"function! GotoOrOpenTab(...)
+  "for file in a:000
+    "if bufnr(file) != -1
+      "exec "sbuffer " . file
+    "else
+      "exec "tabedit " . file
+    "endif
+  "endfor
+"endfunction
+
 function! GrepIt()
   let l:word = expand("<cword>")
   echo 'Searching for "'.l:word.'"...'
   exec('Grep '.l:word.' **/*')
-endfunction
-"function! TryRubyDoc()
-"  let l:word = expand("<cword>")
-"  let l:path = $HOME.'/.vimdata/ruby'
-"  let l:gems = '/var/lib/gems/1.8/doc'
-"
-"  " try search in core help
-"  if findfile(l:path.'/core/'.l:word.'.html') != ''
-"    exec("Browse ".l:path.'/core/'.l:word.'.html')
-"    return
-"  endif
-"  " try search in stdlib help
-"  if findfile(l:path.'/stdlib/'.l:word.'/rdoc/index.html') != ''
-"    exec("Browse ".l:path.'/stdlib/'.l:word.'/rdoc/files/'.l:word.'_rb.html')
-"    return
-"  endif
-"  " try to search in gems directory
-"  if finddir(gems) != ''
-"    let l:filepath = findfile(l:word.'.html', l:gems.'/**')
-"    if l:filepath != ''
-"      exec("Browse ".l:filepath)
-"      return
-"    endif
-"  endif
-"
-"  " perform vim help
-"  exec("help ".l:word)
-"endfunction
-
-function! InitGit()
-  "if exists('g:git_menu')
-    "unmenu &File.&Git
-  "end
-
-  "if finddir(".svn") != ""
-    "let g:git_menu = 1
-
-    "anoremenu &File.&Git.&Commit\ File :call system("TortoiseProc.exe /command:commit /path:".shellescape(expand("%"))." /notempfile /closeonend:1")<cr>
-    "anoremenu &File.&Git.&Update\ File :call system("TortoiseProc.exe /command:update /path:".shellescape(expand("%"))." /notempfile")<cr>
-    "anoremenu &File.&Git.&Diff\ File :call system("TortoiseProc.exe /command:diff /path:".shellescape(expand("%"))." /notempfile")<cr>
-    "anoremenu &File.&Git.&Log\ File :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%"))." /notempfile")<cr>
-    "anoremenu &File.&Git.&Commit\ Buffers :call system("TortoiseProc.exe /command:commit /path:".shellescape(GetBuffersList("*"))." /notempfile /closeonend:1")<cr>
-    "anoremenu &File.&Git.&Update\ Buffers :call system("TortoiseProc.exe /command:update /path:".shellescape(GetBuffersList("*"))." /notempfile")<cr>
-    "anoremenu &File.&Git.&Commit\ Project :call system("TortoiseProc.exe /command:commit /path:".shellescape(expand("%:p:h"))." /notempfile /closeonend:1")<cr>
-    "anoremenu &File.&Git.&Update\ Project :call system("TortoiseProc.exe /command:update /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
-    "anoremenu &File.&Git.&Log\ Project :call system("TortoiseProc.exe /command:log /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
-    "anoremenu &File.&Git.&Clean\ up\ Project :call system("TortoiseProc.exe /command:cleanup /path:".shellescape(expand("%:p:h"))." /notempfile")<cr>
-  "endif
-  "if finddir(".git") != ""
-    "let g:git_menu = 1
-
-    nnoremap <f5> :Gcommit<cr>
-    inoremap <f5> <c-O>:Gcommit<cr>
-    vnoremap <f5> <esc>:Gcommit<cr>
-
-    nnoremap <f6> :Gdiff<cr>
-    inoremap <f6> <c-O>:Gdiff<cr>
-    vnoremap <f6> <esc>:Gdiff<cr>
-
-    "anoremenu &File.&Git :Gcommit<cr>
-    "anoremenu &File.&Git.&Add\ Buffer :call system("git add ".shellescape(expand('%')))<cr>
-    "anoremenu &File.&Git.&Commit\ Project :GitCommit<cr>
-    "anoremenu &File.&Git.&Push\ Project :GitPush<cr>
-    "anoremenu &File.&Git.&Add\ Buffers :call system("git add ".shellescape(GetBuffersList(" ")))<cr>
-    "anoremenu &File.&Git.&Pull\ Project :GitPull<cr>
-  "endif
 endfunction
 
 function! VisualTagWrap()
@@ -1046,10 +1045,6 @@ let g:Tlist_Use_Right_Window = 1
 let g:Tlist_WinWidth = 45
 set completeopt-=preview
 set completeopt+=longest
-" Command-T settings
-set wildignore+=*.o,*.obj,.git,.svn,*.log,vendor/**,public/uploads/**,public/images/**,public/coffeescripts/**,tmp/cache/**,public/ckeditor_prior/**,public/ckeditor/**,public/assets/**,public/stylesheets/compiled/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**,coverage/**,flights_csv/**
-let g:CommandTMaxHeight = 17
-let g:CommandTMaxFiles = 25000
 
 " javascript omnicomplete
 let g:rjscomplete_library = 'jQuery_1.4'
