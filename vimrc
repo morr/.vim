@@ -85,6 +85,16 @@ command! -nargs=+ GotoOrOpenTab call GotoOrOpenTab("<args>")
 let g:CommandTAcceptSelectionCommand = 'GotoOrOpen'
 let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpenTab'
 "-----------------------------------------------------------------------------
+" буферы закрываем всегда
+"-----------------------------------------------------------------------------
+function! s:set_bufhidden()
+  if empty(&buftype)
+    setlocal bufhidden=wipe
+  endif
+endfunction
+
+autocmd! BufRead * call s:set_bufhidden()
+"-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
 set nocompatible
