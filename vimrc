@@ -59,6 +59,23 @@ nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
 nmap <silent> <leader>j :CommandTJump<CR>
 
+function! s:GotoOrOpen(command, ...)
+  for file in a:000
+    if bufwinnr(file) != -1
+      exec "sb " . file
+    else
+      exec a:command . " " . file
+    endif
+  endfor
+endfunction
+
+command! -nargs=+ GotoOrOpen call s:GotoOrOpen(<f-args>)
+
+let g:CommandTAcceptSelectionCommand = 'GotoOrOpen e'
+let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpen tabe'
+let g:CommandTAcceptSelectionSplitCommand = 'GotoOrOpen sp'
+let g:CommandTAcceptSelectionVSplitCommand = 'GotoOrOpen vs'
+
 "function! GotoOrOpen(...)
   "for file in a:000
     "if bufnr(file) != -1
@@ -466,14 +483,14 @@ nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been
 "vnoremap <c-F2> <esc>:wall!<cr>
 " NerdTree
 map <silent> <leader>n :NERDTreeToggle<cr>
-map <silent> <f9> :NERDTreeToggle<cr>
-map <silent> <c-f9> :NERDTreeToggle %<cr>
+map <silent> <leader>N :NERDTreeFind<cr>
 
 nmap <f1> :CommandT<cr>
 nmap ,<f1>r :CommandTFlush<cr>:CommandT<cr>
 
-nmap <f2> :NERDTreeToggle<cr>
-nmap ,<f2> :NERDTree<cr>
+"nmap <f2> :NERDTreeToggle<cr>
+nmap <f2> :NERDTreeFind<cr>
+"nmap ,<f2> :NERDTree<cr>
 
 nmap <f3> :BuffergatorToggle<cr>
 
