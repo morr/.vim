@@ -44,7 +44,7 @@ set laststatus=2
 "-----------------------------------------------------------------------------
 " Command-T
 "-----------------------------------------------------------------------------
-set switchbuf=usetab,newtab
+"set switchbuf=usetab,newtab
 "set wildignore+=*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/images/**,tmp/cache/**,,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**
 let g:CommandTMatchWindowReverse = 0
 let g:CommandTMaxHeight = 17
@@ -59,41 +59,41 @@ nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
 nmap <silent> <leader>j :CommandTJump<CR>
 
-function! GotoOrOpen(...)
-  for file in a:000
-    if bufnr(file) != -1
-      exec "sbuffer " . file
-    else
-      exec "edit " . file
-    endif
-  endfor
-endfunction
+"function! GotoOrOpen(...)
+  "for file in a:000
+    "if bufnr(file) != -1
+      "exec "sbuffer " . file
+    "else
+      "exec "edit " . file
+    "endif
+  "endfor
+"endfunction
 
-function! GotoOrOpenTab(...)
-  for file in a:000
-    if bufnr(file) != -1
-      exec "sbuffer " . file
-    else
-      exec "tabedit " . file
-    endif
-  endfor
-endfunction
+"function! GotoOrOpenTab(...)
+  "for file in a:000
+    "if bufnr(file) != -1
+      "exec "sbuffer " . file
+    "else
+      "exec "tabedit " . file
+    "endif
+  "endfor
+"endfunction
 
-command! -nargs=+ GotoOrOpen call GotoOrOpen("<args>")
-command! -nargs=+ GotoOrOpenTab call GotoOrOpenTab("<args>")
+"command! -nargs=+ GotoOrOpen call GotoOrOpen("<args>")
+"command! -nargs=+ GotoOrOpenTab call GotoOrOpenTab("<args>")
 
-let g:CommandTAcceptSelectionCommand = 'GotoOrOpen'
-let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpenTab'
+"let g:CommandTAcceptSelectionCommand = 'GotoOrOpen'
+"let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpenTab'
 "-----------------------------------------------------------------------------
 " буферы закрываем всегда
 "-----------------------------------------------------------------------------
-function! s:set_bufhidden()
-  if empty(&buftype)
-    setlocal bufhidden=wipe
-  endif
-endfunction
+"function! s:set_bufhidden()
+  "if empty(&buftype)
+    "setlocal bufhidden=wipe
+  "endif
+"endfunction
 
-autocmd! BufRead * call s:set_bufhidden()
+"autocmd! BufRead * call s:set_bufhidden()
 "-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
