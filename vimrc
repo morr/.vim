@@ -21,6 +21,7 @@ autocmd User fugitive
   \   nnoremap <buffer> .. :edit %:h<CR> |
   \ endif
 autocmd BufReadPost fugitive://* set bufhidden=delete
+set diffopt+=vertical
 "-----------------------------------------------------------------------------
 " sytanstic
 "-----------------------------------------------------------------------------
