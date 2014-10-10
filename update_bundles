@@ -2,46 +2,47 @@
 require 'fileutils'
 require 'open-uri'
 
-git_bundles = [
-  'git://github.com/tpope/vim-fugitive',
-  'git://github.com/scrooloose/nerdtree',
-  'git://github.com/tpope/vim-unimpaired', # для переходов по содержимому quicklist http://www.vim.org/scripts/script.php?script_id=1590
-  #'git://github.com/timcharper/textile.vim',
-  #'git://github.com/tpope/vim-cucumber',
-  #'git://github.com/tpope/vim-git',
-  #'git://github.com/tpope/vim-markdown',
-  'git://github.com/vim-ruby/vim-ruby',
-  'git://github.com/tpope/vim-rails',
-  'git://github.com/scrooloose/nerdcommenter',
-  #'git://github.com/tpope/vim-repeat',
-  'git://github.com/tpope/vim-surround',
-  #'git://github.com/tpope/vim-vividchalk',
-  #'git://github.com/tsaleh/vim-align',
-  #'git://github.com/tsaleh/vim-shoulda',
-  #'git://github.com/tsaleh/vim-supertab',
-  #'git://github.com/tsaleh/vim-tcomment',
-  'git://github.com/cakebaker/scss-syntax.vim',
-  'git://github.com/majutsushi/tagbar',
-  'git://github.com/jeetsukumaran/vim-buffergator',
-  'git://github.com/tpope/vim-haml',
-  'git://github.com/slim-template/vim-slim',
-  'git://github.com/ap/vim-css-color',
-  'git://github.com/kchmck/vim-coffee-script',
-  'git://github.com/briancollins/vim-jst',
-  'git://github.com/sstephenson/eco',
-  'git://github.com/wincent/Command-T',
-  'git://github.com/vim-scripts/grep.vim',
-  'git://github.com/vim-scripts/vimgrep.vim',
-  'git://github.com/tpope/vim-endwise',
-  'git://github.com/Keithbsmiley/rspec.vim',
-  'git://github.com/saks/Specky',
-  'git://github.com/scrooloose/syntastic',
-  'git://github.com/elzr/vim-json',
-  'git://github.com/bkad/CamelCaseMotion',
-  'git://github.com/bling/vim-airline',
-  'git://github.com/jrhorn424/vim-multiple-cursors',
-  #'git://github.com/gregsexton/gitv',
+git_bundles = %w[
+  keithbsmiley/rspec.vim
+  ap/vim-css-color
+  bkad/CamelCaseMotion
+  bling/vim-airline
+  briancollins/vim-jst
+  cakebaker/scss-syntax.vim
+  elzr/vim-json
+  jeetsukumaran/vim-buffergator
+  kchmck/vim-coffee-script
+  majutsushi/tagbar
+  mhinz/vim-startify
+  saks/Specky
+  scrooloose/nerdcommenter
+  scrooloose/nerdtree
+  scrooloose/syntastic
+  slim-template/vim-slim
+  sstephenson/eco
+  tpope/vim-endwise
+  tpope/vim-fugitive
+  tpope/vim-haml
+  tpope/vim-rails
+  tpope/vim-surround
+  tpope/vim-unimpaired
+  vim-ruby/vim-ruby
+  vim-scripts/grep.vim
+  vim-scripts/vimgrep.vim
+  wincent/Command-T
 ]
+#gregsexton/gitv
+#timcharper/textile.vim
+#tpope/vim-cucumber
+#tpope/vim-git
+#tpope/vim-markdown
+#tpope/vim-repeat
+#tpope/vim-vividchalk
+#tsaleh/vim-align
+#tsaleh/vim-shoulda
+#tsaleh/vim-supertab
+#tsaleh/vim-tcomment
+#jrhorn424/vim-multiple-cursors
 
 git_keep = []
 
@@ -54,7 +55,8 @@ puts "trashing everything..."
 Dir['*'].each {|d| FileUtils.rm_rf d unless git_keep.include?(d) }
 
 puts "fetching plugins..."
-git_bundles.each do |url|
+git_bundles.each do |plugin|
+  url = "git://github.com/#{plugin}"
   dir = url.split('/').last
 
   puts "  Unpacking #{url} into #{dir}"
