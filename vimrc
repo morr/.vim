@@ -84,32 +84,6 @@ let g:CommandTAcceptSelectionCommand = 'GotoOrOpen e'
 let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpen tabe'
 let g:CommandTAcceptSelectionSplitCommand = 'GotoOrOpen sp'
 let g:CommandTAcceptSelectionVSplitCommand = 'GotoOrOpen vs'
-
-"function! GotoOrOpen(...)
-  "for file in a:000
-    "if bufnr(file) != -1
-      "exec "sbuffer " . file
-    "else
-      "exec "edit " . file
-    "endif
-  "endfor
-"endfunction
-
-"function! GotoOrOpenTab(...)
-  "for file in a:000
-    "if bufnr(file) != -1
-      "exec "sbuffer " . file
-    "else
-      "exec "tabedit " . file
-    "endif
-  "endfor
-"endfunction
-
-"command! -nargs=+ GotoOrOpen call GotoOrOpen("<args>")
-"command! -nargs=+ GotoOrOpenTab call GotoOrOpenTab("<args>")
-
-"let g:CommandTAcceptSelectionCommand = 'GotoOrOpen'
-"let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpenTab'
 "-----------------------------------------------------------------------------
 " буферы закрываем всегда
 "-----------------------------------------------------------------------------
@@ -208,42 +182,6 @@ set t_vb=
 set vb t_vb=
 " show unfinished commands in statusbar
 set showcmd
-" status line
-"set statusline=%{expand('%:t')}       "tail of the filename
-""display a warning if fileformat isnt unix
-"set statusline+=%#warningmsg#
-"set statusline+=%{&ff!='unix'?'['.&ff.']':''}
-"set statusline+=%*
-""display a warning if file encoding isnt utf-8
-"set statusline+=%#warningmsg#
-"set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
-"set statusline+=%*
-"set statusline+=%h      "help file flag
-"set statusline+=%y      "filetype
-"set statusline+=%{fugitive#statusline()}      " branch name
-"set statusline+=%r      "read only flag
-"set statusline+=%m      "modified flag
-""display a warning if &et is wrong, or we have mixed-indenting
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-""set statusline+=%#error#
-""set statusline+=%{StatuslineTabWarning()}
-""set statusline+=%*
-""set statusline+=%{StatuslineTrailingSpaceWarning()}
-""set statusline+=%{StatuslineLongLineWarning()}
-""set statusline+=%#warningmsg#
-""set statusline+=%{SyntasticStatuslineFlag()}
-""set statusline+=%*
-""display a warning if &paste is set
-"set statusline+=%#error#
-"set statusline+=%{&paste?'[paste]':''}
-"set statusline+=%*
-"set statusline+=%=      "left/right separator
-""set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
-"set statusline+=Col:%03c%*\     "cursor column
-"set statusline+=Ln:%l/%L   "cursor line/total lines
-"set statusline+=\ %P    "percent through file
 set cursorline
 "norm \[i
 " display current mode
@@ -297,28 +235,6 @@ endif
 vmap < <gv
 vmap > >gv
 
-" clipboard
-"noremap  yy "+yy
-"noremap  y "+y
-"noremap  Y "+Y
-"noremap  p "+p
-"noremap  P "+P
-"vnoremap y "+y
-"vnoremap Y "+Y
-"vnoremap p "+p
-"vnoremap P "+P
-"vnoremap r "+d
-
-" CTRL+x is Cut
-"vmap <c-x> "+x
-" CTRL+c is Copy
-"vmap <c-c> "+y
-" CTRL+v is Paste
-"nmap <c-v> "+gP
-"vmap <c-v> "+gP
-"imap <c-v> <space><esc>"+gP<del>i
-"cmap <c-v> <c-R>+
-
 " CTRL-X and SHIFT-Del are Cut
 vnoremap <C-X> "+x
 vnoremap <S-Del> "+x
@@ -345,11 +261,6 @@ exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 imap <s-insert>   <c-v>
 vmap <s-insert>   <c-v>
 
-" Use CTRL-G to do what CTRL-V used to do
-"noremap <c-g>     <c-v>
-
-
-
 nmap <a-v> <c-v>
 vmap <a-v> <c-v>
 "imap <c-v> <space><esc>"+gP<del>i
@@ -358,33 +269,28 @@ vmap <c-k> 10k
 nmap <c-k> 10k
 vmap <c-j> 10j
 nmap <c-j> 10j
-" UP
+" up
 nmap k gk
 vmap k gk
 imap <c-k> <up>
 cmap <c-k> <up>
-" DOWN
+" down
 nmap j gj
 vmap j gj
 imap <c-j> <down>
 cmap <c-j> <down>
-" LEFT
+" left
 nmap h <left>
 vmap h <left>
 imap <c-h> <left>
 cmap <c-h> <left>
-" RIGHT
+" right
 nmap l <right>
 vmap l <right>
 imap <c-l> <right>
 cmap <c-l> <right>
 " ESC button
 imap jj <Esc><right>
-"imap <c-d> <esc>ddI
-"imap <c-a> <esc>A
-"imap <c-o> <esc>O
-"imap <c-s> <esc>I
-"cmap <c-s> <home>
 " arrows
 nmap <down> gj
 nmap <up> gk
@@ -403,13 +309,6 @@ vmap <pagedown> <c-D><c-D>
 map <silent> w <plug>CamelCaseMotion_w
 map <silent> b <plug>CamelCaseMotion_b
 map <silent> e <plug>CamelCaseMotion_e
-" move with control
-"vmap <c-up> 10k
-"nmap <c-up> 10k
-"imap <c-up> <esc>10ki
-"vmap <c-down> 10j
-"nmap <c-down> 10j
-"imap <c-down> <esc>10ji
 " Bubble single lines
 nmap <c-up> [e
 nmap <c-down> ]e
@@ -425,71 +324,30 @@ vmap <s-k6> E
 nmap <s-k6> E
 map <s-k8> <pageup>
 map <s-k2> <pagedown>
-" CTRL-A is Select all
-"nmap <c-A> <esc>a<esc>ggVG
-" clear the search buffer when hitting return
-"nmap <cr> :nohlsearch<cr>/<BS>
-"nmap <kEnter> :nohlsearch<cr>/<BS>
 " insert newline after current line
 nmap <silent> <cr> o<Esc>
 " insert newline before current line
 nmap <silent> <s-cr> O<Esc>
 " turn off highlighting and clear messages
 nmap <silent> <space> :nohlsearch<Bar>:echo<cr>
-" comments
-"vmap <c-a> di<?/ */ ?><left><left><left><left><left><esc>Pi<right>
-" translate
-"vmap <c-t> di<?=translate(''<esc>P<right><right><right><right><right>
 " autocomplete
 imap <tab> <c-r>=InsertTabWordWrapper()<cr>
 imap <c-tab> <c-r>=InsertTabLineWrapper()<cr>
 imap <s-tab> <c-n>
-" не работает
-"let g:SuperTabDefaultCompletionType = "<C-n>"
-"let g:SuperTabContextDefaultCompletionType = "<c-n>"
-" select text inside of block
-"imap <c-v> <esc>v<up><end>o%<down><home>o
 " quit
 nmap <c-q> :q!<cr>
 vmap <c-q> <esc>:q!<cr>i
 imap <c-q> <esc>:q!<cr>i
 
-"" save
-"nmap <c-s> :w<cr>
-"vmap <c-s> <esc>:w<cr>gv
-"imap <c-s> <esc>:w<cr>a
-"imap <c-s> <esc>:w<cr>i
-
 nmap <silent><a-S-left> :tabmove -1<cr>
 imap <silent><a-S-left> <c-O>:tabmove -1<cr>
 nmap <silent><a-S-right> :tabmove +1<cr>
 imap <silent><a-S-right> <c-O>:tabmove +1<cr>
-" wrap text into tag
-vmap <silent>,w <esc>:call VisualTagWrap()<cr>
 " search selected text
 vmap <silent>* <esc>:call VisualSearch('/')<cr>/<c-R>/<cr>
 vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
 " Trailing Spaces
 nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
-" make
-"vmap <c-z> <esc>:w!<cr>:make<cr>
-"nmap <c-z> :w!<cr>:make<cr>
-"imap <c-z> <esc>:w!<cr>:make<cr>
-" run
-"vmap <leader>Z <esc>:w!<cr>:!./%<cr>
-"nmap <leader>Z :w!<cr>:!./%<cr>
-"imap <leader>Z <esc>:w!<cr>:!./%<cr>
-"vmap <leader>z <esc>:w!<cr>:!%<cr>
-"nmap <leader>z :w!<cr>:!%<cr>
-"imap <leader>z <esc>:w!<cr>:!%<cr>
-" Save
-"nnoremap <f2> :w!<cr>
-"inoremap <f2> <c-O>:w!<cr>
-"vnoremap <f2> <esc>:w!<cr>
-" Save all
-"nnoremap <c-F2> :wall!<cr>
-"inoremap <c-F2> <c-O>:wall!<cr>
-"vnoremap <c-F2> <esc>:wall!<cr>
 " NerdTree
 map <silent> <leader>n :NERDTreeToggle<cr>
 map <silent> <leader>N :NERDTreeFind<cr>
@@ -497,22 +355,12 @@ map <silent> <leader>N :NERDTreeFind<cr>
 nmap <f1> :CommandT<cr>
 nmap ,<f1>r :CommandTFlush<cr>:CommandT<cr>
 
-"nmap <f2> :NERDTreeToggle<cr>
 nmap <f2> :NERDTreeFind<cr>
-"nmap ,<f2> :NERDTree<cr>
 
 nmap <f3> :BuffergatorToggle<cr>
 
 let g:speckySpecSwitcherKey="<f4>"
 nmap gs <c-w><c-v><c-w>l<f4>
-" Project
-"map <silent> <c-F3> <plug>ToggleProject
-" Wrap
-"nnoremap <f4> :setlocal wrap! wrap?<cr>
-"inoremap <f4> <c-O>:setlocal wrap! wrap?<cr>
-"vnoremap <f4> <esc>:setlocal wrap! wrap?<cr>
-" bufexplorer
-"map <silent> <c-F5> :BufExplorer<cr>
 " Git
 nnoremap <f5> :Gcommit<cr>
 inoremap <f5> <c-O>:Gcommit<cr>
@@ -521,38 +369,7 @@ vnoremap <f5> <esc>:Gcommit<cr>
 nnoremap <f6> :Gdiff<cr>
 inoremap <f6> <c-O>:Gdiff<cr>
 vnoremap <f6> <esc>:Gdiff<cr>
-"nnoremap <f5> :emenu File.Git.<tab>
-"inoremap <f5> <c-O>:emenu File.Git.<tab>
-"vnoremap <f5> <esc>:emenu File.Git.<tab>
-" font
-"nnoremap <c-f5> :emenu File.Font.<tab>
-"inoremap <c-f5> <c-O>:emenu File.Font.<tab>
-"vnoremap <c-f5> <esc>:emenu File.Font.<tab>
-
-" Encoding.Write
-"nnoremap <f6> :emenu File.Encoding.Write.<tab>
-"inoremap <f6> <c-O>:emenu File.Encoding.Write.<tab>
-"vnoremap <f6> <esc>:emenu File.Encoding.Write.<tab>
-" Encoding.Read
-"nnoremap <f7> :emenu File.Encoding.Read.<tab>
-"inoremap <f7> <c-O>:emenu File.Encoding.Read.<tab>
-"vnoremap <f7> <esc>:emenu File.Encoding.Read.<tab>
-" ToggleMatchParen
-nnoremap <f8> :call ToggleMatchParen()<cr>
-inoremap <f8> <c-O>:call ToggleMatchParen()<cr>
-vnoremap <f8> <esc>:call ToggleMatchParen()<cr>
-" Spelling
-"nnoremap <f8> :emenu File.Spell.<tab>
-"inoremap <f8> <c-O>:emenu File.Spell.<tab>
-"vnoremap <f8> <esc>:emenu File.Spell.<tab>
-" External program run
-"nnoremap <f9> :emenu File.Preview.<tab>
-"inoremap <f9> <c-O>:emenu File.Preview.<tab>
-"vnoremap <f9> <esc>:emenu File.Preview.<tab>
 " Tags
-"nnoremap <f11> :TlistToggle<cr>
-"inoremap <f11> <c-O>:TlistToggle<cr>
-"vnoremap <f11> <esc>:TlistToggle<cr>
 nnoremap <f10> :TagbarToggle<cr>
 inoremap <f10> <c-O>:TagbarToggle<cr>
 vnoremap <f10> <esc>:TagbarToggle<cr>
@@ -560,7 +377,6 @@ nnoremap <f12> :emenu Tags.<tab>
 inoremap <f12> <c-O>:emenu Tags.<tab>
 vnoremap <f12> <esc>:emenu Tags.<tab>
 " ruby debugger
-"nnoremap <c-f11> :call EnableDebugger()<cr>
 " vimrc edit
 if exists('$MYGVIMRC')
   map ,v :vsp $MYGVIMRC<CR>
@@ -571,24 +387,15 @@ else
 end
 "  'Control + \' - Open a new tab and tag into the function/variable currently under cursor
 imap {<cr> {<cr>}<Esc>O
-"imap <? <?  ?><left><left><left>
 imap <% <%  %><left><left><left>
-"imap <?= <?= ?><left><left><left>
 imap <%= <%= %><left><left><left>
-"imap <?/ <<left><right>? /*
 
 map <Leader>f :call GrepIt()<cr>
 " quotes replacement
 nnoremap <silent><leader>'  :<C-U>call <SID>ToggleQuote()<CR>
 nnoremap <silent><leader>"  :<C-U>call <SID>ToggleDoubleQuote()<CR>
-"imap /1 //-----------------------------------------------------------------------------
-"imap /2 /1<cr> <cr><backspace><backspace><backspace>/1<up><end>
-"imap /3 /2<down><cr><backspace><backspace><cr>/1<up><up><up><end>
 
-"map <s-k> :exec("help ".expand("<cword>"))<cr>
 map <c-\> :tab split<cr>:exec("tag ".expand("<cword>"))<cr>
-" 'Alt + \' - Open a vertical split and tag into the function/variable currently under cursor
-"map <A-\> :vsplit<cr>:exec("tag ".expand("<cword>"))<cr><c-W>r
 " NERDCommenter
 map ,<space> <plug>NERDCommenterToggle
 "-----------------------------------------------------------------------------
@@ -713,38 +520,10 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 "-----------------------------------------------------------------------------
 " functions
 "-----------------------------------------------------------------------------
-"function! GotoOrOpen(...)
-  "for file in a:000
-    "if bufnr(file) != -1
-      "exec "sbuffer " . file
-    "else
-      "exec "edit " . file
-    "endif
-  "endfor
-"endfunction
-
-"function! GotoOrOpenTab(...)
-  "for file in a:000
-    "if bufnr(file) != -1
-      "exec "sbuffer " . file
-    "else
-      "exec "tabedit " . file
-    "endif
-  "endfor
-"endfunction
-
 function! GrepIt()
   let l:word = expand("<cword>")
   echo 'Searching for "'.l:word.'"...'
   exec('Grep '.l:word.' **/*')
-endfunction
-
-function! VisualTagWrap()
-  let l:tag=input('tag to wrap block: ')
-  if len(l:tag)>0
-    execute 'normal! `>a</'.l:tag.'>'
-    execute 'normal! `<i<'.l:tag.'>'
-  endif
 endfunction
 
 function! VisualSearch(cmd)
@@ -811,25 +590,6 @@ function! InsertSnippetWrapper()
    return inserted
  endif
 endfunction
-
-function! GetBuffersList(delimiter)
-  let i  = 1
-  let m  = bufnr('$')
-  let blist = ''
-  while i <= m
-    if bufloaded(i) && buflisted(i)
-      if bufname(i) != ''
-        if blist != ''
-          let blist = blist.a:delimiter.bufname(i)
-        else
-          let blist = bufname(i)
-        endif
-      endif
-    endif
-    let i = i + 1
-  endwh
-  return blist
-endf
 
 autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 
@@ -1053,13 +813,6 @@ endfunction
 "-----------------------------------------------------------------------------
 " plugins
 "-----------------------------------------------------------------------------
-"command! -nargs=0 RDocPreview call RDocRenderBufferToPreview()
-"function! RDocRenderBufferToPreview()
-"  let rdocoutput = "/tmp/vimrdoc/"
-"  call system("rdoc " . bufname("%") . " --op " . rdocoutput)
-"  call system("open -a Safari ". rdocoutput . "index.html")
-"endfunction
-
 " ruby code completion
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
@@ -1085,28 +838,6 @@ set completeopt+=longest
 " javascript omnicomplete
 let g:rjscomplete_library = 'jQuery_1.4'
 let g:rjscomplete_find_in_prototype = 0
-
-"let g:tlist_javascript_settings = 'javascript;v:var;c:class;p:prototype;m:method;f:function;o:object'
-
-"snipmate setup
-"if has("unix")
-  "source ~/.vim/snippets/support_functions.vim
-"else
-  "source ~/vimfiles/snippets/support_functions.vim
-"endif
-
-"autocmd vimenter * call s:SetupSnippets()
-"function! s:SetupSnippets()
-"  "if we're in a rails env then read in the rails snippets
-"  if filereadable("./config/environment.rb")
-"    call ExtractSnips("~/.vim/snippets/ruby-rails", "ruby")
-"    call ExtractSnips("~/.vim/snippets/eruby-rails", "eruby")
-"  endif
-"
-"  call ExtractSnips("~/.vim/snippets/html", "eruby")
-"  call ExtractSnips("~/.vim/snippets/html", "xhtml")
-"  call ExtractSnips("~/.vim/snippets/html", "php")
-"endfunction
 
 " used to make vim default 'man' viewer
 " see http://vim.wikia.com/wiki/Using_vim_as_a_man-page_viewer_under_Unix
