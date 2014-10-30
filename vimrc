@@ -60,30 +60,30 @@ let g:CommandTMaxHeight = 17
 let g:CommandTMaxFiles = 25000
 let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/images/**,tmp/cache/**,,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**"
 
-if &term =~ 'screen' || &term =~ 'xterm'
-  let g:CommandTCancelMap = ['<ESC>', '<C-c>']
-endif
+"if &term =~ 'screen' || &term =~ 'xterm'
+  "let g:CommandTCancelMap = ['<ESC>', '<C-c>']
+"endif
 
 nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
 nmap <silent> <leader>j :CommandTJump<CR>
 
-function! s:GotoOrOpen(command, ...)
-  for file in a:000
-    if bufwinnr(file) != -1
-      exec "sb " . file
-    else
-      exec a:command . " " . file
-    endif
-  endfor
-endfunction
+"function! s:GotoOrOpen(command, ...)
+  "for file in a:000
+    "if bufwinnr(file) != -1
+      "exec "sb " . file
+    "else
+      "exec a:command . " " . file
+    "endif
+  "endfor
+"endfunction
 
-command! -nargs=+ GotoOrOpen call s:GotoOrOpen(<f-args>)
+"command! -nargs=+ GotoOrOpen call s:GotoOrOpen(<f-args>)
 
-let g:CommandTAcceptSelectionCommand = 'GotoOrOpen e'
-let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpen tabe'
-let g:CommandTAcceptSelectionSplitCommand = 'GotoOrOpen sp'
-let g:CommandTAcceptSelectionVSplitCommand = 'GotoOrOpen vs'
+"let g:CommandTAcceptSelectionCommand = 'GotoOrOpen e'
+"let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpen tabe'
+"let g:CommandTAcceptSelectionSplitCommand = 'GotoOrOpen sp'
+"let g:CommandTAcceptSelectionVSplitCommand = 'GotoOrOpen vs'
 "-----------------------------------------------------------------------------
 " буферы закрываем всегда
 "-----------------------------------------------------------------------------
