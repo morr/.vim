@@ -13,7 +13,6 @@ git_bundles = %w[
   jeetsukumaran/vim-buffergator
   kchmck/vim-coffee-script
   majutsushi/tagbar
-  mhinz/vim-startify
   saks/Specky
   scrooloose/nerdcommenter
   scrooloose/nerdtree
