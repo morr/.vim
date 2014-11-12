@@ -43,14 +43,6 @@ runtime macros/matchit.vim
 let g:airline_powerline_fonts = 1
 set laststatus=2
 "-----------------------------------------------------------------------------
-" startify
-"-----------------------------------------------------------------------------
-let g:startify_bookmarks = ['~/.vim/vimrc']
-let g:startify_skiplist = ['vimrc']
-"let g:startify_custom_header = map(split(system('fortune ~/.vim/bundle/vimtips-fortune/fortunes/vimtips | cowsay -W 60'), '\n'), '"   ". v:val') + ['','']
-"let g:startify_custom_header = map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
-let g:startify_change_to_vcs_root = 1
-"-----------------------------------------------------------------------------
 " Command-T
 "-----------------------------------------------------------------------------
 "set switchbuf=usetab,newtab
