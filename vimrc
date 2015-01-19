@@ -45,37 +45,14 @@ set laststatus=2
 "-----------------------------------------------------------------------------
 " Command-T
 "-----------------------------------------------------------------------------
-"set switchbuf=usetab,newtab
-"set wildignore+=*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/images/**,tmp/cache/**,,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**
 let g:CommandTMatchWindowReverse = 0
 let g:CommandTMaxHeight = 17
 let g:CommandTMaxFiles = 25000
 let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/images/**,tmp/cache/**,,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**"
 
-"if &term =~ 'screen' || &term =~ 'xterm'
-  "let g:CommandTCancelMap = ['<ESC>', '<C-c>']
-"endif
-
 nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
 nmap <silent> <leader>j :CommandTJump<CR>
-
-"function! s:GotoOrOpen(command, ...)
-  "for file in a:000
-    "if bufwinnr(file) != -1
-      "exec "sb " . file
-    "else
-      "exec a:command . " " . file
-    "endif
-  "endfor
-"endfunction
-
-"command! -nargs=+ GotoOrOpen call s:GotoOrOpen(<f-args>)
-
-"let g:CommandTAcceptSelectionCommand = 'GotoOrOpen e'
-"let g:CommandTAcceptSelectionTabCommand = 'GotoOrOpen tabe'
-"let g:CommandTAcceptSelectionSplitCommand = 'GotoOrOpen sp'
-"let g:CommandTAcceptSelectionVSplitCommand = 'GotoOrOpen vs'
 "-----------------------------------------------------------------------------
 " буферы закрываем всегда
 "-----------------------------------------------------------------------------
@@ -205,21 +182,15 @@ set complete+=t
 set wildmenu
 set wcm=<Tab>
 "dont fold by default
-
-"dont fold by default
 set nofoldenable
 " tags
 set tags+=tags
 set tags+=tags2
-" runtimepath for vimdata
-set runtimepath+=~/.vimdata
+
 " vim-ruby
 if has("unix")
   set runtimepath+=~/.vim/vim-ruby
   set runtimepath+=~/.vim/vim-rails
-else
-  set runtimepath+=~/vimfiles/vim-ruby
-  set runtimepath+=~/vimfiles/vim-rails
 endif
 "-----------------------------------------------------------------------------
 " hotkeys
@@ -699,21 +670,6 @@ endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
-" The idea is to delete something anywhere, then go select characters elsewhere, and hit g" to swap the delete characters with the newly selected ones.
-function! s:SwapVisualWithCut()
-  normal! `.``
-  if line(".")==line("'.") && col(".") < col("'.")
-    let c = col('.')
-    normal! gvp```]
-    let c = col('.') - c
-    normal! ``
-    :silent call cursor(line("."),col(".")+c)
-    normal! P
-  else
-    normal! gvp``P
-  endif
-endfunction
-vnoremap <silent> g" <esc>:call <sid>SwapVisualWithCut()<cr>
 
 "jump to last cursor position when opening a file
 "dont do it when writing a commit log entry
@@ -737,41 +693,6 @@ function! s:HighlightLongLines(width)
     else
         echomsg "Usage: HighlightLongLines [natural number]"
     endif
-endfunction
-
-function! ToggleMatchParen()
-  if exists("g:loaded_matchparen")
-    :NoMatchParen
-    :echo 'MatchParen plugin turned off'
-  else
-    :DoMatchParen
-    :echo 'MatchParen plugin turned on'
-  endif
-endfunction
-
-function! EnableDebugger()
-  Rdebugger
-  nnoremap <f5> :Rdebugger %<cr>
-  inoremap <f5> <c-O>:Rdebugger %<cr>
-  vnoremap <f5> <esc>:Rdebugger %<cr>
-  nnoremap <s-f5> :call g:RubyDebugger.exit()<cr>
-  inoremap <s-f5> <c-O>:call g:RubyDebugger.exit()<cr>
-  vnoremap <s-f5> <esc>:call g:RubyDebugger.exit()<cr>
-  nnoremap <f8> :call g:RubyDebugger.continue()<cr>
-  inoremap <f8> <c-O>:call g:RubyDebugger.continue()<cr>
-  vnoremap <f8> <esc>:call g:RubyDebugger.continue()<cr>
-  nnoremap <f9> :call g:RubyDebugger.toggle_breakpoint()<cr>
-  inoremap <f9> <c-O>:call g:RubyDebugger.toggle_breakpoint()<cr>
-  vnoremap <f9> <esc>:call g:RubyDebugger.toggle_breakpoint()<cr>
-  nnoremap <f10> :call g:RubyDebugger.next()<cr>
-  inoremap <f10> <c-O>:call g:RubyDebugger.next()<cr>
-  vnoremap <f10> <esc>:call g:RubyDebugger.next()<cr>
-  nnoremap <f11> :call g:RubyDebugger.step()<cr>
-  inoremap <f11> <c-O>:call g:RubyDebugger.step()<cr>
-  vnoremap <f11> <esc>:call g:RubyDebugger.step()<cr>
-  nnoremap <s-f11> :call g:RubyDebugger.finish()<cr>
-  inoremap <s-f11> <c-O>:call g:RubyDebugger.finish()<cr>
-  vnoremap <s-f11> <esc>:call g:RubyDebugger.finish()<cr>
 endfunction
 
 " replacement for quotes
@@ -817,19 +738,14 @@ let g:rubycomplete_rails = 1
 " SessionMgr
 let g:SessionMgr_AutoManage = 0
 let g:SessionMgr_DefaultName = "last"
-" SnipMate
-"let s:did_snips_mappings = 1
 " Tlist settings
 let g:Tlist_Show_One_File = 1
 let g:Tlist_GainFocus_On_ToggleOpen = 1
 let g:Tlist_Use_Right_Window = 1
 let g:Tlist_WinWidth = 45
+
 set completeopt-=preview
 set completeopt+=longest
-
-" javascript omnicomplete
-let g:rjscomplete_library = 'jQuery_1.4'
-let g:rjscomplete_find_in_prototype = 0
 
 " used to make vim default 'man' viewer
 " see http://vim.wikia.com/wiki/Using_vim_as_a_man-page_viewer_under_Unix
