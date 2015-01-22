@@ -29,6 +29,7 @@ git_bundles = %w[
   vim-scripts/grep.vim
   vim-scripts/vimgrep.vim
   wincent/Command-T
+  sjbach/lusty
 ]
 #gregsexton/gitv
 #timcharper/textile.vim

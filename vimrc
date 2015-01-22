@@ -1,18 +1,11 @@
 "-----------------------------------------------------------------------------
-"  Buffergator
-"-----------------------------------------------------------------------------
-let g:buffergator_suppress_keymaps = 1
-nnoremap <silent> <Leader>b :BuffergatorOpen<CR>
-nnoremap <silent> <Leader>B :BuffergatorClose<CR>
-"nnoremap <silent> <Leader>t :BuffergatorTabsOpen<CR>
-"nnoremap <silent> <Leader>T :BuffergatorTabsClose<CR>
-"-----------------------------------------------------------------------------
 " pathogen
 "-----------------------------------------------------------------------------
 filetype off
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
 filetype on
+
 "-----------------------------------------------------------------------------
 " fugitive
 "-----------------------------------------------------------------------------
@@ -22,6 +15,12 @@ autocmd User fugitive
   \ endif
 autocmd BufReadPost fugitive://* set bufhidden=delete
 set diffopt+=vertical
+
+"-----------------------------------------------------------------------------
+" supertab
+"-----------------------------------------------------------------------------
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
 "-----------------------------------------------------------------------------
 " sytanstic
 "-----------------------------------------------------------------------------
@@ -33,15 +32,18 @@ let g:syntastic_json_checkers=['jsonlint'] " npm install -g jsonlint
 let g:vim_json_syntax_conceal = 0
 "let g:syntastic_enable_signs=1
 "let g:syntastic_auto_loc_list=1
+
 "-----------------------------------------------------------------------------
 " matchit
 "-----------------------------------------------------------------------------
 runtime macros/matchit.vim
+
 "-----------------------------------------------------------------------------
 " powerline
 "-----------------------------------------------------------------------------
 let g:airline_powerline_fonts = 1
 set laststatus=2
+
 "-----------------------------------------------------------------------------
 " Command-T
 "-----------------------------------------------------------------------------
@@ -53,9 +55,11 @@ let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/uploads
 nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
 nmap <silent> <leader>j :CommandTJump<CR>
-"-----------------------------------------------------------------------------
+
+nmap <f1> :CommandT<cr>
+nmap ,<f1>r :CommandTFlush<cr>:CommandT<cr>
+
 " буферы закрываем всегда
-"-----------------------------------------------------------------------------
 "function! s:set_bufhidden()
   "if empty(&buftype)
     "setlocal bufhidden=wipe
@@ -63,6 +67,36 @@ nmap <silent> <leader>j :CommandTJump<CR>
 "endfunction
 
 "autocmd! BufRead * call s:set_bufhidden()
+
+"-----------------------------------------------------------------------------
+" LustyExplorer
+"-----------------------------------------------------------------------------
+nmap <silent> <leader>l :LustyBufferGrep<cr>
+nmap <f4> :LustyBufferGrep<cr>
+
+silent! unmap <leader>lf
+silent! unmap <leader>lr
+silent! unmap <leader>lb
+silent! unmap <leader>lg
+silent! unmap <leader>lj
+
+"-----------------------------------------------------------------------------
+" NerdTree
+"-----------------------------------------------------------------------------
+map <silent> <leader>n :NERDTreeToggle<cr>
+map <silent> <leader>N :NERDTreeFind<cr>
+nmap <f2> :NERDTreeFind<cr>
+
+"-----------------------------------------------------------------------------
+"  Buffergator
+"-----------------------------------------------------------------------------
+let g:buffergator_suppress_keymaps = 1
+nnoremap <silent> <Leader>b :BuffergatorOpen<CR>
+nnoremap <silent> <Leader>B :BuffergatorClose<CR>
+"nnoremap <silent> <Leader>t :BuffergatorTabsOpen<CR>
+"nnoremap <silent> <Leader>T :BuffergatorTabsClose<CR>
+nmap <f3> :BuffergatorToggle<cr>
+
 "-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
@@ -311,16 +345,6 @@ vmap <silent>* <esc>:call VisualSearch('/')<cr>/<c-R>/<cr>
 vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
 " Trailing Spaces
 nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
-" NerdTree
-map <silent> <leader>n :NERDTreeToggle<cr>
-map <silent> <leader>N :NERDTreeFind<cr>
-
-nmap <f1> :CommandT<cr>
-nmap ,<f1>r :CommandTFlush<cr>:CommandT<cr>
-
-nmap <f2> :NERDTreeFind<cr>
-
-nmap <f3> :BuffergatorToggle<cr>
 
 let g:speckySpecSwitcherKey="<f4>"
 nmap gs <c-w><c-v><c-w>l<f4>
@@ -353,7 +377,7 @@ imap {<cr> {<cr>}<Esc>O
 imap <% <%  %><left><left><left>
 imap <%= <%= %><left><left><left>
 
-map <Leader>f :call GrepIt()<cr>
+"map <Leader>f :call GrepIt()<cr>
 " quotes replacement
 nnoremap <silent><leader>'  :<C-U>call <SID>ToggleQuote()<CR>
 nnoremap <silent><leader>"  :<C-U>call <SID>ToggleDoubleQuote()<CR>
