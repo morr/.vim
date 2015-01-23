@@ -346,8 +346,8 @@ vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
 " Trailing Spaces
 nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
 
-let g:speckySpecSwitcherKey="<f4>"
-nmap gs <c-w><c-v><c-w>l<f4>
+let g:speckySpecSwitcherKey="<f12>"
+nmap gs <c-w><c-v><c-w>l<f12>
 " Git
 nnoremap <f5> :Gcommit<cr>
 inoremap <f5> <c-O>:Gcommit<cr>
@@ -360,9 +360,9 @@ vnoremap <f6> <esc>:Gdiff<cr>
 nnoremap <f10> :TagbarToggle<cr>
 inoremap <f10> <c-O>:TagbarToggle<cr>
 vnoremap <f10> <esc>:TagbarToggle<cr>
-nnoremap <f12> :emenu Tags.<tab>
-inoremap <f12> <c-O>:emenu Tags.<tab>
-vnoremap <f12> <esc>:emenu Tags.<tab>
+"nnoremap <f12> :emenu Tags.<tab>
+"inoremap <f12> <c-O>:emenu Tags.<tab>
+"vnoremap <f12> <esc>:emenu Tags.<tab>
 " ruby debugger
 " vimrc edit
 if exists('$MYGVIMRC')
