@@ -3,6 +3,7 @@ require 'fileutils'
 require 'open-uri'
 
 git_bundles = %w[
+  wincent/Command-T
   keithbsmiley/rspec.vim
   ap/vim-css-color
   bkad/CamelCaseMotion
@@ -26,7 +27,6 @@ git_bundles = %w[
   tpope/vim-unimpaired
   vim-ruby/vim-ruby
   vim-scripts/grep.vim
-  wincent/Command-T
   sjbach/lusty
   rking/ag.vim
 ]
