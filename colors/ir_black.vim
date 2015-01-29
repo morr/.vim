@@ -67,7 +67,8 @@ let colors_name = "ir_black"
 
 " General colors
 hi Normal           guifg=#f6f3e8     guibg=grey16     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
-hi NonText          guifg=#070707     guibg=grey16     gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
+"hi NonText          guifg=#070707     guibg=grey16     gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
+hi NonText          guifg=#eeeeee     guibg=grey16     gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
 
 "hi Cursor           guifg=black       guibg=white       gui=NONE      ctermfg=black       ctermbg=white       cterm=reverse
 hi Cursor           guifg=black       guibg=#ffbc0d     gui=NONE      ctermfg=black       ctermbg=white       cterm=reverse
@@ -210,6 +211,3 @@ hi link javaScriptNumber      Number
 
 " Special for CSharp
 hi  link csXmlTag             Keyword
-
-
-" Special for PHP

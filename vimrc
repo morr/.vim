@@ -197,8 +197,8 @@ set noerrorbells
 set cpoptions+=$
 "set nocp " option for cppomnicomplete
 set list
-"set listchars=trail:.
-set listchars=tab:>·,trail:·,extends:#,nbsp:·
+set listchars=tab:>·,trail:·,precedes:#,extends:#,nbsp:·
+
 " allow to use backspace instead of "x"
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 " do not abandon buffer when it is unloaded
