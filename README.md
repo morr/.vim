@@ -1,8 +1,8 @@
 ## Requirements
 
-### Packages `ctags`, `cowsay`, `fortune`
+### Packages `ctags`, `the_silver_searcher`
 ```
-brew install ctags cowsay fortune
+brew install ctags the_silver_searcher
 ```
 
 ### Fonts
