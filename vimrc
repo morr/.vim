@@ -97,6 +97,9 @@ nnoremap <silent> <Leader>B :BuffergatorClose<CR>
 "nnoremap <silent> <Leader>T :BuffergatorTabsClose<CR>
 nmap <f3> :BuffergatorToggle<cr>
 
+nmap <silent> <C-p> :BuffergatorMruCyclePrev<CR>
+nmap <silent> <C-n> :BuffergatorMruCycleNext<CR>
+
 "-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
