@@ -168,7 +168,7 @@ endif
 set number " always show line numbers
 set guioptions-=T
 set ch=1
-set noguipty
+" set noguipty
 set nostartofline
 set whichwrap+=>
 set whichwrap+=<
