@@ -26,10 +26,10 @@ git_bundles = %w[
   tpope/vim-unimpaired
   vim-ruby/vim-ruby
   vim-scripts/grep.vim
-  vim-scripts/vimgrep.vim
   wincent/Command-T
   sjbach/lusty
 ]
+#vim-scripts/vimgrep.vim
 #majutsushi/tagbar
 #gregsexton/gitv
 #timcharper/textile.vim
