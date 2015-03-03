@@ -103,9 +103,9 @@ nmap <silent> <C-n> :BuffergatorMruCycleNext<CR>
 "-----------------------------------------------------------------------------
 " Ag
 "-----------------------------------------------------------------------------
-let g:ag_search_ignore = 'log,public,tmp,spec/vcr_cassettes'
+let g:ag_search_ignore = 'log,public,tmp,spec/vcr_cassettes,vendor/'
 let g:ag_prg="ag --nogroup --nocolor --column "
-let g:ag_qhandler="copen 25"
+let g:ag_qhandler="copen 12"
 map <Leader>/ <esc>:call AgSearch()<cr>
 
 function! AgSearch()
