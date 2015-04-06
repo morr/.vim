@@ -73,7 +73,7 @@ hi NonText          guifg=#eeeeee     guibg=grey16     gui=NONE      ctermfg=bla
 "hi Cursor           guifg=black       guibg=white       gui=NONE      ctermfg=black       ctermbg=white       cterm=reverse
 hi Cursor           guifg=black       guibg=#ffbc0d     gui=NONE      ctermfg=black       ctermbg=white       cterm=reverse
 hi LineNr           guifg=#808080     guibg=grey7       gui=NONE      ctermfg=darkgray    ctermbg=NONE        cterm=NONE
-hi CursorLineNr     guifg=#C0C0C0     guibg=grey7       gui=NONE      ctermfg=darkgray    ctermbg=NONE        cterm=NONE
+hi CursorLineNr     guifg=#dddd22     guibg=gray25      gui=NONE      ctermfg=darkgray    ctermbg=NONE        cterm=NONE
 
 hi VertSplit        guifg=#202020     guibg=#202020     gui=NONE      ctermfg=darkgray    ctermbg=darkgray    cterm=NONE
 hi StatusLine       guifg=#CCCCCC     guibg=#303030     gui=italic    ctermfg=white       ctermbg=darkgray    cterm=NONE
