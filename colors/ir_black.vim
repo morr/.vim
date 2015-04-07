@@ -112,7 +112,7 @@ endif
 
 " Syntax highlighting
 hi Comment          guifg=#7F9F7F     guibg=NONE        gui=italic    ctermfg=darkgray    ctermbg=NONE        cterm=NONE
-hi String           guifg=#FFA0A0     guibg=NONE        gui=NONE      ctermfg=green       ctermbg=NONE        cterm=NONE
+hi String           guifg=#FFA5A5     guibg=NONE        gui=NONE      ctermfg=green       ctermbg=NONE        cterm=NONE
 hi Number           guifg=#FF73FD     guibg=NONE        gui=NONE      ctermfg=magenta     ctermbg=NONE        cterm=NONE
 
 hi Keyword          guifg=#96CBFE     guibg=NONE        gui=NONE      ctermfg=blue        ctermbg=NONE        cterm=NONE
