@@ -67,8 +67,11 @@ let colors_name = "ir_black"
 
 " General colors
 hi Normal           guifg=#f6f3e8     guibg=grey16     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
-"hi NonText          guifg=#070707     guibg=grey16     gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
-hi NonText          guifg=#eeeeee     guibg=grey16     gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
+"hi Normal           guifg=#F6F3F0     guibg=#2F2F3B     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
+hi NonText          guifg=#575767     guibg=#1F1F2A       gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
+"hi Normal           guifg=#f6f3e8     guibg=grey16     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
+"hi NonText          guifg=#eeeeee     guibg=grey16     gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
+""hi NonText          guifg=#070707     guibg=grey16     gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
 
 "hi Cursor           guifg=black       guibg=white       gui=NONE      ctermfg=black       ctermbg=white       cterm=reverse
 hi Cursor           guifg=black       guibg=#ffbc0d     gui=NONE      ctermfg=black       ctermbg=white       cterm=reverse
@@ -103,6 +106,7 @@ if version >= 700 " Vim 7.x specific colors
   hi MatchParen     guifg=#f6f3e8     guibg=#857b6f     gui=BOLD      ctermfg=white       ctermbg=darkgray    cterm=NONE
   hi Pmenu          guifg=#f6f3e8     guibg=#444444     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
   hi PmenuSel       guifg=#000000     guibg=#cae682     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
+  "hi Search         guifg=#cccccc     guibg=#006600     gui=underline ctermfg=NONE        ctermbg=NONE        cterm=underline
   hi Search         guifg=#EEEEEE     guibg=#656500     gui=underline ctermfg=NONE        ctermbg=NONE        cterm=underline
 endif
 
