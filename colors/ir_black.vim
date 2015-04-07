@@ -66,7 +66,7 @@ let colors_name = "ir_black"
 "hi Example         guifg=NONE        guibg=NONE        gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
 
 " General colors
-hi Normal           guifg=#f6f3e8     guibg=grey16     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
+hi Normal           guifg=#f6f3e8     guibg=#292930     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
 "hi Normal           guifg=#F6F3F0     guibg=#2F2F3B     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
 hi NonText          guifg=#575767     guibg=#1F1F2A       gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
 "hi Normal           guifg=#f6f3e8     guibg=grey16     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
