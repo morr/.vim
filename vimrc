@@ -168,7 +168,7 @@ set noswapfile
 " gui
 syntax on
 set t_Co=256
-colors ir_black
+colors ir_black_morr
 "colors sebocean
 if has("mac")
   "set guifont=Source\ Code\ Pro:h14

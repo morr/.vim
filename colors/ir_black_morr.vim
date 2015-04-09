@@ -60,13 +60,13 @@ if exists("syntax_on")
   syntax reset
 endif
 
-let colors_name = "ir_black"
+let colors_name = "ir_black_morr"
 
 
 "hi Example         guifg=NONE        guibg=NONE        gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
 
 " General colors
-hi Normal           guifg=#f6f3e8     guibg=#292930     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
+hi Normal           guifg=#f6f3e8     guibg=#2c2c39     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
 "hi Normal           guifg=#F6F3F0     guibg=#2F2F3B     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
 hi NonText          guifg=#575767     guibg=#1F1F2A       gui=NONE      ctermfg=black       ctermbg=NONE        cterm=NONE
 "hi Normal           guifg=#f6f3e8     guibg=grey16     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
@@ -120,7 +120,9 @@ hi PreProc          guifg=#96CBFE     guibg=NONE        gui=NONE      ctermfg=bl
 hi Conditional      guifg=#6699CC     guibg=NONE        gui=NONE      ctermfg=blue        ctermbg=NONE        cterm=NONE  " if else end
 
 hi Todo             guifg=#8f8f8f     guibg=NONE        gui=NONE      ctermfg=red         ctermbg=NONE        cterm=NONE
-hi Constant         guifg=#99CC99     guibg=NONE        gui=bold      ctermfg=cyan        ctermbg=NONE        cterm=NONE
+"hi Constant         guifg=#99CC99     guibg=NONE        gui=bold      ctermfg=cyan        ctermbg=NONE        cterm=NONE
+hi Constant         guifg=#88DF40     guibg=NONE        gui=bold      ctermfg=cyan        ctermbg=NONE        cterm=NONE
+"hi Constant         guifg=#99ccd9     guibg=NONE        gui=bold      ctermfg=cyan        ctermbg=NONE        cterm=NONE
 
 hi Identifier       guifg=#C6C5FE     guibg=NONE        gui=NONE      ctermfg=cyan        ctermbg=NONE        cterm=NONE
 hi Function         guifg=#FFD2A7     guibg=NONE        gui=NONE      ctermfg=brown       ctermbg=NONE        cterm=NONE
@@ -157,7 +159,8 @@ hi rubyEscape                  guifg=white        guibg=NONE      gui=NONE      
 hi rubyInterpolationDelimiter  guifg=#00A0A0      guibg=NONE      gui=NONE      ctermfg=blue           ctermbg=NONE      cterm=NONE
 hi rubyControl                 guifg=#6699CC      guibg=NONE      gui=NONE      ctermfg=blue           ctermbg=NONE      cterm=NONE  "and break, etc
 "hi rubyGlobalVariable          guifg=#FFCCFF      guibg=NONE      gui=NONE      ctermfg=lightblue      ctermbg=NONE      cterm=NONE  "yield
-hi rubyStringDelimiter         guifg=#336633      guibg=NONE      gui=NONE      ctermfg=lightgreen     ctermbg=NONE      cterm=NONE
+"hi rubyStringDelimiter         guifg=#336633      guibg=NONE      gui=NONE      ctermfg=lightgreen     ctermbg=NONE      cterm=NONE
+hi rubyStringDelimiter         guifg=#77aa66      guibg=NONE      gui=NONE      ctermfg=lightgreen     ctermbg=NONE      cterm=NONE
 "rubyInclude
 "rubySharpBang
 "rubyAccess
