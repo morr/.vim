@@ -130,7 +130,7 @@ set directory=$HOME
 " russian language fix
 set langmap=ё`,йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,фa,ыs,вd,аf,пg,рh,оj,лk,дl,э',яz,чx,сc,мv,иb,тn,ьm,б\\,,ю.,Ё~,ЙQ,ЦW,УE,КR,ЕT,НY,ГU,ШI,ЩO,ЗP,ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж:,Э\\",ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Б<,Ю>
 " one word symbol class
-set iskeyword=@,48-57,_,192-255,\$
+set iskeyword=@,48-57,_,192-255,\$,\-
 " encodings
 set fileencodings=utf-8,windows-1251,iso-8859-15,koi8-r
 " fileformat
