@@ -367,8 +367,7 @@ vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
 " Trailing Spaces
 nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
 
-let g:speckySpecSwitcherKey="<f12>"
-nmap gs <c-w><c-v><c-w>l<f12>
+nmap gs :AV<cr>
 " Git
 nnoremap <f5> :Gcommit<cr>
 inoremap <f5> <c-O>:Gcommit<cr>
