@@ -340,6 +340,8 @@ vmap <s-k6> E
 nmap <s-k6> E
 map <s-k8> <pageup>
 map <s-k2> <pagedown>
+" set ctrl+c to behave like esc
+inoremap <c-c> <esc>
 " insert newline after current line
 nmap <silent> <cr> o<Esc>
 " insert newline before current line
