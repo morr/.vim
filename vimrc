@@ -116,6 +116,31 @@ function! AgSearch()
   silent execute ':Ag --ignore-dir={'.g:ag_search_ignore.'} '.l:search_phrase
 endfunction
 
+"-------------------------------------------------------------------------------
+" vim-rails
+"
+" example projections: https://gist.github.com/henrik/5676109
+"-------------------------------------------------------------------------------
+
+nmap <F4> :A<CR>
+nmap <Leader><F4> :AV<CR>
+
+let g:rails_projections = {
+\   'app/admin/*.rb': {
+\     'alternate': 'spec/controllers/admin/{}_controller_spec.rb'
+\   },
+\   'spec/controllers/admin/*_controller_spec.rb': {
+\     'alternate': 'app/admin/{}.rb'
+\   },
+\ }
+
+
+"-------------------------------------------------------------------------------
+" syntastic
+"-------------------------------------------------------------------------------
+
+let g:syntastic_ruby_mri_exec = 'ruby2.2.2'
+
 "-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
