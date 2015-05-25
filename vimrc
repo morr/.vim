@@ -479,7 +479,6 @@ au BufNewFile,BufRead *.slim set filetype=slim
 au BufNewFile,BufRead *.json set filetype=json
 
 "au BufNewFile,BufRead *.rb set makeprg=ruby\ -c\ %
-au BufRead,BufNewFile *_spec.rb set filetype=rspec
 au BufNewFile,BufRead *.ass,*.ssa set filetype=ssa
 "-----------------------------------------------------------------------------
 " omni completion
