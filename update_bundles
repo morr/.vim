@@ -28,6 +28,7 @@ git_bundles = %w[
   vim-scripts/grep.vim
   sjbach/lusty
   rking/ag.vim
+  kshenoy/vim-signature
 ]
 #vim-scripts/vimgrep.vim
 #majutsushi/tagbar
