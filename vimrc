@@ -31,6 +31,13 @@ let g:syntastic_slim_checkers=['slimrb']
 let g:syntastic_json_checkers=['jsonlint'] " npm install -g jsonlint
 let g:syntastic_sass_checkers=[]
 let g:vim_json_syntax_conceal = 0
+let g:syntastic_ruby_mri_exec = 'ruby2.2.2'
+let g:syntastic_ruby_mri_quiet_messages = {
+\ 'regex': [
+\   '\m`&'' interpreted as argument prefix',
+\   '\m`*'' interpreted as argument prefix'
+\ ] }
+"\   '\m^shadowing outer local variable',
 "let g:syntastic_enable_signs=1
 "let g:syntastic_auto_loc_list=1
 
@@ -133,13 +140,6 @@ let g:rails_projections = {
 \     'alternate': 'app/admin/{}.rb'
 \   },
 \ }
-
-
-"-------------------------------------------------------------------------------
-" syntastic
-"-------------------------------------------------------------------------------
-
-let g:syntastic_ruby_mri_exec = 'ruby2.2.2'
 
 "-----------------------------------------------------------------------------
 " options
@@ -299,8 +299,8 @@ cmap <s-insert>   <c-r>+
 exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 
-imap <s-insert>   <c-v>
-vmap <s-insert>   <c-v>
+"imap <s-insert> <c-v>
+"vmap <s-insert> <c-v>
 
 nmap <a-v> <c-v>
 vmap <a-v> <c-v>
@@ -417,14 +417,18 @@ else
   map ,v :vsp $MYVIMRC<CR>
   map ,V :source $MYVIMRC<CR>
 end
-"  'Control + \' - Open a new tab and tag into the function/variable currently under cursor
+
 imap {<cr> {<cr>}<Esc>O
 imap <% <%  %><left><left><left>
 imap <%= <%= %><left><left><left>
 
+" 'Control + \' - Open a new tab and tag into the function/variable currently under cursor
 map <c-\> :tab split<cr>:exec("tag ".expand("<cword>"))<cr>
 " NERDCommenter
 map ,<space> <plug>NERDCommenterToggle
+
+" чтобы не копировать выделенный текст в дефолтный регистр при вставке
+vnoremap p "_dp
 "-----------------------------------------------------------------------------
 " menu
 "-----------------------------------------------------------------------------
@@ -531,30 +535,31 @@ function! BackupDir()
 endfunction
 
 function! InsertTabWordWrapper()
- let col = col('.') - 1
- if !col || getline('.')[col - 1] !~ '\k'
-   return "\<tab>"
- else
-   return "\<c-p>"
- endif
+  let col = col('.') - 1
+  if !col || getline('.')[col - 1] !~ '\k'
+    return "\<tab>"
+  else
+    return "\<c-p>"
+  endif
 endfunction
 
 function! InsertTabLineWrapper()
- let col = col('.') - 1
- if !col || getline('.')[col - 1] !~ '\k'
-   return "\<tab>"
- else
-   return "\<c-x>\<c-l>"
- endif
+  let col = col('.') - 1
+  if !col || getline('.')[col - 1] !~ '\k'
+    return "\<tab>"
+  else
+    return "\<c-x>\<c-l>"
+  endif
 endfunction
 
 "visual search mappings
 function! s:VSetSearch()
-    let temp = @@
-    norm! gvy
-    let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-    let @@ = temp
+  let temp = @@
+  norm! gvy
+  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+  let @@ = temp
 endfunction
+
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
@@ -562,12 +567,12 @@ vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 "dont do it when writing a commit log entry
 autocmd BufReadPost * call SetCursorPosition()
 function! SetCursorPosition()
-    if &filetype !~ 'commit\c'
-        if line("'\"") > 0 && line("'\"") <= line("$")
-            exe "normal! g`\""
-            normal! zz
-        endif
-    end
+  if &filetype !~ 'commit\c'
+    if line("'\"") > 0 && line("'\"") <= line("$")
+      exe "normal! g`\""
+      normal! zz
+    endif
+  end
 endfunction
 
 "-----------------------------------------------------------------------------
