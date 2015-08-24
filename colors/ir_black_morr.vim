@@ -182,6 +182,8 @@ hi link rubyGlobalVariable    Identifier
 hi link rubyClassVariable     Identifier
 hi link rubyConstant          Type
 
+hi link rubyParens             Special
+
 
 " Special for Java
 " hi link javaClassDecl    Type

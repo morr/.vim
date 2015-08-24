@@ -140,7 +140,6 @@ let g:rails_projections = {
 \     'alternate': 'app/admin/{}.rb'
 \   },
 \ }
-
 "-----------------------------------------------------------------------------
 " options
 "-----------------------------------------------------------------------------
@@ -461,6 +460,9 @@ anoremenu &File.&Spell.&Off :setlocal nospell spelllang=<cr>
 "-----------------------------------------------------------------------------
 " autocommands
 "-----------------------------------------------------------------------------
+" syntax highlight fix for brackets
+au BufNewFile,BufRead *.rb syn match rubyParens "[()\[\]{}]"
+
 " backups
 autocmd! bufwritepre * call BackupDir()
 " reload vimrc
