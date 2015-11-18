@@ -133,8 +133,15 @@ let g:rails_projections = {
 \     'alternate': 'app/admin/{}.rb'
 \   },
 \ }
+
 "-----------------------------------------------------------------------------
-" options
+" editing
+"-----------------------------------------------------------------------------
+set cpoptions+=$
+set colorcolumn=81
+
+"-----------------------------------------------------------------------------
+" other options
 "-----------------------------------------------------------------------------
 set nocompatible
 set backup
@@ -227,7 +234,6 @@ set cursorline
 "set showmode
 set noshowmode
 set noerrorbells
-set cpoptions+=$
 "set nocp " option for cppomnicomplete
 set list
 set listchars=tab:>·,trail:·,precedes:#,extends:#,nbsp:·

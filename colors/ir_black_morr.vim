@@ -133,6 +133,8 @@ hi Special          guifg=#E18964     guibg=NONE        gui=NONE      ctermfg=wh
 hi Delimiter        guifg=#DCDCCC     guibg=NONE        gui=NONE      ctermfg=cyan        ctermbg=NONE        cterm=NONE
 hi Operator         guifg=white       guibg=NONE        gui=NONE      ctermfg=white       ctermbg=NONE        cterm=NONE
 
+hi ColorColumn      guifg=NONE        guibg=#33333d     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
+
 hi link Character       Constant
 hi link Boolean         Constant
 hi link Float           Number
