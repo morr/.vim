@@ -207,6 +207,7 @@ endif
 " strings numeration
 set number " always show line numbers
 set guioptions-=T
+set guioptions+=c " disable some gui popups
 set ch=1
 " set noguipty
 set nostartofline
