@@ -53,12 +53,17 @@ let g:airline_powerline_fonts = 1
 set laststatus=2
 
 "-----------------------------------------------------------------------------
+" buffergator
+"-----------------------------------------------------------------------------
+let g:buffergator_suppress_keymaps = 1
+nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
+"-----------------------------------------------------------------------------
 " Command-T
 "-----------------------------------------------------------------------------
 let g:CommandTMatchWindowReverse = 0
 let g:CommandTMaxHeight = 17
 let g:CommandTMaxFiles = 25000
-let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/system/**,public/images/**,tmp/cache/**,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**"
+let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/system/**,public/images/**,tmp/cache/**,tmp/miniprofiler/**,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**"
 
 nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>

@@ -28,6 +28,8 @@ git_bundles = %w[
   sjbach/lusty
   rking/ag.vim
   mhinz/vim-hugefile
+  gaogao1030/vim-slimbars
+  jeetsukumaran/vim-buffergator
 ]
 #vim-scripts/vimgrep.vim
 #majutsushi/tagbar
