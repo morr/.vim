@@ -328,6 +328,8 @@ cmap <c-j> <down>
 nmap h <left>
 vmap h <left>
 imap <c-h> <left>
+imap <c-b> <left>
+imap <c-f> <righT>
 cmap <c-h> <left>
 " right
 nmap l <right>
