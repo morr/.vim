@@ -107,6 +107,13 @@ nmap <f3> :NERDTreeToggle<cr>
 let NERDSpaceDelims = 1
 
 "-----------------------------------------------------------------------------
+" EasyMotion
+"-----------------------------------------------------------------------------
+let g:EasyMotion_enter_jump_first = 1
+map ; <Plug>(easymotion-s)
+"map <c-;> <Plug>(easymotion-repeat)
+
+"-----------------------------------------------------------------------------
 " Ag
 "-----------------------------------------------------------------------------
 let g:ag_search_ignore = 'log,public,tmp,spec/vcr_cassettes,vendor/'
@@ -429,7 +436,7 @@ imap <% <%  %><left><left><left>
 imap <%= <%= %><left><left><left>
 
 " 'Control + \' - Open a new tab and tag into the function/variable currently under cursor
-map <c-\> :tab split<cr>:exec("tag ".expand("<cword>"))<cr>
+"map <c-\> :tab split<cr>:exec("tag ".expand("<cword>"))<cr>
 " NERDCommenter
 map ,<space> <plug>NERDCommenterToggle
 
@@ -490,6 +497,7 @@ au BufRead,BufNewFile *.scss set filetype=scss
 au BufNewFile,BufRead *.json set filetype=javascript
 au BufNewFile,BufRead *.slim set filetype=slim
 au BufNewFile,BufRead *.json set filetype=json
+au BufNewFile,BufRead *.jade.erb set filetype=pug
 
 "au BufNewFile,BufRead *.rb set makeprg=ruby\ -c\ %
 au BufNewFile,BufRead *.ass,*.ssa set filetype=ssa
