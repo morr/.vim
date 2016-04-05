@@ -32,7 +32,6 @@ git_bundles = %w[
   digitaltoad/vim-pug
   airblade/vim-gitgutter
   easymotion/vim-easymotion
-  Valloric/YouCompleteMe
 ]
 #vim-scripts/vimgrep.vim
 #majutsushi/tagbar
