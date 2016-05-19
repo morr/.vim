@@ -31,15 +31,16 @@ let g:syntastic_slim_checkers=['slimrb']
 let g:syntastic_json_checkers=['jsonlint'] " npm install -g jsonlint
 let g:syntastic_sass_checkers=[]
 let g:vim_json_syntax_conceal = 0
-let g:syntastic_ruby_mri_exec = 'ruby2.2.2'
-let g:syntastic_ruby_mri_quiet_messages = {
-\ 'regex': [
-\   '\m`&'' interpreted as argument prefix',
-\   '\m`*'' interpreted as argument prefix'
-\ ] }
+" let g:syntastic_ruby_mri_exec = 'ruby2.3.1'
+" let g:syntastic_ruby_mri_quiet_messages = {
+" \ 'regex': [
+" \   '\m`&'' interpreted as argument prefix',
+" \   '\m`*'' interpreted as argument prefix'
+" \ ] }
 "\   '\m^shadowing outer local variable',
 "let g:syntastic_enable_signs=1
 "let g:syntastic_auto_loc_list=1
+nnoremap <silent> ,r :SyntasticCheck ruby rubocop<CR>
 
 "-----------------------------------------------------------------------------
 " matchit
