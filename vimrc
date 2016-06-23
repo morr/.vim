@@ -134,7 +134,6 @@ endfunction
 "
 " example projections: https://gist.github.com/henrik/5676109
 "-------------------------------------------------------------------------------
-
 nmap <F4> :A<CR>
 nmap <Leader><F4> :AV<CR>
 
@@ -145,6 +144,15 @@ let g:rails_projections = {
 \   'spec/controllers/admin/*_controller_spec.rb': {
 \     'alternate': 'app/admin/{}.rb'
 \   },
+\   'config/locales/*ru.yml': {
+\     'alternate': 'config/locales/{}en.yml'
+\   },
+\   'config/locales/*en.yml': {
+\     'alternate': 'config/locales/{}zh-CN.yml'
+\   },
+\   'config/locales/*zh-CN.yml': {
+\     'alternate': 'config/locales/{}ru.yml'
+\   }
 \ }
 
 "-----------------------------------------------------------------------------
@@ -152,6 +160,8 @@ let g:rails_projections = {
 "-----------------------------------------------------------------------------
 set cpoptions+=$
 set colorcolumn=81
+" do not highlight after 200 column
+set synmaxcol=200
 
 "-----------------------------------------------------------------------------
 " other options
@@ -477,6 +487,10 @@ anoremenu &File.&Spell.&Off :setlocal nospell spelllang=<cr>
 "-----------------------------------------------------------------------------
 " syntax highlight fix for brackets
 au BufNewFile,BufRead *.rb syn match rubyParens "[()\[\]{}]"
+au BufNewFile,BufRead *.json syn match rubyParens "[()\[\]{}]"
+au BufNewFile,BufRead *.js syn match rubyParens "[()\[\]{}]"
+au BufNewFile,BufRead *.coffee syn match rubyParens "[()\[\]{}]"
+au BufNewFile,BufRead *.jbuilder syn match rubyParens "[()\[\]{}]"
 
 " backups
 autocmd! bufwritepre * call BackupDir()
