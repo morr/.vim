@@ -32,21 +32,8 @@ git_bundles = %w[
   digitaltoad/vim-pug
   airblade/vim-gitgutter
   easymotion/vim-easymotion
+  flazz/vim-colorschemes
 ]
-#vim-scripts/vimgrep.vim
-#majutsushi/tagbar
-#gregsexton/gitv
-#timcharper/textile.vim
-#tpope/vim-cucumber
-#tpope/vim-git
-#tpope/vim-markdown
-#tpope/vim-repeat
-#tpope/vim-vividchalk
-#tsaleh/vim-align
-#tsaleh/vim-shoulda
-#tsaleh/vim-supertab
-#tsaleh/vim-tcomment
-#jrhorn424/vim-multiple-cursors
 
 git_keep = []
 
