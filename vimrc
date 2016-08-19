@@ -129,6 +129,7 @@ function! AgSearch()
   silent execute ':Ag --ignore-dir={'.g:ag_search_ignore.'} '.l:search_phrase
 endfunction
 
+
 "-------------------------------------------------------------------------------
 " vim-rails
 "
@@ -154,6 +155,15 @@ let g:rails_projections = {
 \     'alternate': 'config/locales/{}ru.yml'
 \   }
 \ }
+
+"-----------------------------------------------------------------------------
+" colorschemes
+"-----------------------------------------------------------------------------
+nmap <f8> :colors ir_black_morr<cr>
+nmap <f9> :colors papercolor<cr>:set background=dark<cr>
+nmap <f10> :colors papercolor<cr>:set background=light<cr>
+nmap <f11> :colors solarized<cr>:set background=dark<cr>
+nmap <f12> :colors solarized<cr>:set background=light<cr>
 
 "-----------------------------------------------------------------------------
 " editing
