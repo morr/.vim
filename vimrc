@@ -26,9 +26,10 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 "-----------------------------------------------------------------------------
 "let g:syntastic_ruby_checkers=['mri'] ", 'rubylint', 'rubocop'
 "let g:syntastic_ruby_mri_args='-T1 -c'
-let g:syntastic_coffee_checkers=['coffee'] ", 'coffeelint'
-let g:syntastic_slim_checkers=[]
 let g:syntastic_json_checkers=['jsonlint'] " npm install -g jsonlint
+let g:syntastic_coffee_checkers=[] ", 'coffeelint'
+let g:syntastic_slim_checkers=[]
+let g:syntastic_ruby_checkers=[]
 let g:syntastic_sass_checkers=[]
 let g:vim_json_syntax_conceal = 0
 " let g:syntastic_ruby_mri_exec = 'ruby2.3.1'
