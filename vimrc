@@ -140,6 +140,9 @@ nmap <F4> :A<CR>
 nmap <Leader><F4> :AV<CR>
 
 let g:rails_projections = {
+\   'app/*.rb': {
+\     'alternate': 'spec/{}_spec.rb'
+\   },
 \   'app/admin/*.rb': {
 \     'alternate': 'spec/controllers/admin/{}_controller_spec.rb'
 \   },
@@ -160,6 +163,10 @@ let g:rails_projections = {
 "-----------------------------------------------------------------------------
 " colorschemes
 "-----------------------------------------------------------------------------
+map <F7> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>"
+
 nmap <f8> :colors ir_black_morr<cr>
 nmap <f9> :colors papercolor<cr>:set background=dark<cr>
 nmap <f10> :colors papercolor<cr>:set background=light<cr>
@@ -427,7 +434,7 @@ vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
 " Trailing Spaces
 nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
 
-nmap gs <c-w><c-v><c-w>l:A<cr>
+nmap gs :AV<cr>
 " Git
 nnoremap <f5> :Gcommit<cr>
 inoremap <f5> <c-O>:Gcommit<cr>
