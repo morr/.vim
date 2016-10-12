@@ -230,6 +230,8 @@ set smartcase     " ignore case if search pattern is all lowercase,
                   "    case-sensitive otherwise
 set smarttab      " insert tabs on the start of a line according to
 set noswapfile
+" split
+set splitright    " to open slits with 'gs' in right split
 " gui
 syntax on
 set t_Co=256
@@ -453,10 +455,10 @@ vnoremap <f6> <esc>:Gdiff<cr>
 " ruby debugger
 " vimrc edit
 if exists('$MYGVIMRC')
-  map ,v :vsp $MYGVIMRC<CR>
+  map ,v :e $MYGVIMRC<CR>
   map ,V :source $MYGVIMRC<CR>
 else
-  map ,v :vsp $MYVIMRC<CR>
+  map ,v :e $MYVIMRC<CR>
   map ,V :source $MYVIMRC<CR>
 end
 
