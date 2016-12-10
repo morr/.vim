@@ -33,6 +33,7 @@ git_bundles = %w[
   airblade/vim-gitgutter
   easymotion/vim-easymotion
   flazz/vim-colorschemes
+  int3/vim-extradite
 ]
 
 git_keep = []
