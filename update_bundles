@@ -34,6 +34,7 @@ git_bundles = %w[
   easymotion/vim-easymotion
   flazz/vim-colorschemes
   int3/vim-extradite
+  posva/vim-vue
 ]
 
 git_keep = []
