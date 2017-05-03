@@ -65,7 +65,7 @@ nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 let g:CommandTMatchWindowReverse = 0
 let g:CommandTMaxHeight = 17
 let g:CommandTMaxFiles = 25000
-let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/uploads/**,public/system/**,public/images/**,tmp/cache/**,tmp/miniprofiler/**,public/assets/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**"
+let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/assets/**,public/uploads/**,public/packs/**,public/system/**,public/images/**,tmp/cache/**,tmp/miniprofiler/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**,node_modules/**"
 
 nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
@@ -118,7 +118,7 @@ map ; <Plug>(easymotion-s)
 "-----------------------------------------------------------------------------
 " Ag
 "-----------------------------------------------------------------------------
-let g:ag_search_ignore = 'log,public,tmp,spec/vcr_cassettes,vendor/'
+let g:ag_search_ignore = 'log,public,tmp,spec/vcr_cassettes,vendor/,node_modules'
 let g:ag_prg="ag --nogroup --nocolor --column "
 let g:ag_qhandler="copen 12"
 map <Leader>/ <esc>:call AgSearch()<cr>
