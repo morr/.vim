@@ -82,13 +82,50 @@ map ; <Plug>(easymotion-s)
 let g:ag_search_ignore = 'log,public,tmp,spec/vcr_cassettes,node_modules'
 let g:ag_prg="ag --nogroup --nocolor --column "
 let g:ag_qhandler="copen 12"
-map <Leader>/ <esc>:call AgSearch()<cr>
+" map <Leader>/ <esc>:call AgSearch()<cr>
 
-function! AgSearch()
-  let l:search_phrase=input('Ag ')
+" function! AgSearch()
+  " let l:search_phrase=input('Ag ')
+  " redraw
+  " echo "Ack Searching..."
+  " silent execute ':Ag --ignore-dir={'.g:ag_search_ignore.'} '.l:search_phrase
+" endfunction
+
+map <Leader>/ :call <SID>MyLAg()<CR>
+
+" `!` is not allowed in function name
+function! s:MyLAg()
+  let l:search_phrase = input(':LAg! ')
   redraw
-  echo "Ack Searching..."
-  silent execute ':Ag --ignore-dir={'.g:ag_search_ignore.'} '.l:search_phrase
+  echo 'Searching...'
+
+  " don't use `silent` - or else no message
+  " will be shown when no matches are found
+  "
+  " https://github.com/mileszs/ack.vim/issues/5
+  " https://stackoverflow.com/a/15403852/3632318
+  " https://stackoverflow.com/questions/5669194
+  " :help escape()
+  " :help shellescape()
+  "
+  " WHY SUCH A COMPLICATED COMBINATION?
+  "
+  " for `LAg!` to work we need to:
+  "
+  " - not to escape `!` at all
+  " - escape `%#` twice
+  " - escape other special characters (slashes, etc.) once
+  "
+  " - `shellescape({string})`
+  "   escapes all special characters once (excluding `!%#`)
+  " - `shellescape({string}, 1)`
+  "   escapes all special characters once (including `!%#`)
+  " - `escape({string}, {chars})`
+  "   escapes only the characters it's told to escape
+  "
+  " => escape all special characters with `shellescape` once
+  "   (excluding `!%#`) and escape `%#` with `escape` twice
+  exec ':LAg! ' . escape(escape(shellescape(l:search_phrase), '%#'), '%#')
 endfunction
 
 "-----------------------------------------------------------------------------
