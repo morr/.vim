@@ -19,6 +19,7 @@ git_bundles = %w[
   sstephenson/eco
   tpope/vim-endwise
   tpope/vim-fugitive
+  tpope/vim-rhubarb
   tpope/vim-haml
   tpope/vim-rails
   tpope/vim-surround
@@ -54,7 +55,6 @@ git_bundles.each do |plugin|
 
   puts "  Unpacking #{url} into #{dir}"
   %x{git clone #{url} #{dir}}
-  FileUtils.rm_rf File.join(dir, ".git")
 end
 
 puts "compiling command-t..."
