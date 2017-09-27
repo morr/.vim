@@ -204,11 +204,11 @@ anoremenu &File.&Spell.&Off :setlocal nospell spelllang=<cr>
 " autocommands
 "-----------------------------------------------------------------------------
 " syntax highlight fix for brackets
-au BufNewFile,BufRead *.rb syn match rubyParens "[()\[\]{}]"
-au BufNewFile,BufRead *.json syn match rubyParens "[()\[\]{}]"
-au BufNewFile,BufRead *.js syn match rubyParens "[()\[\]{}]"
-au BufNewFile,BufRead *.coffee syn match rubyParens "[()\[\]{}]"
-au BufNewFile,BufRead *.jbuilder syn match rubyParens "[()\[\]{}]"
+" au BufNewFile,BufRead *.rb syn match rubyParens "[()\[\]{}]"
+" au BufNewFile,BufRead *.json syn match rubyParens "[()\[\]{}]"
+" au BufNewFile,BufRead *.js syn match rubyParens "[()\[\]{}]"
+" au BufNewFile,BufRead *.coffee syn match rubyParens "[()\[\]{}]"
+" au BufNewFile,BufRead *.jbuilder syn match rubyParens "[()\[\]{}]"
 
 " backups
 autocmd! bufwritepre * call BackupDir()

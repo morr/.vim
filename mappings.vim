@@ -173,8 +173,7 @@ nmap ,cd2 :call <SID>InstallColor("colors papercolor\\nset background=dark")<cr>
 nmap ,cd3 :call <SID>InstallColor("colors one\\nset background=dark\\nlet g:airline_theme='one'")<cr>
 nmap ,cd4 :call <SID>InstallColor("colors ir_black_morr")<cr>
 nmap ,cd5 :call <SID>InstallColor("colors vim-material\\nlet g:airline_theme='material'")<cr>
-nmap ,cd6 :call <SID>InstallColor("colors material\\nlet g:airline_theme='material'")<cr>
-nmap ,cd7 :call <SID>InstallColor("colors spring-night\\nlet g:airline_theme='spring_night'")<cr>
+nmap ,cd6 :call <SID>InstallColor("colors spring-night\\nlet g:airline_theme='spring_night'")<cr>
 
 nmap ,cl1 :call <SID>InstallColor("colors solarized\\nset background=light")<cr>
 nmap ,cl2 :call <SID>InstallColor("colors papercolor\\nset background=light")<cr>
@@ -194,6 +193,7 @@ nmap ,c13 :call <SID>InstallColor("colors seagull")<cr>
 nmap ,c14 :call <SID>InstallColor("colors stormpetrel")<cr>
 
 function! s:InstallColor(cmd)
+  echo split(a:cmd, "\\")[0]
   silent exe "!echo \"".a:cmd."\" > $HOME/.vim/colorscheme.vim"
   source $HOME/.vim/colorscheme.vim
 endfunction

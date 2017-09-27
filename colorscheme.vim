@@ -1,3 +1,2 @@
-colors one
-set background=dark
-let g:airline_theme='one'
+colors spring-night
+let g:airline_theme='spring_night'
