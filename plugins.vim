@@ -26,7 +26,7 @@ nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 let g:CommandTMatchWindowReverse = 0
 let g:CommandTMaxHeight = 17
 let g:CommandTMaxFiles = 25000
-let g:CommandTWildIgnore = &wildignore."*.o,*.obj,.git,.svn,*.log,public/assets/**,public/uploads/**,public/packs/**,public/system/**,public/images/**,tmp/cache/**,tmp/miniprofiler/**,tmp/sass-cache/**,tmp/pages/**,tmp/cache/**,test/pages/**,spec/pages/**,node_modules/**"
+let g:CommandTWildIgnore = &wildignore.".git,log,tmp,node_modules,*/public/assets,*/public/uploads,*/public/packs,*/public/packs-test,*/public/system,*/public/images,*/spec/vcr_cassettes"
 
 nmap <silent> <leader>t :CommandT<cr>
 nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
@@ -135,9 +135,13 @@ endfunction
 "let g:syntastic_ruby_mri_args='-T1 -c'
 let g:syntastic_json_checkers=['jsonlint', 'jslint'] " npm install -g jsonlint
 let g:syntastic_coffee_checkers=['coffeelint']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exe = 'npm run lint --'
+
 let g:syntastic_slim_checkers=[]
 let g:syntastic_ruby_checkers=[]
 let g:syntastic_sass_checkers=[]
+
 let g:vim_json_syntax_conceal = 0
 " let g:syntastic_ruby_mri_exec = 'ruby2.3.1'
 " let g:syntastic_ruby_mri_quiet_messages = {
@@ -179,19 +183,6 @@ let g:rails_projections = {
 \     'alternate': 'config/locales/{}ru.yml'
 \   }
 \ }
-
-"-----------------------------------------------------------------------------
-" colorschemes
-"-----------------------------------------------------------------------------
-map <F7> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>"
-
-nmap <f8> :colors ir_black_morr<cr>
-nmap <f9> :colors papercolor<cr>:set background=dark<cr>
-nmap <f10> :colors papercolor<cr>:set background=light<cr>
-nmap <f11> :colors solarized<cr>:set background=dark<cr>
-nmap <f12> :colors solarized<cr>:set background=light<cr>
 
 "-----------------------------------------------------------------------------
 " ruby code completion

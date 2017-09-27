@@ -2,6 +2,7 @@
 require 'fileutils'
 require 'open-uri'
 
+# http://vimcolors.com/
 git_bundles = %w[
   wincent/Command-T
   keithbsmiley/rspec.vim
@@ -36,6 +37,22 @@ git_bundles = %w[
   flazz/vim-colorschemes
   int3/vim-extradite
   posva/vim-vue
+  pangloss/vim-javascript
+  elixir-lang/vim-elixir
+] + %w[
+  davidklsn/vim-sialoquent
+  lu-ren/SerialExperimentsLain
+  mom0tomo/dotfiles
+  zcodes/vim-colors-basic
+  rhysd/vim-color-spring-night
+  dim13/smyck.vim
+  nightsense/carbonized
+  hzchirs/vim-material
+  aunsira/macvim-light
+  nightsense/seabird
+  hzchirs/vim-material
+  rakr/vim-one
+  tomasr/molokai
 ]
 
 git_keep = []
@@ -45,23 +62,28 @@ bundles_dir = File.join(File.dirname(__FILE__), 'bundle')
 FileUtils.mkdir bundles_dir unless File.exists?(bundles_dir)
 FileUtils.cd(bundles_dir)
 
-puts "trashing everything..."
-Dir['*'].each {|d| FileUtils.rm_rf d unless git_keep.include?(d) }
+# puts "trashing everything..."
+# Dir['*'].each {|d| FileUtils.rm_rf d unless git_keep.include?(d) }
 
 puts "fetching plugins..."
 git_bundles.each do |plugin|
   url = "git://github.com/#{plugin}"
   dir = url.split('/').last
 
-  puts "  Unpacking #{url} into #{dir}"
-  %x{git clone #{url} #{dir}}
+  if File.exists? dir
+    puts " Updating #{plugin}"
+    %x{cd #{dir} && git pull --rebase}
+  else
+    puts "  Cloning #{plugin} (#{url}) into #{dir}"
+    %x{git clone #{url} #{dir}}
+  end
 end
 
-puts "compiling command-t..."
+# puts "compiling command-t..."
 
-environment = 'ARCHFLAGS="-Wno-error=unused-command-line-argument-hard-error-in-future"'
-command_t_path = File.join 'Command-T/ruby/command-t'
-rvm_init_script = 'source $HOME/.zshrc && rvm use ruby-2.0.0-p645'
-command_t_build_script = 'bundle && ruby extconf.rb && make'
-# command_t_build_script = 'bundle && make clean && ruby extconf.rb && make'
-puts %x{zsh -c 'cd #{command_t_path} && #{rvm_init_script} && #{environment} #{command_t_build_script}'}
+# environment = 'ARCHFLAGS="-Wno-error=unused-command-line-argument-hard-error-in-future"'
+# command_t_path = File.join 'Command-T/ruby/command-t/ext/command-t'
+# rvm_init_script = 'source $HOME/.zshrc && rvm use ruby-2.0.0-p648'
+# command_t_build_script = 'bundle && ruby extconf.rb && make'
+# # command_t_build_script = 'bundle && make clean; ruby extconf.rb && make'
+# puts %x{zsh -c 'cd #{command_t_path} && #{rvm_init_script} && #{environment} #{command_t_build_script}'}

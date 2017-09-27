@@ -17,6 +17,21 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 set diffopt+=vertical
 
 "-----------------------------------------------------------------------------
+" plugins
+"-----------------------------------------------------------------------------
+source ~/.vim/plugins.vim
+
+"-----------------------------------------------------------------------------
+" mappings
+"-----------------------------------------------------------------------------
+source ~/.vim/mappings.vim
+
+"-----------------------------------------------------------------------------
+" colorscheme
+"-----------------------------------------------------------------------------
+source ~/.vim/colorscheme.vim
+
+"-----------------------------------------------------------------------------
 " editing
 "-----------------------------------------------------------------------------
 set cpoptions+=$
@@ -78,7 +93,7 @@ set splitright    " to open slits with 'gs' in right split
 " gui
 syntax on
 set t_Co=256
-colors ir_black_morr
+"colors ir_black_morr
 "colors sebocean
 if has("mac")
   "set guifont=Source\ Code\ Pro:h14
@@ -155,162 +170,7 @@ if has("unix")
   set runtimepath+=~/.vim/vim-ruby
   set runtimepath+=~/.vim/vim-rails
 endif
-"-----------------------------------------------------------------------------
-" hotkeys
-"-----------------------------------------------------------------------------
-vmap < <gv
-vmap > >gv
 
-" CTRL-X and SHIFT-Del are Cut
-vnoremap <C-X> "+x
-vnoremap <S-Del> "+x
-
-" CTRL-C and CTRL-Insert are Copy
-vnoremap <c-c> "+y
-vnoremap <c-insert> "+y
-
-" CTRL-V and SHIFT-Insert are Paste
-"map <c-v>     "+gP
-map <s-insert>    "+gP
-
-"cmap <c-v>    <c-r>+
-cmap <s-insert>   <c-r>+
-
-" Pasting blockwise and linewise selections is not possible in Insert and
-" Visual mode without the +virtualedit feature.  They are pasted as if they
-" were characterwise instead.
-" Uses the paste.vim autoload script.
-
-exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
-exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
-
-"imap <s-insert> <c-v>
-"vmap <s-insert> <c-v>
-
-nmap <a-v> <c-v>
-vmap <a-v> <c-v>
-"imap <c-v> <space><esc>"+gP<del>i
-" movement
-vmap <c-k> 10k
-nmap <c-k> 10k
-vmap <c-j> 10j
-nmap <c-j> 10j
-" up
-nmap k gk
-vmap k gk
-imap <c-k> <up>
-cmap <c-k> <up>
-" down
-nmap j gj
-vmap j gj
-imap <c-j> <down>
-cmap <c-j> <down>
-" left
-nmap h <left>
-vmap h <left>
-imap <c-h> <left>
-imap <c-b> <left>
-imap <c-f> <righT>
-cmap <c-h> <left>
-" right
-nmap l <right>
-vmap l <right>
-imap <c-l> <right>
-cmap <c-l> <right>
-" ESC button
-imap jj <Esc><right>
-" arrows
-nmap <down> gj
-nmap <up> gk
-vmap <down> gj
-vmap <up> gk
-imap <down> <c-O>gj
-imap <up> <c-O>gk
-" save position while page up/down
-nmap <pageup> <c-U><c-U>
-nmap <pagedown> <c-D><c-D>
-imap <pageup> <c-O><c-U><c-O><c-U>
-imap <pagedown> <c-O><c-D><c-O><c-D>
-vmap <pageup> <c-U><c-U>
-vmap <pagedown> <c-D><c-D>
-" CamelCase movement
-map <silent> w <plug>CamelCaseMotion_w
-map <silent> b <plug>CamelCaseMotion_b
-map <silent> e <plug>CamelCaseMotion_e
-" Bubble single lines
-nmap <c-up> [e
-nmap <c-down> ]e
-" Bubble multiple lines
-vmap <c-up> [egv
-vmap <c-down> ]egv
-" move with shift
-imap <s-k4> <esc>Bi
-vmap <s-k4> B
-nmap <s-k4> B
-imap <s-k6> <esc>Ea
-vmap <s-k6> E
-nmap <s-k6> E
-map <s-k8> <pageup>
-map <s-k2> <pagedown>
-" set ctrl+c to behave like esc
-inoremap <c-c> <esc>
-" insert newline after current line
-nmap <silent> <cr> o<Esc>
-" insert newline before current line
-nmap <silent> <s-cr> O<Esc>
-" turn off highlighting and clear messages
-nmap <silent> <space> :nohlsearch<Bar>:echo<cr>
-" autocomplete
-imap <tab> <c-r>=InsertTabWordWrapper()<cr>
-imap <c-tab> <c-r>=InsertTabLineWrapper()<cr>
-imap <s-tab> <c-n>
-" quit
-nmap <c-q> :q!<cr>
-vmap <c-q> <esc>:q!<cr>i
-imap <c-q> <esc>:q!<cr>i
-
-nmap <silent><a-S-left> :tabmove -1<cr>
-imap <silent><a-S-left> <c-O>:tabmove -1<cr>
-nmap <silent><a-S-right> :tabmove +1<cr>
-imap <silent><a-S-right> <c-O>:tabmove +1<cr>
-" search selected text
-vmap <silent>* <esc>:call VisualSearch('/')<cr>/<c-R>/<cr>
-vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
-" Trailing Spaces
-nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
-
-nmap gs :AV<cr>
-" Git
-nnoremap <f5> :Gcommit<cr>
-inoremap <f5> <c-O>:Gcommit<cr>
-vnoremap <f5> <esc>:Gcommit<cr>
-
-nnoremap <f6> :Gdiff<cr>
-inoremap <f6> <c-O>:Gdiff<cr>
-vnoremap <f6> <esc>:Gdiff<cr>
-" Tags
-"nnoremap <f10> :TagbarToggle<cr>
-"inoremap <f10> <c-O>:TagbarToggle<cr>
-"vnoremap <f10> <esc>:TagbarToggle<cr>
-"nnoremap <f12> :emenu Tags.<tab>
-"inoremap <f12> <c-O>:emenu Tags.<tab>
-"vnoremap <f12> <esc>:emenu Tags.<tab>
-" ruby debugger
-" vimrc edit
-
-map ,v :e $MYGVIMRC<CR>
-
-imap {<cr> {<cr>}<Esc>O
-imap <% <%  %><left><left><left>
-imap <%= <%= %><left><left><left>
-
-" 'Control + \' - Open a new tab and tag into the function/variable currently under cursor
-"map <c-\> :tab split<cr>:exec("tag ".expand("<cword>"))<cr>
-" NERDCommenter
-map ,<space> <plug>NERDCommenterToggle
-
-" чтобы не копировать выделенный текст в дефолтный регистр при вставке
-vnoremap p "_dp
 "-----------------------------------------------------------------------------
 " menu
 "-----------------------------------------------------------------------------
@@ -467,5 +327,3 @@ endfunction
 
 set completeopt-=preview
 set completeopt+=longest
-
-source ~/.vim/plugins.vim
