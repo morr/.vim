@@ -6,18 +6,18 @@ vmap > >gv
 
 " CTRL-X and SHIFT-Del are Cut
 vnoremap <C-X> "+x
-vnoremap <S-Del> "+x
+" vnoremap <S-Del> "+x
 
 " CTRL-C and CTRL-Insert are Copy
 vnoremap <c-c> "+y
-vnoremap <c-insert> "+y
+" vnoremap <c-insert> "+y
 
 " CTRL-V and SHIFT-Insert are Paste
 "map <c-v>     "+gP
-map <s-insert>    "+gP
+" map <s-insert>    "+gP
 
 "cmap <c-v>    <c-r>+
-cmap <s-insert>   <c-r>+
+" cmap <s-insert>   <c-r>+
 
 " Pasting blockwise and linewise selections is not possible in Insert and
 " Visual mode without the +virtualedit feature.  They are pasted as if they
@@ -30,8 +30,8 @@ exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 "imap <s-insert> <c-v>
 "vmap <s-insert> <c-v>
 
-nmap <a-v> <c-v>
-vmap <a-v> <c-v>
+" nmap <a-v> <c-v>
+" vmap <a-v> <c-v>
 "imap <c-v> <space><esc>"+gP<del>i
 " movement
 vmap <c-k> 10k
@@ -81,11 +81,11 @@ map <silent> w <plug>CamelCaseMotion_w
 map <silent> b <plug>CamelCaseMotion_b
 map <silent> e <plug>CamelCaseMotion_e
 " Bubble single lines
-nmap <c-up> [e
-nmap <c-down> ]e
+" nmap <c-up> [e
+" nmap <c-down> ]e
 " Bubble multiple lines
-vmap <c-up> [egv
-vmap <c-down> ]egv
+" vmap <c-up> [egv
+" vmap <c-down> ]egv
 " move with shift
 imap <s-k4> <esc>Bi
 vmap <s-k4> B
@@ -103,34 +103,11 @@ nmap <silent> <cr> o<Esc>
 nmap <silent> <s-cr> O<Esc>
 " turn off highlighting and clear messages
 nmap <silent> <space> :nohlsearch<Bar>:echo<cr>
-" autocomplete
-imap <tab> <c-r>=InsertTabWordWrapper()<cr>
-imap <c-tab> <c-r>=InsertTabLineWrapper()<cr>
-imap <s-tab> <c-n>
 " quit
 nmap <c-q> :q!<cr>
 vmap <c-q> <esc>:q!<cr>i
 imap <c-q> <esc>:q!<cr>i
 
-nmap <silent><a-S-left> :tabmove -1<cr>
-imap <silent><a-S-left> <c-O>:tabmove -1<cr>
-nmap <silent><a-S-right> :tabmove +1<cr>
-imap <silent><a-S-right> <c-O>:tabmove +1<cr>
-" search selected text
-vmap <silent>* <esc>:call VisualSearch('/')<cr>/<c-R>/<cr>
-vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
-" Trailing Spaces
-nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
-
-nmap gs :AV<cr>
-" Git
-nnoremap <f5> :Gcommit<cr>
-inoremap <f5> <c-O>:Gcommit<cr>
-vnoremap <f5> <esc>:Gcommit<cr>
-
-nnoremap <f6> :Gdiff<cr>
-inoremap <f6> <c-O>:Gdiff<cr>
-vnoremap <f6> <esc>:Gdiff<cr>
 " Tags
 "nnoremap <f10> :TagbarToggle<cr>
 "inoremap <f10> <c-O>:TagbarToggle<cr>
@@ -141,22 +118,98 @@ vnoremap <f6> <esc>:Gdiff<cr>
 " ruby debugger
 " vimrc edit
 
-map ,v :e ~/.vim/vimrc<CR>
 
-imap {<cr> {<cr>}<Esc>O
-imap <% <%  %><left><left><left>
-imap <%= <%= %><left><left><left>
+" imap {<cr> {<cr>}<Esc>O
+" imap <% <%  %><left><left><left>
+" imap <%= <%= %><left><left><left>
 
 " 'Control + \' - Open a new tab and tag into the function/variable currently under cursor
 "map <c-\> :tab split<cr>:exec("tag ".expand("<cword>"))<cr>
-" NERDCommenter
-map ,<space> <plug>NERDCommenterToggle
 
 " чтобы не копировать выделенный текст в дефолтный регистр при вставке
 vnoremap p "_dp
 
+nnoremap <f12> :bd<cr>
+
 "-----------------------------------------------------------------------------
-" colorschemes
+" open vim config
+"-----------------------------------------------------------------------------
+map ,v :e ~/.vim/vimrc<CR>
+
+"-----------------------------------------------------------------------------
+" autocomplete
+"-----------------------------------------------------------------------------
+" imap <tab> <c-r>=InsertTabWordWrapper()<cr>
+" imap <c-tab> <c-r>=InsertTabLineWrapper()<cr>
+" imap <s-tab> <c-n>
+
+" function! InsertTabWordWrapper()
+  " let col = col('.') - 1
+  " if !col || getline('.')[col - 1] !~ '\k'
+    " return "\<tab>"
+  " else
+    " return "\<c-p>"
+  " endif
+" endfunction
+
+" function! InsertTabLineWrapper()
+  " let col = col('.') - 1
+  " if !col || getline('.')[col - 1] !~ '\k'
+    " return "\<tab>"
+  " else
+    " return "\<c-x>\<c-l>"
+  " endif
+" endfunction
+
+"-----------------------------------------------------------------------------
+" VisualSearch
+" search selected text
+"-----------------------------------------------------------------------------
+" vmap <silent>* <esc>:call VisualSearch('/')<cr>/<c-R>/<cr>
+" vmap <silent># <esc>:call VisualSearch('?')<cr>?<c-R>/<cr>
+
+" function! VisualSearch(cmd)
+  " let l:old_reg=getreg('"')
+  " let l:old_regtype=getregtype('"')
+  " normal! gvy
+  " let @/='\V'.substitute(substitute(substitute(escape(@@, a:cmd.'\'), '^\_s\+', '\\s\\+', ''), '\_s\+$', '\\s\\*', ''), '\_s\+', '\\_s\\+', 'g')
+  " normal! gV
+  " call setreg('"', l:old_reg, l:old_regtype)
+" endfunction
+
+" vmap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
+" vmap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+
+" "visual search mappings
+" function! s:VSetSearch()
+  " let temp = @@
+  " norm! gvy
+  " let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+  " let @@ = temp
+" endfunction
+
+"-----------------------------------------------------------------------------
+" RemoveTrailingSpaces
+"-----------------------------------------------------------------------------
+nmap <silent>,t :call RemoveTrailingSpaces()<cr>:echo 'trailing spaces have been removed'<cr>
+
+function! RemoveTrailingSpaces()
+  normal! mzHmy
+  execute '%s/\t/  /ge'
+  execute '%s/\s\+$//ge'
+  normal! 'yzt`z
+endfunction
+
+"-----------------------------------------------------------------------------
+" tabmove
+"-----------------------------------------------------------------------------
+nmap <silent><a-S-left> :tabmove -1<cr>
+imap <silent><a-S-left> <c-O>:tabmove -1<cr>
+nmap <silent><a-S-right> :tabmove +1<cr>
+imap <silent><a-S-right> <c-O>:tabmove +1<cr>
+
+"-----------------------------------------------------------------------------
+" switch and remember colorschemes
 "-----------------------------------------------------------------------------
 map <F7> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"

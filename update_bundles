@@ -3,56 +3,62 @@ require 'fileutils'
 require 'open-uri'
 
 # http://vimcolors.com/
+# bling/vim-airline
 git_bundles = %w[
-  wincent/Command-T
-  keithbsmiley/rspec.vim
+  airblade/vim-gitgutter
   ap/vim-css-color
   bkad/CamelCaseMotion
-  bling/vim-airline
   briancollins/vim-jst
   cakebaker/scss-syntax.vim
+  digitaltoad/vim-pug
+  easymotion/vim-easymotion
+  elixir-lang/vim-elixir
   elzr/vim-json
+  ervandew/supertab
+  yssl/QFEnter
+  flazz/vim-colorschemes
+  henrik/vim-indexed-search
+  int3/vim-extradite
+  jeetsukumaran/vim-buffergator
   kchmck/vim-coffee-script
+  keithbsmiley/rspec.vim
+  mhinz/vim-hugefile
+  pangloss/vim-javascript
+  posva/vim-vue
+  rking/ag.vim
   scrooloose/nerdcommenter
   scrooloose/nerdtree
   scrooloose/syntastic
+  sjbach/lusty
   slim-template/vim-slim
   sstephenson/eco
+  tap349/ack.vim
   tpope/vim-endwise
   tpope/vim-fugitive
-  tpope/vim-rhubarb
   tpope/vim-haml
   tpope/vim-rails
+  tpope/vim-repeat
+  tpope/vim-rhubarb
   tpope/vim-surround
   tpope/vim-unimpaired
-  vim-ruby/vim-ruby
+  morr/vim-ruby
   vim-scripts/grep.vim
-  sjbach/lusty
-  rking/ag.vim
-  mhinz/vim-hugefile
-  jeetsukumaran/vim-buffergator
-  digitaltoad/vim-pug
-  airblade/vim-gitgutter
-  easymotion/vim-easymotion
-  flazz/vim-colorschemes
-  int3/vim-extradite
-  posva/vim-vue
-  pangloss/vim-javascript
-  elixir-lang/vim-elixir
+  wincent/Command-T
 ] + %w[
+  aunsira/macvim-light
   davidklsn/vim-sialoquent
+  dim13/smyck.vim
+  hzchirs/vim-material
+  hzchirs/vim-material
   lu-ren/SerialExperimentsLain
   mom0tomo/dotfiles
-  zcodes/vim-colors-basic
-  rhysd/vim-color-spring-night
-  dim13/smyck.vim
   nightsense/carbonized
-  hzchirs/vim-material
-  aunsira/macvim-light
   nightsense/seabird
-  hzchirs/vim-material
   rakr/vim-one
+  rhysd/vim-color-spring-night
   tomasr/molokai
+  zcodes/vim-colors-basic
+
 ]
 
 git_keep = []

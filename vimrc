@@ -17,18 +17,10 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 set diffopt+=vertical
 
 "-----------------------------------------------------------------------------
-" plugins
+" config files
 "-----------------------------------------------------------------------------
 source ~/.vim/plugins.vim
-
-"-----------------------------------------------------------------------------
-" mappings
-"-----------------------------------------------------------------------------
 source ~/.vim/mappings.vim
-
-"-----------------------------------------------------------------------------
-" colorscheme
-"-----------------------------------------------------------------------------
 source ~/.vim/colorscheme.vim
 
 "-----------------------------------------------------------------------------
@@ -212,19 +204,11 @@ anoremenu &File.&Spell.&Off :setlocal nospell spelllang=<cr>
 
 " backups
 autocmd! bufwritepre * call BackupDir()
-" reload vimrc
-if has("unix")
-  autocmd! bufwritepost ~/.vimrc source ~/.vimrc
-  autocmd! bufwritepost ~/.gvimrc source ~/.gvimrc
 
-  autocmd! bufwritepost ~/.vim/vimrc source ~/.vim/vimrc
-  autocmd! bufwritepost ~/.vim/gvimrc source ~/.vim/gvimrc
-else
-  autocmd! bufwritepost ~/vimfiles/gvimrc source ~/vimfiles/gvimrc
-  autocmd! bufwritepost ~/vimfiles/vimrc source ~/vimfiles/vimrc
-  autocmd! bufwritepost $VIM/_gvimrc source $VIM/_gvimrc
-  autocmd! bufwritepost $VIM/_vimrc source $VIM/_vimrc
-endif
+autocmd! bufwritepost ~/.vim/vimrc source ~/.vim/vimrc
+autocmd! bufwritepost ~/.vim/colorscheme.vim source ~/.vim/colorscheme.vim
+autocmd! bufwritepost ~/.vim/plugins.vim source ~/.vim/plugins.vim
+autocmd! bufwritepost ~/.vim/mappings.vim source ~/.vim/mappings.vim
 
 au BufRead,BufNewFile *.scss set filetype=scss
 au BufNewFile,BufRead *.json set filetype=javascript
@@ -234,36 +218,10 @@ au BufNewFile,BufRead *.jade.erb set filetype=pug
 
 "au BufNewFile,BufRead *.rb set makeprg=ruby\ -c\ %
 au BufNewFile,BufRead *.ass,*.ssa set filetype=ssa
-"-----------------------------------------------------------------------------
-" omni completion
-"-----------------------------------------------------------------------------
-autocmd FileType ruby set omnifunc=rubycomplete#Complete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=RjsComplete
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType c set omnifunc=ccomplete#Complete
+
 "-----------------------------------------------------------------------------
 " functions
 "-----------------------------------------------------------------------------
-function! VisualSearch(cmd)
-  let l:old_reg=getreg('"')
-  let l:old_regtype=getregtype('"')
-  normal! gvy
-  let @/='\V'.substitute(substitute(substitute(escape(@@, a:cmd.'\'), '^\_s\+', '\\s\\+', ''), '\_s\+$', '\\s\\*', ''), '\_s\+', '\\_s\\+', 'g')
-  normal! gV
-  call setreg('"', l:old_reg, l:old_regtype)
-endfunction
-
-function! RemoveTrailingSpaces()
-  normal! mzHmy
-  execute '%s/\t/  /ge'
-  execute '%s/\s\+$//ge'
-  normal! 'yzt`z
-endfunction
-
 function! BackupDir()
   if has("win32")
     let l:backupdir=$HOME.'\.backup\'.substitute(expand('%:p:h'), ':', '', '')
@@ -283,35 +241,6 @@ function! BackupDir()
     let &backupext=strftime('~%Y-%m-%d %H:%M:%S~')
   endif
 endfunction
-
-function! InsertTabWordWrapper()
-  let col = col('.') - 1
-  if !col || getline('.')[col - 1] !~ '\k'
-    return "\<tab>"
-  else
-    return "\<c-p>"
-  endif
-endfunction
-
-function! InsertTabLineWrapper()
-  let col = col('.') - 1
-  if !col || getline('.')[col - 1] !~ '\k'
-    return "\<tab>"
-  else
-    return "\<c-x>\<c-l>"
-  endif
-endfunction
-
-"visual search mappings
-function! s:VSetSearch()
-  let temp = @@
-  norm! gvy
-  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  let @@ = temp
-endfunction
-
-vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
-vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 "jump to last cursor position when opening a file
 "dont do it when writing a commit log entry

@@ -2,7 +2,7 @@
 
 ### Packages `ctags`, `the_silver_searcher`
 ```
-brew install ctags the_silver_searcher
+brew install ctags the_silver_searcher ripgrep
 ```
 
 ### Fonts
