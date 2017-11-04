@@ -1,22 +1,4 @@
 "-----------------------------------------------------------------------------
-" pathogen
-"-----------------------------------------------------------------------------
-filetype off
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
-filetype on
-
-"-----------------------------------------------------------------------------
-" fugitive
-"-----------------------------------------------------------------------------
-autocmd User fugitive
-  \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-  \   nnoremap <buffer> .. :edit %:h<CR> |
-  \ endif
-autocmd BufReadPost fugitive://* set bufhidden=delete
-set diffopt+=vertical
-
-"-----------------------------------------------------------------------------
 " config files
 "-----------------------------------------------------------------------------
 source ~/.vim/plugins.vim

@@ -1,34 +1,77 @@
+call plug#begin('~/.vim/plugged')
+
+Plug 'airblade/vim-gitgutter'
+Plug 'ap/vim-css-color'
+Plug 'bkad/CamelCaseMotion'
+Plug 'briancollins/vim-jst'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'digitaltoad/vim-pug'
+Plug 'elixir-lang/vim-elixir'
+Plug 'elzr/vim-json'
+Plug 'flazz/vim-colorschemes'
+Plug 'henrik/vim-indexed-search'
+Plug 'int3/vim-extradite'
+Plug 'kchmck/vim-coffee-script'
+Plug 'keithbsmiley/rspec.vim'
+Plug 'vim-scripts/matchit.zip'
+Plug 'mhinz/vim-hugefile'
+Plug 'pangloss/vim-javascript'
+Plug 'posva/vim-vue'
+Plug 'sjbach/lusty'
+Plug 'slim-template/vim-slim'
+Plug 'sstephenson/eco'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-haml'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'morr/vim-ruby'
+Plug 'vim-scripts/grep.vim'
+Plug 'wincent/Command-T'
+
 "-----------------------------------------------------------------------------
-" supertab
+" styles
+"-----------------------------------------------------------------------------
+
+Plug 'aunsira/macvim-light'
+Plug 'davidklsn/vim-sialoquent'
+Plug 'dim13/smyck.vim'
+Plug 'hzchirs/vim-material'
+Plug 'hzchirs/vim-material'
+Plug 'lu-ren/SerialExperimentsLain'
+Plug 'mom0tomo/dotfiles'
+Plug 'nightsense/carbonized'
+Plug 'nightsense/seabird'
+Plug 'rakr/vim-one'
+Plug 'rhysd/vim-color-spring-night'
+Plug 'tomasr/molokai'
+Plug 'zcodes/vim-colors-basic'
+
+"-----------------------------------------------------------------------------
+Plug 'tpope/vim-fugitive'
+"-----------------------------------------------------------------------------
+autocmd User fugitive
+  \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+  \   nnoremap <buffer> .. :edit %:h<CR> |
+  \ endif
+autocmd BufReadPost fugitive://* set bufhidden=delete
+set diffopt+=vertical
+
+" nnoremap <f5> :Gcommit<cr>
+" inoremap <f5> <c-O>:Gcommit<cr>
+" vnoremap <f5> <esc>:Gcommit<cr>
+
+nnoremap <f6> :Gdiff<cr>
+inoremap <f6> <c-O>:Gdiff<cr>
+vnoremap <f6> <esc>:Gdiff<cr>
+
+"-----------------------------------------------------------------------------
+Plug 'ervandew/supertab'
 "-----------------------------------------------------------------------------
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
 "-----------------------------------------------------------------------------
-" matchit
-"-----------------------------------------------------------------------------
-runtime macros/matchit.vim
-
-"-----------------------------------------------------------------------------
-" powerline
-"-----------------------------------------------------------------------------
-set laststatus=2
-let g:airline_powerline_fonts = 1
-
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#whitespace#enabled = 0
-
-let g:airline#extensions#tabline#enabled = 0
-" let g:airline#extensions#tabline#formatter = 'default'
-" let g:airline#extensions#tabline#formatter = 'unique_tail'
-" let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-" let g:airline#extensions#tabline#show_buffers = 0
-
-" disable airline integration with https://github.com/airblade/vim-gitgutter
-let g:airline#extensions#hunks#enabled = 0
-let g:airline#extensions#hunks#non_zero_only = 1
-
-"-----------------------------------------------------------------------------
-" buffergator
+Plug 'jeetsukumaran/vim-buffergator'
 "-----------------------------------------------------------------------------
 let g:buffergator_suppress_keymaps = 1
 nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
@@ -91,54 +134,24 @@ silent! unmap <leader>lj
 
 
 "-----------------------------------------------------------------------------
-" NerdTree
+Plug 'scrooloose/nerdtree'
 "-----------------------------------------------------------------------------
 map <silent> <leader>n :NERDTreeToggle<cr>
 map <silent> <leader>N :NERDTreeFind<cr>
 nmap <f2> :NERDTreeFind<cr>
 nmap <f3> :NERDTreeToggle<cr>
 
+"-----------------------------------------------------------------------------
+Plug 'scrooloose/nerdcommenter'
+"-----------------------------------------------------------------------------
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDDefaultAlign = 'left'
 
-"-----------------------------------------------------------------------------
-" NerdCommenter
-"-----------------------------------------------------------------------------
-let NERDSpaceDelims = 1
 map ,<space> <plug>NERDCommenterToggle
 
-
 "-----------------------------------------------------------------------------
-" fugitive
-"-----------------------------------------------------------------------------
-" nnoremap <f5> :Gcommit<cr>
-" inoremap <f5> <c-O>:Gcommit<cr>
-" vnoremap <f5> <esc>:Gcommit<cr>
-
-nnoremap <f6> :Gdiff<cr>
-inoremap <f6> <c-O>:Gdiff<cr>
-vnoremap <f6> <esc>:Gdiff<cr>
-
-
-"-----------------------------------------------------------------------------
-" EasyMotion
-"-----------------------------------------------------------------------------
-let g:EasyMotion_enter_jump_first = 1
-let g:EasyMotion_do_mapping = 0
-
-map ; <Plug>(easymotion-s)
-"map <c-;> <Plug>(easymotion-repeat)
-
-
-"-----------------------------------------------------------------------------
-" Ag
-"-----------------------------------------------------------------------------
-let g:ag_search_ignore = 'log,public,tmp,spec/vcr_cassettes,node_modules'
-let g:ag_prg="ag --nogroup --nocolor --column "
-let g:ag_qhandler="copen 12"
-" map <Leader>/ <esc>:call AgSearch()<cr>
-
-nmap <F5> :Ag! 
-"-----------------------------------------------------------------------------
-" syntastic
+Plug 'scrooloose/syntastic'
 "-----------------------------------------------------------------------------
 "let g:syntastic_ruby_checkers=['mri'] ", 'rubylint', 'rubocop'
 "let g:syntastic_ruby_mri_args='-T1 -c'
@@ -166,7 +179,7 @@ nnoremap <silent> ,R :w<cr>:silent !rubocop --auto-correct %<cr>:edit!<cr>
 
 
 "-------------------------------------------------------------------------------
-" vim-rails
+Plug 'tpope/vim-rails'
 "-------------------------------------------------------------------------------
 nmap <F4> :A<CR>
 nmap <Leader><F4> :AV<CR>
@@ -195,9 +208,7 @@ let g:rails_projections = {
 \ }
 
 "-------------------------------------------------------------------------------
-" ack.vim
-"
-" rg respects ./.gitignore and ~/.ignore files
+Plug 'tap349/ack.vim'
 "-------------------------------------------------------------------------------
 
 let g:ackprg = 'rg --fixed-strings --smart-case --vimgrep'
@@ -304,41 +315,12 @@ function! s:ShowWarningMessage(message)
 endfunction
 
 "-----------------------------------------------------------------------------
-" ruby code completion
-"-----------------------------------------------------------------------------
-" let g:rubycomplete_buffer_loading = 1
-" let g:rubycomplete_classes_in_global = 1
-" let g:rubycomplete_include_object = 1
-" let g:rubycomplete_include_objectspace = 1
-" let g:rubycomplete_rails = 1
-
-"-----------------------------------------------------------------------------
-" Matchit
-"-----------------------------------------------------------------------------
-"let b:match_words = '<:>,<tag>:</tag>'
-
-"-----------------------------------------------------------------------------
-" vim-repeat
+Plug 'tpope/vim-repeat'
 "-----------------------------------------------------------------------------
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
-"-----------------------------------------------------------------------------
-" SessionMgr
-"-----------------------------------------------------------------------------
-let g:SessionMgr_AutoManage = 0
-let g:SessionMgr_DefaultName = "last"
-
-"-----------------------------------------------------------------------------
-" Tlist settings
-"-----------------------------------------------------------------------------
-"let g:Tlist_Show_One_File = 1
-"let g:Tlist_GainFocus_On_ToggleOpen = 1
-"let g:Tlist_Use_Right_Window = 1
-"let g:Tlist_WinWidth = 45
-
 "-------------------------------------------------------------------------------
-" QFEnter
-"
+Plug 'yssl/QFEnter'
 " QFEnter respects `switchbuf` option! if selected file is opened
 " in another tab all mappings below just switch to that tab
 "-------------------------------------------------------------------------------
@@ -353,3 +335,27 @@ let g:qfenter_keymap.open_keep = ['<S-CR>']
 let g:qfenter_keymap.hopen = ['<C-s>']
 let g:qfenter_keymap.vopen = ['<C-v>']
 let g:qfenter_keymap.topen = ['<C-t>']"
+
+
+"-----------------------------------------------------------------------------
+Plug 'osyo-manga/vim-anzu'
+"-----------------------------------------------------------------------------
+nmap * <Plug>(anzu-star)
+nmap # <Plug>(anzu-sharp)
+nmap n <Plug>(anzu-mode-n)
+nmap N <Plug>(anzu-mode-N)
+
+"-----------------------------------------------------------------------------
+" Plug 'haya14busa/vim-asterisk'
+"-----------------------------------------------------------------------------
+" map *   <Plug>(asterisk-*)
+" map #   <Plug>(asterisk-#)
+" map g*  <Plug>(asterisk-g*)
+" map g#  <Plug>(asterisk-g#)
+" map z*  <Plug>(asterisk-z*)
+" map gz* <Plug>(asterisk-gz*)
+" map z#  <Plug>(asterisk-z#)
+" map gz# <Plug>(asterisk-gz#)
+
+" Initialize plugin system
+call plug#end()
