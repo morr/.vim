@@ -17,7 +17,6 @@ Plug 'vim-scripts/matchit.zip'
 Plug 'mhinz/vim-hugefile'
 Plug 'pangloss/vim-javascript'
 Plug 'posva/vim-vue'
-Plug 'sjbach/lusty'
 Plug 'slim-template/vim-slim'
 Plug 'sstephenson/eco'
 Plug 'tpope/vim-endwise'
@@ -27,7 +26,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'morr/vim-ruby'
 Plug 'vim-scripts/grep.vim'
-Plug 'wincent/Command-T'
 
 "-----------------------------------------------------------------------------
 " styles
@@ -77,7 +75,9 @@ let g:buffergator_suppress_keymaps = 1
 nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 
 "-----------------------------------------------------------------------------
-" Command-T
+Plug 'wincent/command-t', {
+  \   'do': 'cd ruby/command-t/ext/command-t && rbenv local system && ruby extconf.rb && make'
+  \ }
 "-----------------------------------------------------------------------------
 let g:CommandTMaxHeight = 17
 " let g:CommandTMaxFiles = 25000
