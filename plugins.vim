@@ -15,8 +15,6 @@ Plug 'kchmck/vim-coffee-script'
 Plug 'keithbsmiley/rspec.vim'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mhinz/vim-hugefile'
-Plug 'pangloss/vim-javascript'
-Plug 'posva/vim-vue'
 Plug 'slim-template/vim-slim'
 Plug 'sstephenson/eco'
 Plug 'tpope/vim-endwise'
@@ -26,6 +24,13 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'morr/vim-ruby'
 Plug 'vim-scripts/grep.vim'
+
+"-----------------------------------------------------------------------------
+" javascript
+"-----------------------------------------------------------------------------
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'posva/vim-vue'
 
 "-----------------------------------------------------------------------------
 " styles
@@ -150,33 +155,42 @@ let g:NERDDefaultAlign = 'left'
 
 map ,<space> <plug>NERDCommenterToggle
 
+
 "-----------------------------------------------------------------------------
-Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 "-----------------------------------------------------------------------------
-"let g:syntastic_ruby_checkers=['mri'] ", 'rubylint', 'rubocop'
-"let g:syntastic_ruby_mri_args='-T1 -c'
-let g:syntastic_json_checkers=['jsonlint', 'jslint'] " npm install -g jsonlint
-let g:syntastic_coffee_checkers=['coffeelint']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exe = 'npm run lint --'
 
-let g:syntastic_slim_checkers=[]
-let g:syntastic_ruby_checkers=[]
-let g:syntastic_sass_checkers=[]
+" only linters from g:ale_linters are enabled
+let g:ale_linters_explicit = 1
 
-let g:vim_json_syntax_conceal = 0
-" let g:syntastic_ruby_mri_exec = 'ruby2.3.1'
-" let g:syntastic_ruby_mri_quiet_messages = {
-" \ 'regex': [
-" \   '\m`&'' interpreted as argument prefix',
-" \   '\m`*'' interpreted as argument prefix'
-" \ ] }
-"\   '\m^shadowing outer local variable',
-"let g:syntastic_enable_signs=1
-"let g:syntastic_auto_loc_list=1
-nnoremap <silent> ,r :SyntasticCheck ruby rubocop<CR>
-nnoremap <silent> ,R :w<cr>:silent !rubocop --auto-correct %<cr>:edit!<cr>
+" hi ALEWarningSign guibg=#FDE1FD guifg=#0512FB gui=bold
+" hi ALEErrorSign guibg=#F4DBDC guifg=#662529 gui=bold
 
+" location list is populated by default -
+" this might overwrite the contents of already
+" opened location list (e.g., search results)
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
+
+let g:ale_sign_warning = 'W>'
+let g:ale_sign_error = 'E>'
+
+" https://github.com/w0rp/ale/issues/505
+" to disable g:ale_lint_on_enter, it's necessary
+" to disable g:ale_lint_on_filetype_changed as well
+"let g:ale_lint_on_enter = 0
+let g:ale_lint_on_filetype_changed = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+
+let g:ale_linters = {
+\   'elixir': ['credo'],
+\   'javascript': ['eslint', 'flow'],
+\   'ruby': ['rubocop']
+\ }
+
+au BufNewFile,BufRead *.rb nnoremap <silent> ,R :w<cr>:silent !rubocop --auto-correct %<cr>:edit!<cr>
+au BufNewFile,BufRead *.js nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
 
 "-------------------------------------------------------------------------------
 Plug 'tpope/vim-rails'
@@ -200,9 +214,6 @@ let g:rails_projections = {
 \     'alternate': 'config/locales/{}en.yml'
 \   },
 \   'config/locales/*en.yml': {
-\     'alternate': 'config/locales/{}zh-CN.yml'
-\   },
-\   'config/locales/*zh-CN.yml': {
 \     'alternate': 'config/locales/{}ru.yml'
 \   }
 \ }
