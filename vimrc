@@ -17,7 +17,6 @@ set synmaxcol=200
 " other options
 "-----------------------------------------------------------------------------
 set nocompatible
-set backup
 set nowrap
 set history=9999
 set undolevels=9999
@@ -184,9 +183,6 @@ anoremenu &File.&Spell.&Off :setlocal nospell spelllang=<cr>
 " au BufNewFile,BufRead *.coffee syn match rubyParens "[()\[\]{}]"
 " au BufNewFile,BufRead *.jbuilder syn match rubyParens "[()\[\]{}]"
 
-" backups
-autocmd! bufwritepre * call BackupDir()
-
 autocmd! bufwritepost ~/.vim/vimrc source ~/.vim/vimrc
 autocmd! bufwritepost ~/.vim/colorscheme.vim source ~/.vim/colorscheme.vim
 autocmd! bufwritepost ~/.vim/plugins.vim source ~/.vim/plugins.vim
@@ -204,26 +200,6 @@ au BufNewFile,BufRead *.ass,*.ssa set filetype=ssa
 "-----------------------------------------------------------------------------
 " functions
 "-----------------------------------------------------------------------------
-function! BackupDir()
-  if has("win32")
-    let l:backupdir=$HOME.'\.backup\'.substitute(expand('%:p:h'), ':', '', '')
-  else
-    let l:backupdir=substitute($HOME.'/.backup/'.substitute(expand('%:p:h'), ':', '', ''), '//', '/', '')
-  endif
-
-  if !isdirectory(l:backupdir)
-    call mkdir(l:backupdir, 'p', 0700)
-  endif
-
-  let &backupdir=l:backupdir
-
-  if has("win32")
-    let &backupext=strftime('~%Y-%m-%d %H_%M_%S~')
-  else
-    let &backupext=strftime('~%Y-%m-%d %H:%M:%S~')
-  endif
-endfunction
-
 "jump to last cursor position when opening a file
 "dont do it when writing a commit log entry
 autocmd BufReadPost * call SetCursorPosition()
