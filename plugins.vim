@@ -152,9 +152,11 @@ Plug 'scrooloose/nerdcommenter'
 let g:NERDSpaceDelims = 1
 let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
+let g:NERDCustomDelimiters = {
+  \ 'eruby': { 'left': '#', 'right': '' },
+\ }
 
 map ,<space> <plug>NERDCommenterToggle
-
 
 "-----------------------------------------------------------------------------
 Plug 'w0rp/ale'
@@ -191,6 +193,7 @@ let g:ale_linters = {
 
 au BufNewFile,BufRead *.rb nnoremap <silent> ,R :w<cr>:silent !rubocop --auto-correct %<cr>:edit!<cr>
 au BufNewFile,BufRead *.js nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
+au BufNewFile,BufRead *.jsx nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
 
 "-------------------------------------------------------------------------------
 Plug 'tpope/vim-rails'
