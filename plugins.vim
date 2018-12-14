@@ -24,6 +24,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'morr/vim-ruby'
 Plug 'vim-scripts/grep.vim'
+Plug 'jparise/vim-graphql'
 
 "-----------------------------------------------------------------------------
 " javascript
@@ -146,6 +147,8 @@ map <silent> <leader>N :NERDTreeFind<cr>
 nmap <f2> :NERDTreeFind<cr>
 nmap <f3> :NERDTreeToggle<cr>
 
+let g:NERDTreeIgnore=['node_modules']
+
 "-----------------------------------------------------------------------------
 Plug 'scrooloose/nerdcommenter'
 "-----------------------------------------------------------------------------
@@ -187,13 +190,16 @@ let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_linters = {
 \   'elixir': ['credo'],
-\   'javascript': ['eslint', 'flow'],
+\   'javascript': ['eslint'],
+\   'vue': ['eslint'],
+\   'coffee': ['coffeelint'],
 \   'ruby': ['rubocop']
 \ }
 
 au BufNewFile,BufRead *.rb nnoremap <silent> ,R :w<cr>:silent !rubocop --auto-correct %<cr>:edit!<cr>
 au BufNewFile,BufRead *.js nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
 au BufNewFile,BufRead *.jsx nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
+au BufNewFile,BufRead *.vue nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
 
 "-------------------------------------------------------------------------------
 Plug 'tpope/vim-rails'
@@ -334,7 +340,7 @@ Plug 'tpope/vim-repeat'
 silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
 "-------------------------------------------------------------------------------
-Plug 'yssl/QFEnter'
+Plug 'tap349/QFEnter'
 " QFEnter respects `switchbuf` option! if selected file is opened
 " in another tab all mappings below just switch to that tab
 "-------------------------------------------------------------------------------
@@ -344,8 +350,9 @@ Plug 'yssl/QFEnter'
 let g:qfenter_enable_autoquickfix = 0
 
 let g:qfenter_keymap = {}
-let g:qfenter_keymap.open = ['<CR>']
+let g:qfenter_keymap.open = ['<C-CR>']
 let g:qfenter_keymap.open_keep = ['<S-CR>']
+let g:qfenter_keymap.open_close = ['<CR>']
 let g:qfenter_keymap.hopen = ['<C-s>']
 let g:qfenter_keymap.vopen = ['<C-v>']
 let g:qfenter_keymap.topen = ['<C-t>']"

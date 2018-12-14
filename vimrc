@@ -13,6 +13,15 @@ set colorcolumn=81
 " do not highlight after 200 column
 set synmaxcol=200
 
+" http://vim.wikia.com/wiki/Project_specific_settings
+function! SetupEnvironment()
+  let l:path = expand('%:p')
+  if l:path =~ '/Users/morr/develop/shikimori/'
+    setlocal colorcolumn=101
+  endif
+endfunction
+autocmd! BufReadPost,BufNewFile * call SetupEnvironment()
+
 "-----------------------------------------------------------------------------
 " other options
 "-----------------------------------------------------------------------------
@@ -137,6 +146,8 @@ set nofoldenable
 " tags
 set tags+=tags
 set tags+=tags2
+
+set maxmempattern=100000 " to avoid errors when opening huge VCR cassete files
 
 " vim-ruby
 if has("unix")
