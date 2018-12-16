@@ -1,2 +1,2 @@
-colors vim-material
-let g:airline_theme='material'
+colors spring-night
+let g:airline_theme='spring_night'
