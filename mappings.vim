@@ -250,3 +250,8 @@ function! s:InstallColor(cmd)
   silent exe "!echo \"".a:cmd."\" > $HOME/.vim/colorscheme.vim"
   source $HOME/.vim/colorscheme.vim
 endfunction
+
+"-----------------------------------------------------------------------------
+" rebuild syntax
+"-----------------------------------------------------------------------------
+map <F10> :syntax sync fromstart<cr>
