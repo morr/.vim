@@ -53,11 +53,12 @@ Plug 'zcodes/vim-colors-basic'
 "-----------------------------------------------------------------------------
 Plug 'posva/vim-vue'
 "-----------------------------------------------------------------------------
+au BufNewFile,BufRead *.vue setf vue
 " https://github.com/posva/vim-vue#how-to-use-commenting-functionality-with-multiple-languages-in-vue-files
-autocmd FileType vue syntax sync fromstart
+au FileType vue syntax sync fromstart
 
 " Vim slows down when using this plugin How can I fix that?
-let g:vue_pre_processors = ['pug', 'html', 'sass']
+let g:vue_pre_processors = ['pug', 'sass']
 
 "-----------------------------------------------------------------------------
 Plug 'tpope/vim-fugitive'
@@ -199,7 +200,6 @@ map ,<space> <plug>(caw:hatpos:toggle)
 "-----------------------------------------------------------------------------
 Plug 'w0rp/ale'
 "-----------------------------------------------------------------------------
-
 " only linters from g:ale_linters are enabled
 let g:ale_linters_explicit = 1
 
