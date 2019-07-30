@@ -31,7 +31,6 @@ Plug 'jparise/vim-graphql'
 "-----------------------------------------------------------------------------
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-Plug 'posva/vim-vue'
 
 "-----------------------------------------------------------------------------
 " styles
@@ -50,6 +49,15 @@ Plug 'rakr/vim-one'
 Plug 'rhysd/vim-color-spring-night'
 Plug 'tomasr/molokai'
 Plug 'zcodes/vim-colors-basic'
+
+"-----------------------------------------------------------------------------
+Plug 'posva/vim-vue'
+"-----------------------------------------------------------------------------
+" https://github.com/posva/vim-vue#how-to-use-commenting-functionality-with-multiple-languages-in-vue-files
+autocmd FileType vue syntax sync fromstart
+
+" Vim slows down when using this plugin How can I fix that?
+let g:vue_pre_processors = ['pug', 'html', 'sass']
 
 "-----------------------------------------------------------------------------
 Plug 'tpope/vim-fugitive'
@@ -147,19 +155,46 @@ map <silent> <leader>N :NERDTreeFind<cr>
 nmap <f2> :NERDTreeFind<cr>
 nmap <f3> :NERDTreeToggle<cr>
 
-let g:NERDTreeIgnore=['node_modules']
+let g:NERDTreeIgnore = ['node_modules']
 
 "-----------------------------------------------------------------------------
-Plug 'scrooloose/nerdcommenter'
+" Plug 'scrooloose/nerdcommenter'
 "-----------------------------------------------------------------------------
-let g:NERDSpaceDelims = 1
-let g:NERDCompactSexyComs = 1
-let g:NERDDefaultAlign = 'left'
-let g:NERDCustomDelimiters = {
-  \ 'eruby': { 'left': '#', 'right': '' },
-\ }
+" let g:NERDSpaceDelims = 1
+" let g:NERDCompactSexyComs = 1
+" let g:NERDDefaultAlign = 'left'
+" let g:NERDCustomDelimiters = {
+"   \ 'eruby': { 'left': '#', 'right': '' },
+" \ }
 
-map ,<space> <plug>NERDCommenterToggle
+" map ,<space> <plug>NERDCommenterToggle
+
+" let g:ft = ''
+" function! NERDCommenter_before()
+"   if &ft == 'vue'
+"     let g:ft = 'vue'
+"     let stack = synstack(line('.'), col('.'))
+"     if len(stack) > 0
+"       let syn = synIDattr((stack)[0], 'name')
+"       if len(syn) > 0
+"         exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+"       endif
+"     endif
+"   endif
+" endfunction
+" function! NERDCommenter_after()
+"   if g:ft == 'vue'
+"     setf vue
+"     let g:ft = ''
+"   endif
+" endfunction
+
+"-----------------------------------------------------------------------------
+" replacement for nerdcommenter that works for vue
+Plug 'tyru/caw.vim'
+Plug 'Shougo/context_filetype.vim'
+"-----------------------------------------------------------------------------
+map ,<space> <plug>(caw:hatpos:toggle)
 
 "-----------------------------------------------------------------------------
 Plug 'w0rp/ale'
