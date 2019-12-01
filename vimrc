@@ -149,6 +149,8 @@ set tags+=tags2
 
 set maxmempattern=100000 " to avoid errors when opening huge VCR cassete files
 
+set nobackup
+
 " vim-ruby
 if has("unix")
   set runtimepath+=~/.vim/vim-ruby
