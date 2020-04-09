@@ -96,7 +96,7 @@ Plug 'wincent/command-t', {
 "-----------------------------------------------------------------------------
 let g:CommandTMaxHeight = 17
 " let g:CommandTMaxFiles = 25000
-let g:CommandTWildIgnore = &wildignore.".git,log,tmp,node_modules,*/public/assets,*/public/uploads,*/public/packs,*/public/packs-test,*/public/system,*/public/images,*/spec/vcr_cassettes"
+let g:CommandTWildIgnore = &wildignore.".git,log,tmp,/doc/*,node_modules,*/public/assets,*/public/uploads,*/public/packs,*/public/packs-test,*/public/system,*/public/images,*/spec/vcr_cassettes"
 let g:CommandTFileScanner = 'git'
 let g:CommandTTraverseSC = 'pwd'
 " let g:CommandTAlwaysShowDotFiles = 1
@@ -392,7 +392,7 @@ let g:qfenter_keymap.open_keep = ['<S-CR>']
 let g:qfenter_keymap.open_close = ['<CR>']
 let g:qfenter_keymap.hopen = ['<C-s>']
 let g:qfenter_keymap.vopen = ['<C-v>']
-let g:qfenter_keymap.topen = ['<C-t>']"
+let g:qfenter_keymap.topen = ['<C-t>']
 
 
 "-----------------------------------------------------------------------------
