@@ -91,7 +91,7 @@ nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 
 "-----------------------------------------------------------------------------
 Plug 'wincent/command-t', {
-  \   'do': 'cd ruby/command-t/ext/command-t && RBENV_VERSION=system ruby extconf.rb && make'
+  \   'do': 'cd ruby/command-t/ext/command-t && /usr/local/opt/ruby/bin/ruby extconf.rb && make'
   \ }
 "-----------------------------------------------------------------------------
 let g:CommandTMaxHeight = 17
