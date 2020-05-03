@@ -255,3 +255,8 @@ endfunction
 " rebuild syntax
 "-----------------------------------------------------------------------------
 map <F10> :syntax sync fromstart<cr>
+
+"-----------------------------------------------------------------------------
+" Show the active syntax highlighting groups under the cursor
+"-----------------------------------------------------------------------------
+nnoremap zS :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<cr>
