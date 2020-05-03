@@ -12,7 +12,6 @@ Plug 'flazz/vim-colorschemes'
 Plug 'henrik/vim-indexed-search'
 Plug 'int3/vim-extradite'
 Plug 'kchmck/vim-coffee-script'
-Plug 'keithbsmiley/rspec.vim'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mhinz/vim-hugefile'
 Plug 'slim-template/vim-slim'
@@ -25,6 +24,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'morr/vim-ruby'
 Plug 'vim-scripts/grep.vim'
 Plug 'jparise/vim-graphql'
+Plug 'keithbsmiley/rspec.vim'
 
 "-----------------------------------------------------------------------------
 " javascript
