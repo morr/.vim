@@ -108,6 +108,9 @@ nmap <c-q> :q!<cr>
 vmap <c-q> <esc>:q!<cr>i
 imap <c-q> <esc>:q!<cr>i
 
+" unmap annoying script
+map <S-k> <Nop>
+
 " Tags
 "nnoremap <f10> :TagbarToggle<cr>
 "inoremap <f10> <c-O>:TagbarToggle<cr>
