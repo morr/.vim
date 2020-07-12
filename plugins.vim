@@ -134,18 +134,17 @@ endfunction
 
 " autocmd! BufRead * call s:set_bufhidden()
 
-
-"-----------------------------------------------------------------------------
-" LustyExplorer
-"-----------------------------------------------------------------------------
-nmap <silent> <leader>l :LustyBufferGrep<cr>
-" nmap <f4> :LustyBufferGrep<cr>
-
-silent! unmap <leader>lf
-silent! unmap <leader>lr
-silent! unmap <leader>lb
-silent! unmap <leader>lg
-silent! unmap <leader>lj
+" "-----------------------------------------------------------------------------
+" " LustyExplorer
+" "-----------------------------------------------------------------------------
+" nmap <silent> <leader>l :LustyBufferGrep<cr>
+" " nmap <f4> :LustyBufferGrep<cr>
+" 
+" silent! unmap <leader>lf
+" silent! unmap <leader>lr
+" silent! unmap <leader>lb
+" silent! unmap <leader>lg
+" silent! unmap <leader>lj
 
 
 "-----------------------------------------------------------------------------
