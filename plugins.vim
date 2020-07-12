@@ -267,7 +267,7 @@ let g:rails_projections = {
 Plug 'tap349/ack.vim'
 "-------------------------------------------------------------------------------
 
-let g:ackprg = 'rg --fixed-strings --smart-case --vimgrep'
+let g:ackprg = 'rg --fixed-strings --smart-case --ignore-file $HOME/.agignore --vimgrep'
 " disable empty search (searching the word under cursor) -
 " it complicates the logic to parse user input excessively
 "
