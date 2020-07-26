@@ -133,6 +133,9 @@ map <S-k> <Nop>
 vnoremap p "_dp
 
 nnoremap <f12> :bd<cr>
+nnoremap <leader>w :bd<cr>
+" ˙ = ⌥+w on OSX
+" nnoremap ˙ :bd<cr>
 
 "-----------------------------------------------------------------------------
 " open vim config
