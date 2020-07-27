@@ -243,6 +243,7 @@ Plug 'tpope/vim-rails'
 nmap <F4> :A<CR>
 nmap <Leader><F4> :AV<CR>
 nmap gs :AV<cr>
+nmap gS :A<cr>
 
 " example projections: https://gist.github.com/henrik/5676109
 let g:rails_projections = {
