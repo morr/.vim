@@ -217,10 +217,6 @@ imap <silent><a-S-right> <c-O>:tabmove +1<cr>
 "-----------------------------------------------------------------------------
 " switch and remember colorschemes
 "-----------------------------------------------------------------------------
-map <F7> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>"
-
 " nmap <f8> :colors ir_black_morr<cr>
 " nmap <f9> :colors papercolor<cr>:set background=dark<cr>
 " nmap <f10> :colors papercolor<cr>:set background=light<cr>
@@ -240,7 +236,7 @@ nmap ,cl3 :call <SID>InstallColor("colors one\\nset background=light\\nlet g:air
 
 nmap ,c01 :call <SID>InstallColor("colors sialoquent")<cr>
 nmap ,c02 :call <SID>InstallColor("colors SerialExperimentsLain")<cr>
-nmap ,c04 :call <SID>InstallColor("colors basic-dark")<cr>
+nmap ,c03 :call <SID>InstallColor("colors basic-dark")<cr>
 nmap ,c04 :call <SID>InstallColor("colors basic-light")<cr>
 nmap ,c05 :call <SID>InstallColor("colors smyck")<cr>
 nmap ,c06 :call <SID>InstallColor("colors carbonized-light")<cr>
@@ -267,3 +263,11 @@ map zZ :syntax sync fromstart<cr>
 " Show the active syntax highlighting groups under the cursor
 "-----------------------------------------------------------------------------
 nnoremap zS :echo join(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')),' ')<cr>
+nnoremap zZ :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>"
+
+"-----------------------------------------------------------------------------
+" Copy path to current file into buffer
+"-----------------------------------------------------------------------------
+nnoremap <Leader>z :let @+=expand('%:p')<CR>
