@@ -257,7 +257,7 @@ endfunction
 " rebuild syntax
 "-----------------------------------------------------------------------------
 map <F10> :syntax sync fromstart<cr>
-map zZ :syntax sync fromstart<cr>
+map zz :syntax sync fromstart<cr>
 
 "-----------------------------------------------------------------------------
 " Show the active syntax highlighting groups under the cursor
