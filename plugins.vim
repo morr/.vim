@@ -97,7 +97,7 @@ Plug 'wincent/command-t', {
 "-----------------------------------------------------------------------------
 let g:CommandTMaxHeight = 17
 " let g:CommandTMaxFiles = 25000
-let g:CommandTWildIgnore = &wildignore.".git,log,tmp,doc,dist,node_modules,*/public/assets,*/public/uploads,*/public/packs,*/public/packs-test,*/public/system,*/public/images,*/spec/vcr_cassettes"
+let g:CommandTWildIgnore = &wildignore.".git,log,tmp,doc,dist,node_modules,*/public/assets,*/public/uploads,*/public/packs,*/public/packs-test,*/public/system,*/public/images,*/spec/vcr_cassettes,.DS_Store"
 let g:CommandTFileScanner = 'ruby'
 let g:CommandTTraverseSC = 'pwd'
 " let g:CommandTAlwaysShowDotFiles = 1
