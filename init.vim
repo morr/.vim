@@ -158,35 +158,6 @@ if has("unix")
 endif
 
 "-----------------------------------------------------------------------------
-" menu
-"-----------------------------------------------------------------------------
-if !has("unix")
-  anoremenu &File.&Font.&Monaco_10 :set guifont=Monaco:h10<cr>
-  anoremenu &File.&Font.&Consolas_10 :set guifont=Consolas:h12:cRUSSIAN<cr>
-  anoremenu &File.&Font.&Monaco_12 :set guifont=Monaco:h10<cr>
-  anoremenu &File.&Font.&Monaco_12_russian :set guifont=Monaco:h12:cRUSSIAN<cr>
-endif
-
-anoremenu &File.&EOL.&unix :setlocal fileformat=unix<cr>
-anoremenu &File.&EOL.&dos :setlocal fileformat=dos<cr>
-anoremenu &File.&EOL.&mac :setlocal fileformat=mac<cr>
-
-anoremenu &File.E&ncoding.&Write.&utf-8 :setlocal fileencoding=utf-8<cr>
-anoremenu &File.E&ncoding.&Write.&windows-1251 :setlocal fileencoding=windows-1251<cr>
-anoremenu &File.E&ncoding.&Write.&iso-8859-15 :setlocal fileencoding=iso-8859-15<cr>
-anoremenu &File.E&ncoding.&Write.&koi8-r :setlocal fileencoding=koi8-r<cr>
-
-anoremenu &File.E&ncoding.&Read.&utf-8 :edit ++enc=utf-8<cr>
-anoremenu &File.E&ncoding.&Read.&windows-1251 :edit ++enc=windows-1251<cr>
-anoremenu &File.E&ncoding.&Read.&iso-8859-15 :edit ++enc=iso-8859-15<cr>
-anoremenu &File.E&ncoding.&Read.&koi8-r :edit ++enc=koi8-r<cr>
-
-anoremenu &File.&Spell.&Combined :setlocal spell spelllang=ru,en<cr>
-anoremenu &File.&Spell.&Russian :setlocal spell spelllang=ru<cr>
-anoremenu &File.&Spell.&English :setlocal spell spelllang=en<cr>
-anoremenu &File.&Spell.&Off :setlocal nospell spelllang=<cr>
-
-"-----------------------------------------------------------------------------
 " autocommands
 "-----------------------------------------------------------------------------
 " syntax highlight fix for brackets
