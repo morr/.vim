@@ -112,17 +112,17 @@ let g:CommandTAcceptSelectionVSplitCommand = 'vs'
 
 " nmap <silent> <leader>t :tabe<cr>:CommandT<cr>
 " nmap <silent> <leader>t :call <SID>SmartCommandT()<cr>
-nmap <silent> <leader>r :CommandTFlush<cr>:CommandT<cr>
+nmap <silent> <leader>r :KommandTFlush<cr>:CommandT<cr>
 " nmap <silent> <leader>j :CommandTJump<CR>
 
-nmap <f1> :CommandT<cr>
+nmap <f1> :KommandT<cr>
 
 function! s:SmartCommandT()
   if bufname("%") == ""
-    CommandT
+    KommandT
   else
     tabe
-    CommandT
+    KommandT
   end
 endfunction
 
