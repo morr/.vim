@@ -112,19 +112,20 @@ let g:CommandTAcceptSelectionVSplitCommand = 'vs'
 
 " nmap <silent> <leader>t :tabe<cr>:CommandT<cr>
 " nmap <silent> <leader>t :call <SID>SmartCommandT()<cr>
-nmap <silent> <leader>r :KommandTFlush<cr>:CommandT<cr>
+nmap <leader>t :KommandT<cr>
+nmap <silent> <leader>r :CommandTFlush<cr>:KommandT<cr>
 " nmap <silent> <leader>j :CommandTJump<CR>
 
 nmap <f1> :KommandT<cr>
 
-function! s:SmartCommandT()
-  if bufname("%") == ""
-    KommandT
-  else
-    tabe
-    KommandT
-  end
-endfunction
+" function! s:SmartCommandT()
+"   if bufname("%") == ""
+"     KommandT
+"   else
+"     tabe
+"     KommandT
+"   end
+" endfunction
 
 " буферы закрываем всегда
 " function! s:set_bufhidden()
