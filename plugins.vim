@@ -92,15 +92,16 @@ nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 
 "-----------------------------------------------------------------------------
 Plug '/opt/homebrew/opt/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 "-----------------------------------------------------------------------------
 nmap <leader>t :Files<cr>
 nmap <leader>r :Rg<cr>
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-
 " look at https://github.com/junegunn/fzf/wiki/Color-schemes
+" Nord theme
 let color_scheme_options = '--color=fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C,pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B'
+let $BAT_THEME='Nord'
 
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', color_scheme_options]}), <bang>0) # , '--color='.join(cols, ',')
