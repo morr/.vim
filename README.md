@@ -2,7 +2,7 @@
 
 ### Packages
 ```sh
-brew install ripgrep
+brew install ripgrep fzf bat
 ```
 
 ### Fonts

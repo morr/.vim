@@ -91,62 +91,90 @@ let g:buffergator_suppress_keymaps = 1
 nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 
 "-----------------------------------------------------------------------------
-Plug 'wincent/command-t', {
-  \   'do': 'cd ruby/command-t/ext/command-t && /usr/local/opt/ruby/bin/ruby extconf.rb && make'
-  \ }
+Plug '/opt/homebrew/opt/fzf'
 "-----------------------------------------------------------------------------
-let g:CommandTMaxHeight = 17
-" let g:CommandTMaxFiles = 25000
-let g:CommandTWildIgnore = &wildignore.".git,log,tmp,doc,dist,node_modules,*/public/assets,*/public/uploads,*/public/packs,*/public/packs-test,*/public/system,*/public/images,*/spec/vcr_cassettes,.DS_Store"
-let g:CommandTFileScanner = 'ruby'
-let g:CommandTTraverseSC = 'pwd'
-" let g:CommandTAlwaysShowDotFiles = 1
-let g:CommandTMatchWindowReverse = 0
-let g:CommandTMatchWindowAtTop = 0
-let g:CommandTGitIncludeUntracked = 1
+nmap <leader>t :Files<cr>
+nmap <leader>r :Rg<cr>
 
-let g:CommandTAcceptSelectionCommand = 'e'
-let g:CommandTAcceptSelectionTabCommand = 'tabe'
-let g:CommandTAcceptSelectionSplitCommand = 'sp'
-let g:CommandTAcceptSelectionVSplitCommand = 'vs'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
-" nmap <silent> <leader>t :tabe<cr>:CommandT<cr>
-" nmap <silent> <leader>t :call <SID>SmartCommandT()<cr>
-nmap <leader>t :KommandT<cr>
-nmap <silent> <leader>r :CommandTFlush<cr>:KommandT<cr>
-" nmap <silent> <leader>j :CommandTJump<CR>
-
-nmap <f1> :KommandT<cr>
-
-" function! s:SmartCommandT()
-"   if bufname("%") == ""
-"     KommandT
-"   else
-"     tabe
-"     KommandT
-"   end
+" function! s:update_fzf_colors()
+"   let rules =
+"  \ { 'fg':      [['Normal',       'fg']],
+"    \ 'bg':      [['Normal',       'bg']],
+"    \ 'hl':      [['Comment',      'fg']],
+"    \ 'fg+':     [['CursorColumn', 'fg'], ['Normal', 'fg']],
+"    \ 'bg+':     [['CursorColumn', 'bg']],
+"    \ 'hl+':     [['Statement',    'fg']],
+"    \ 'info':    [['PreProc',      'fg']],
+"    \ 'prompt':  [['Conditional',  'fg']],
+"    \ 'pointer': [['Exception',    'fg']],
+"    \ 'marker':  [['Keyword',      'fg']],
+"    \ 'spinner': [['Label',        'fg']],
+"    \ 'header':  [['Comment',      'fg']] }
+"   let cols = []
+"   for [name, pairs] in items(rules)
+"     for pair in pairs
+"       let code = synIDattr(synIDtrans(hlID(pair[0])), pair[1])
+"       if !empty(name) && code > 0
+"         call add(cols, name.':'.code)
+"         break
+"       endif
+"     endfor
+"   endfor
+"   let s:orig_fzf_default_opts = get(s:, 'orig_fzf_default_opts', $FZF_DEFAULT_OPTS)
+"   let $FZF_DEFAULT_OPTS = s:orig_fzf_default_opts .
+"        \ empty(cols) ? '' : (' --color='.join(cols, ','))
 " endfunction
 
-" буферы закрываем всегда
-" function! s:set_bufhidden()
-  " if empty(&buftype)
-    " setlocal bufhidden=wipe
-  " endif
-" endfunction
+" command! -bang -nargs=? -complete=dir Files
+    "\ call fzf#vim#with_preview(<q-args>, {'options': ['--layout=reverse', '--info=inline']}, <bang>0)
 
-" autocmd! BufRead * call s:set_bufhidden()
+" let g:fzf_colors =
+"            \ { 'fg':      ['fg', 'Normal'],
+"            \ 'bg':      ['bg', 'Normal'],
+"            \ 'hl':      ['fg', 'Comment'],
+"            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+"            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+"            \ 'hl+':     ['fg', 'Statement'],
+"            \ 'info':    ['fg', 'PreProc'],
+"            \ 'border':  ['fg', 'Ignore'],
+"            \ 'prompt':  ['fg', 'Conditional'],
+"            \ 'pointer': ['fg', 'Exception'],
+"            \ 'marker':  ['fg', 'Keyword'],
+"            \ 'spinner': ['fg', 'Label'],
+"            \ 'header':  ['fg', 'Comment'] }
 
-" "-----------------------------------------------------------------------------
-" " LustyExplorer
-" "-----------------------------------------------------------------------------
-" nmap <silent> <leader>l :LustyBufferGrep<cr>
-" " nmap <f4> :LustyBufferGrep<cr>
-" 
-" silent! unmap <leader>lf
-" silent! unmap <leader>lr
-" silent! unmap <leader>lb
-" silent! unmap <leader>lg
-" silent! unmap <leader>lj
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
+
+" augroup _fzf
+"   autocmd!
+"   autocmd ColorScheme * call <sid>update_fzf_colors()
+"   autocmd VimEnter,ColorScheme * call s:update_fzf_colors()
+" augroup END
+
+" Global line completion (not just open buffers. ripgrep required.)
+inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+  \ 'prefix': '^.*$',
+  \ 'source': 'rg -n ^ --color always',
+  \ 'options': '--ansi --delimiter : --nth 3..',
+  \ 'reducer': { lines -> join(split(lines[-1], ':\zs')[2:], '') }}))
+
+function! s:fzf_statusline()
+  " Override statusline as you like
+  highlight fzf1 ctermfg=161 ctermbg=251
+  highlight fzf2 ctermfg=23 ctermbg=251
+  highlight fzf3 ctermfg=237 ctermbg=251
+  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+
+" [Buffers] Do not Jump to the existing window if possible
+let g:fzf_buffers_jump = 0
 
 
 "-----------------------------------------------------------------------------
