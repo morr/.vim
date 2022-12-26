@@ -91,38 +91,21 @@ let g:buffergator_suppress_keymaps = 1
 nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 
 "-----------------------------------------------------------------------------
+" 
 Plug '/opt/homebrew/opt/fzf'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 "-----------------------------------------------------------------------------
 nmap <leader>t :Files<cr>
 nmap <leader>r :Rg<cr>
+nmap <leader>b :Buffers<cr>
 
-" look at https://github.com/junegunn/fzf/wiki/Color-schemes
-" Nord theme
-let color_scheme_options = '--color=fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C,pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B'
+" Nord theme https://github.com/junegunn/fzf/wiki/Color-schemes#nord 
+let color_scheme_options = 'fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C,pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B'
 let $BAT_THEME='Nord'
-
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', color_scheme_options]}), <bang>0) # , '--color='.join(cols, ',')
-
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview({'options': ['--layout=reverse', color_scheme_options]}), <bang>0)
-
-" Global line completion (not just open buffers. ripgrep required.)
-inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
-  \ 'prefix': '^.*$',
-  \ 'source': 'rg -n ^ --color always',
-  \ 'options': '--ansi --delimiter : --nth 3.. --layout=reverse',
-  \ 'reducer': { lines -> join(split(lines[-1], ':\zs')[2:], '') }}))
-
-function! s:fzf_statusline()
-  " Override statusline as you like
-  highlight fzf1 ctermfg=161 ctermbg=251
-  highlight fzf2 ctermfg=23 ctermbg=251
-  highlight fzf3 ctermfg=237 ctermbg=251
-  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
+" https://github.com/junegunn/fzf/blob/master/README-VIM.md#fzf
+let $FZF_DEFAULT_OPTS = '--layout=reverse --color='.color_scheme_options
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
 " [Buffers] Do not Jump to the existing window if possible
 let g:fzf_buffers_jump = 0
