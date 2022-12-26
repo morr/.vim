@@ -99,70 +99,20 @@ nmap <leader>r :Rg<cr>
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" function! s:update_fzf_colors()
-"   let rules =
-"  \ { 'fg':      [['Normal',       'fg']],
-"    \ 'bg':      [['Normal',       'bg']],
-"    \ 'hl':      [['Comment',      'fg']],
-"    \ 'fg+':     [['CursorColumn', 'fg'], ['Normal', 'fg']],
-"    \ 'bg+':     [['CursorColumn', 'bg']],
-"    \ 'hl+':     [['Statement',    'fg']],
-"    \ 'info':    [['PreProc',      'fg']],
-"    \ 'prompt':  [['Conditional',  'fg']],
-"    \ 'pointer': [['Exception',    'fg']],
-"    \ 'marker':  [['Keyword',      'fg']],
-"    \ 'spinner': [['Label',        'fg']],
-"    \ 'header':  [['Comment',      'fg']] }
-"   let cols = []
-"   for [name, pairs] in items(rules)
-"     for pair in pairs
-"       let code = synIDattr(synIDtrans(hlID(pair[0])), pair[1])
-"       if !empty(name) && code > 0
-"         call add(cols, name.':'.code)
-"         break
-"       endif
-"     endfor
-"   endfor
-"   let s:orig_fzf_default_opts = get(s:, 'orig_fzf_default_opts', $FZF_DEFAULT_OPTS)
-"   let $FZF_DEFAULT_OPTS = s:orig_fzf_default_opts .
-"        \ empty(cols) ? '' : (' --color='.join(cols, ','))
-" endfunction
-
-" command! -bang -nargs=? -complete=dir Files
-    "\ call fzf#vim#with_preview(<q-args>, {'options': ['--layout=reverse', '--info=inline']}, <bang>0)
-
-" let g:fzf_colors =
-"            \ { 'fg':      ['fg', 'Normal'],
-"            \ 'bg':      ['bg', 'Normal'],
-"            \ 'hl':      ['fg', 'Comment'],
-"            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-"            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-"            \ 'hl+':     ['fg', 'Statement'],
-"            \ 'info':    ['fg', 'PreProc'],
-"            \ 'border':  ['fg', 'Ignore'],
-"            \ 'prompt':  ['fg', 'Conditional'],
-"            \ 'pointer': ['fg', 'Exception'],
-"            \ 'marker':  ['fg', 'Keyword'],
-"            \ 'spinner': ['fg', 'Label'],
-"            \ 'header':  ['fg', 'Comment'] }
+" look at https://github.com/junegunn/fzf/wiki/Color-schemes
+let color_scheme_options = '--color=fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C,pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B'
 
 command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', color_scheme_options]}), <bang>0) # , '--color='.join(cols, ',')
 
 command! -bang -nargs=* Rg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview({'options': ['--layout=reverse']}), <bang>0)
-
-" augroup _fzf
-"   autocmd!
-"   autocmd ColorScheme * call <sid>update_fzf_colors()
-"   autocmd VimEnter,ColorScheme * call s:update_fzf_colors()
-" augroup END
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview({'options': ['--layout=reverse', color_scheme_options]}), <bang>0)
 
 " Global line completion (not just open buffers. ripgrep required.)
 inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
   \ 'prefix': '^.*$',
   \ 'source': 'rg -n ^ --color always',
-  \ 'options': '--ansi --delimiter : --nth 3..',
+  \ 'options': '--ansi --delimiter : --nth 3.. --layout=reverse',
   \ 'reducer': { lines -> join(split(lines[-1], ':\zs')[2:], '') }}))
 
 function! s:fzf_statusline()
@@ -175,7 +125,6 @@ endfunction
 
 " [Buffers] Do not Jump to the existing window if possible
 let g:fzf_buffers_jump = 0
-
 
 "-----------------------------------------------------------------------------
 Plug 'scrooloose/nerdtree'
