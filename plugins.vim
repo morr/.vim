@@ -121,38 +121,6 @@ nmap <f3> :NERDTreeToggle<cr>
 let g:NERDTreeIgnore = ['node_modules']
 
 "-----------------------------------------------------------------------------
-" Plug 'scrooloose/nerdcommenter'
-"-----------------------------------------------------------------------------
-" let g:NERDSpaceDelims = 1
-" let g:NERDCompactSexyComs = 1
-" let g:NERDDefaultAlign = 'left'
-" let g:NERDCustomDelimiters = {
-"   \ 'eruby': { 'left': '#', 'right': '' },
-" \ }
-
-" map ,<space> <plug>NERDCommenterToggle
-
-" let g:ft = ''
-" function! NERDCommenter_before()
-"   if &ft == 'vue'
-"     let g:ft = 'vue'
-"     let stack = synstack(line('.'), col('.'))
-"     if len(stack) > 0
-"       let syn = synIDattr((stack)[0], 'name')
-"       if len(syn) > 0
-"         exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
-"       endif
-"     endif
-"   endif
-" endfunction
-" function! NERDCommenter_after()
-"   if g:ft == 'vue'
-"     setf vue
-"     let g:ft = ''
-"   endif
-" endfunction
-
-"-----------------------------------------------------------------------------
 " replacement for nerdcommenter that works for vue
 Plug 'tyru/caw.vim'
 Plug 'Shougo/context_filetype.vim'
