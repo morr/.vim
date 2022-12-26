@@ -11,7 +11,6 @@ Plug 'elzr/vim-json'
 Plug 'flazz/vim-colorschemes'
 Plug 'henrik/vim-indexed-search'
 Plug 'int3/vim-extradite'
-Plug 'kchmck/vim-coffee-script'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mhinz/vim-hugefile'
 Plug 'slim-template/vim-slim'
@@ -159,7 +158,6 @@ let g:ale_linters = {
 \   'elixir': ['credo'],
 \   'javascript': ['eslint'],
 \   'vue': ['eslint'],
-\   'coffee': ['coffeelint'],
 \   'ruby': ['rubocop']
 \ }
 
