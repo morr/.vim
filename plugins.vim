@@ -109,6 +109,10 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 " [Buffers] Do not Jump to the existing window if possible
 let g:fzf_buffers_jump = 0
 
+" default rip grep search behaviour but with hidden files included
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep("rg --hidden --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+
 "-----------------------------------------------------------------------------
 Plug 'scrooloose/nerdtree'
 "-----------------------------------------------------------------------------
