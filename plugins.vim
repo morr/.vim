@@ -104,6 +104,7 @@ let color_scheme_options = 'fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#43
 let $BAT_THEME='Nord'
 " https://github.com/junegunn/fzf/blob/master/README-VIM.md#fzf
 let $FZF_DEFAULT_OPTS = '--layout=reverse --color='.color_scheme_options
+let $FZF_DEFAULT_COMMAND = 'fd --type file --hidden --follow --ignore-file .gitignore -E .git -E node_modules -E tmp'
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
 " [Buffers] Do not Jump to the existing window if possible
