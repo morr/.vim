@@ -90,7 +90,6 @@ let g:buffergator_suppress_keymaps = 1
 nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 
 "-----------------------------------------------------------------------------
-" 
 Plug '/opt/homebrew/opt/fzf'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -132,7 +131,7 @@ Plug 'Shougo/context_filetype.vim'
 map ,<space> <plug>(caw:hatpos:toggle)
 
 "-----------------------------------------------------------------------------
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 "-----------------------------------------------------------------------------
 " only linters from g:ale_linters are enabled
 let g:ale_linters_explicit = 1
@@ -157,7 +156,8 @@ let g:ale_lint_on_filetype_changed = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_enter = 0
+let g:ale_lint_on_enter = 1
+" let g:ale_set_highlights = 0
 
 let g:ale_linters = {
 \   'elixir': ['credo'],
