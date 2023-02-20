@@ -111,6 +111,9 @@ imap <c-q> <esc>:q!<cr>i
 " unmap annoying script
 map <S-k> <Nop>
 
+" sort
+vmap <c-s> :sor<cr>
+
 " Tags
 "nnoremap <f10> :TagbarToggle<cr>
 "inoremap <f10> <c-O>:TagbarToggle<cr>

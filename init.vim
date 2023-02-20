@@ -198,4 +198,3 @@ endfunction
 
 set completeopt-=preview
 set completeopt+=longest
-
