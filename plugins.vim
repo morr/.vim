@@ -58,8 +58,9 @@ Plug 'rust-lang/rust.vim'
 "-----------------------------------------------------------------------------
 " CoC
 "-----------------------------------------------------------------------------
-let g:coc_global_extensions = ['coc-rust-analyzer']
+let g:coc_global_extensions = ['coc-rust-analyzer', 'coc-solargraph']
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+" Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'brew list solargraph \|\| brew install solargraph' }
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -69,7 +70,7 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 "      \ <SID>check_back_space() ? "\<TAB>" :
 "      \ coc#refresh()
 " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" 
+"
 " function! s:check_back_space() abort
 "   let col = col('.') - 1
 "   return !col || getline('.')[col - 1]  =~# '\s'
@@ -94,6 +95,11 @@ endfunction
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+au BufNewFile,BufRead *.rb nnoremap <silent> ,R :w<cr>:silent !rubocop --auto-correct %<cr>:edit!<cr>
+au BufNewFile,BufRead *.js nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
+au BufNewFile,BufRead *.jsx nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
+au BufNewFile,BufRead *.vue nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
 
 "-----------------------------------------------------------------------------
 Plug 'posva/vim-vue'
@@ -143,7 +149,7 @@ nmap <leader>t :Files<cr>
 nmap <leader>r :Rg<cr>
 nmap <leader>b :Buffers<cr>
 
-" Nord theme https://github.com/junegunn/fzf/wiki/Color-schemes#nord 
+" Nord theme https://github.com/junegunn/fzf/wiki/Color-schemes#nord
 let color_scheme_options = 'fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C,pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B'
 let $BAT_THEME='Nord'
 " https://github.com/junegunn/fzf/blob/master/README-VIM.md#fzf
@@ -175,44 +181,44 @@ Plug 'Shougo/context_filetype.vim'
 "-----------------------------------------------------------------------------
 map ,<space> <plug>(caw:hatpos:toggle)
 
-"-----------------------------------------------------------------------------
-Plug 'dense-analysis/ale'
-"-----------------------------------------------------------------------------
-" only linters from g:ale_linters are enabled
-let g:ale_linters_explicit = 1
-
-" hi ALEWarningSign guibg=#FDE1FD guifg=#0512FB gui=bold
-" hi ALEErrorSign guibg=#F4DBDC guifg=#662529 gui=bold
-
-" location list is populated by default -
-" this might overwrite the contents of already
-" opened location list (e.g., search results)
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
-
-let g:ale_sign_warning = 'W>'
-let g:ale_sign_error = 'E>'
-
-let g:ale_lint_on_filetype_changed = 1
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_enter = 1
-
-" virtual-text is broken when it displayed in wrapped state
-let g:ale_virtualtext_cursor = 0
-
-let g:ale_linters = {
-\   'elixir': ['credo'],
-\   'javascript': ['eslint'],
-\   'vue': ['eslint'],
-\   'ruby': ['rubocop']
-\ }
-
-au BufNewFile,BufRead *.rb nnoremap <silent> ,R :w<cr>:silent !rubocop --auto-correct %<cr>:edit!<cr>
-au BufNewFile,BufRead *.js nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
-au BufNewFile,BufRead *.jsx nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
-au BufNewFile,BufRead *.vue nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
+" "-----------------------------------------------------------------------------
+" Plug 'dense-analysis/ale'
+" "-----------------------------------------------------------------------------
+" " only linters from g:ale_linters are enabled
+" let g:ale_linters_explicit = 1
+"
+" " hi ALEWarningSign guibg=#FDE1FD guifg=#0512FB gui=bold
+" " hi ALEErrorSign guibg=#F4DBDC guifg=#662529 gui=bold
+"
+" " location list is populated by default -
+" " this might overwrite the contents of already
+" " opened location list (e.g., search results)
+" let g:ale_set_loclist = 0
+" let g:ale_set_quickfix = 0
+"
+" let g:ale_sign_warning = 'W>'
+" let g:ale_sign_error = 'E>'
+"
+" let g:ale_lint_on_filetype_changed = 1
+" let g:ale_lint_on_save = 1
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_insert_leave = 0
+" let g:ale_lint_on_enter = 1
+"
+" " virtual-text is broken when it displayed in wrapped state
+" let g:ale_virtualtext_cursor = 0
+"
+" let g:ale_linters = {
+"\   'elixir': ['credo'],
+"\   'javascript': ['eslint'],
+"\   'vue': ['eslint'],
+"\   'ruby': ['rubocop']
+"\ }
+"
+" au BufNewFile,BufRead *.rb nnoremap <silent> ,R :w<cr>:silent !rubocop --auto-correct %<cr>:edit!<cr>
+" au BufNewFile,BufRead *.js nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
+" au BufNewFile,BufRead *.jsx nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
+" au BufNewFile,BufRead *.vue nnoremap <silent> ,R :w<cr>:silent !yarn run eslint --fix %<cr>:edit!<cr>
 
 "-------------------------------------------------------------------------------
 Plug 'tpope/vim-rails'
