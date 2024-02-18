@@ -1,4 +1,7 @@
 {
+  "codeLens.enable": true,
+  "solargraph.useBundler": false,
+  "solargraph.diagnostics": true,
   "languageserver": {
     "rubocop": {
       "command": "bundle",
